@@ -7,17 +7,19 @@
         xmlns:uc="clr-namespace:Transaction_Management.Views.UserControls"
         mc:Ignorable="d"
         Title="Xác thực"
-        Height="600"
-        Width="800"
+        Height="650"
+        Width="1000"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Background="Transparent">
+        Background="Black">
+
+    <!-- Liên kết với MainLoginViewModel để xử lý logic chuyển trang -->
     <Window.DataContext>
         <vm:MainLoginViewModel />
     </Window.DataContext>
 
+    <!-- Khai báo DataTemplate để Window biết phải gọi UI nào khi ViewModel thay đổi -->
     <Window.Resources>
-
         <DataTemplate DataType="{x:Type vm:LoginViewModel}">
             <uc:Login_UC />
         </DataTemplate>
@@ -25,96 +27,20 @@
         <DataTemplate DataType="{x:Type vm:RegisterViewModel}">
             <uc:Register_UC />
         </DataTemplate>
-
-        <Storyboard x:Key="GlowAnimation">
-            <DoubleAnimation Storyboard.TargetName="GlowEffect"
-                             Storyboard.TargetProperty="BlurRadius"
-                             From="25"
-                             To="50"
-                             Duration="0:0:2.5"
-                             AutoReverse="True"
-                             RepeatBehavior="Forever" />
-        </Storyboard>
-
-        <PathGeometry x:Key="LoginFrameGeometry">
-            <PathFigure StartPoint="20,0"
-                        IsClosed="True">
-                <QuadraticBezierSegment Point1="300,20"
-                                        Point2="580,0" />
-                <ArcSegment Point="600,20"
-                            Size="20,20"
-                            SweepDirection="Clockwise" />
-                <LineSegment Point="600,380" />
-                <ArcSegment Point="580,400"
-                            Size="20,20"
-                            SweepDirection="Clockwise" />
-                <QuadraticBezierSegment Point1="300,380"
-                                        Point2="20,400" />
-                <ArcSegment Point="0,380"
-                            Size="20,20"
-                            SweepDirection="Clockwise" />
-                <LineSegment Point="0,20" />
-                <ArcSegment Point="20,0"
-                            Size="20,20"
-                            SweepDirection="Clockwise" />
-            </PathFigure>
-        </PathGeometry>
     </Window.Resources>
 
-
-    <!-- Phần Window Trigger (Bộ kích hoạt)-->
-    <Window.Triggers>
-        <EventTrigger RoutedEvent="Window.Loaded">
-            <BeginStoryboard Storyboard="{StaticResource GlowAnimation}" />
-        </EventTrigger>
-    </Window.Triggers>
-
-    <!-- Phần Grid chính -->
     <Grid>
-        <!-- Trình phát Video-->
-        <MediaElement x:Name="bgVideo"
-                      Source="Resources\Images\Backgrounds\Animation_Pixel_BG.mp4"
-                      LoadedBehavior="Play"
-                      UnloadedBehavior="Stop"
-                      Stretch="UniformToFill"
-                      IsMuted="True"
-                      RenderOptions.BitmapScalingMode="LowQuality">
-            <MediaElement.Effect>
-                <BlurEffect Radius="10" />
-            </MediaElement.Effect>
-        </MediaElement>
+        <!-- ẢNH NỀN TRÀN VIỀN -->
+        <Image Source="pack://application:,,,/Resources/Images/hinhnen.png" 
+               Stretch="UniformToFill" />
 
-        <Rectangle Fill="Black"
-                   Opacity="0.2" />
+        <!-- Lớp phủ màu đen trong suốt để làm dịu ảnh nền, tôn Form trắng lên -->
+        <Rectangle Fill="Black" Opacity="0.15" />
 
-        <Grid VerticalAlignment="Center"
-              HorizontalAlignment="Center"
-              Width="600"
-              Height="400">
-            <!-- Grid của phần Path-->
-            <Grid>
-                <Grid.CacheMode>
-                    <BitmapCache EnableClearType="False"
-                                 RenderAtScale="1" />
-                </Grid.CacheMode>
-                <Path Data="{StaticResource LoginFrameGeometry}"
-                      Fill="#1AFFFFFF"
-                      Stroke="White"
-                      StrokeThickness="2.5"
-                      Stretch="Fill">
-                    <Path.Effect>
-                        <DropShadowEffect x:Name="GlowEffect"
-                                          Color="White"
-                                          BlurRadius="25"
-                                          ShadowDepth="0"
-                                          Opacity="0.5" />
-                    </Path.Effect>
-                </Path>
-
-                <ContentControl Content="{Binding CurrentView}" />
-
-            </Grid>
-
-        </Grid>
+        <!-- KHUNG CHỨA FORM ĐỘNG -->
+        <!-- Content sẽ tự động hiển thị Login_UC hoặc Register_UC -->
+        <ContentControl Content="{Binding CurrentView}" 
+                        HorizontalAlignment="Stretch" 
+                        VerticalAlignment="Stretch" />
     </Grid>
 </Window>

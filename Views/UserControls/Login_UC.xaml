@@ -3,138 +3,205 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:vm="clr-namespace:Transaction_Management.ViewModels"
              mc:Ignorable="d"
-             d:DesignHeight="450"
-             d:DesignWidth="800">
-    <UserControl.DataContext>
-        <vm:LoginViewModel />
-    </UserControl.DataContext>
+             d:DesignHeight="650"
+             d:DesignWidth="1000"
+             Background="Transparent">
 
-    <!-- Phần Grid của Form -->
-    <Grid Margin="30,40,30,20">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="30" />
-        </Grid.RowDefinitions>
+    <UserControl.Resources>
+        <!-- Style Tùy chỉnh cho TextBox và PasswordBox -->
+        <Style x:Key="LoginInputStyle" TargetType="Control">
+            <Setter Property="Height" Value="48" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Background" Value="#F8FDF8" />
+            <!-- Xanh lá siêu nhạt -->
+            <Setter Property="BorderBrush" Value="#A5D6A7" />
+            <Setter Property="BorderThickness" Value="1.5" />
+            <Setter Property="Padding" Value="15,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Control">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="12">
+                            <!-- Bo góc mềm mại -->
+                            <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <!-- Hiệu ứng khi nhấp chuột vào ô nhập liệu -->
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="BorderBrush" Value="#4CAF50" />
+                    <Setter Property="Background" Value="#FFFFFF" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
-        <!-- Tiêu đề -->
-        <TextBlock Text="LOGIN"
-                   Grid.ColumnSpan="2"
-                   Grid.Row="0"
-                   HorizontalAlignment="Center"
-                   Margin="0,0,0,20"
-                   Style="{StaticResource TextBlockTitleStyle}">
-            <TextBlock.Effect>
-                <DropShadowEffect BlurRadius="10"
-                                  ShadowDepth="2"
-                                  Opacity="0.8" />
-            </TextBlock.Effect>
-        </TextBlock>
+        <!-- Style cho Nút bấm chính (Login) -->
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#2E7D32" />
+            <!-- Xanh lá đậm -->
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1B5E20" />
+                                <!-- Đậm hơn khi Hover -->
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-        <!-- Nhập Username-->
-        <TextBlock Text="Username:"
-                   Grid.Row="1"
-                   VerticalAlignment="Center"
-                   Style="{StaticResource TextBlockContentStyle}" />
-        <TextBox x:Name="txtUsername"
-                 Text="{Binding GetUsername}"
-                 Grid.Column="1"
-                 Grid.Row="1"
-                 Style="{StaticResource TextBlockInputStyle}" />
+        <!-- Style cho Nút bấm phụ (Register) -->
+        <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#2E7D32" />
+            <Setter Property="BorderBrush" Value="#2E7D32" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#E8F5E9" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
 
-        <!-- Nhập Password-->
-        <TextBlock Text="Password:"
-                   Grid.Row="2"
-                   VerticalAlignment="Center"
-                   Style="{StaticResource TextBlockContentStyle}" />
-        <PasswordBox x:Name="pwbPassword"
-                     Grid.Column="1"
-                     Grid.Row="2"
-                     Style="{StaticResource TextBlockInputStyle}" />
+    <Grid>
+        <!-- KHUNG CHỨA LOGIN CĂN GIỮA -->
+        <Border Background="White"
+                CornerRadius="25"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Width="480"
+                Padding="45,40">
+            <!-- Đổ bóng làm nổi bật khung -->
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="40" ShadowDepth="10" Opacity="0.08" Color="Black" />
+            </Border.Effect>
 
-        <!-- Quên mật khẩu -->
-        <Button x:Name="btnForgetPass"
-                Content="Forget Passowrd?"
-                Grid.ColumnSpan="2"
-                Grid.Row="3"
-                Foreground="Snow"
-                Cursor="Hand"
-                FontFamily="Cascadia Mono">
-            <Button.Template>
-                <ControlTemplate TargetType="Button">
-                    <TextBlock Text="{TemplateBinding Content}"
-                               TextDecorations="Underline"
-                               HorizontalAlignment="Right"
-                               Margin="0,0,70,0"
-                               x:Name="txtFP" />
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver"
-                                 Value="True">
-                            <Setter TargetName="txtFP"
-                                    Property="Foreground"
-                                    Value="SkyBlue" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Button.Template>
-        </Button>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-        <!-- Phần nút Login và Sign In-->
-        <StackPanel Grid.Row="4"
-                    Grid.ColumnSpan="2"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Center">
+                <!-- TIÊU ĐỀ -->
+                <StackPanel Grid.Row="0" Margin="0,0,0,35">
+                    <TextBlock Text="WELCOME BACK"
+                               HorizontalAlignment="Center"
+                               Foreground="#2E7D32" 
+                               FontSize="30"
+                               FontWeight="Heavy" 
+                               Margin="0,0,0,5" />
+                    <TextBlock Text="Please enter your details to sign in"
+                               HorizontalAlignment="Center"
+                               Foreground="#757575" 
+                               FontSize="14" />
+                </StackPanel>
 
-            <!-- Nút Login -->
-            <Button x:Name="btnLogin"
-                    Content="Login"
-                    Width="140"
-                    Height="45"
-                    Background="White"
-                    Foreground="#0077B6"
-                    Margin="10"
-                    FontFamily="Cascadia Mono"
-                    FontSize="18"
-                    Command="{Binding LoginCommand}"
-                    CommandParameter="{Binding ElementName=pwbPassword}"
-                    Style="{StaticResource ButtonStyle}" />
+                <!-- Ô NHẬP USERNAME -->
+                <StackPanel Grid.Row="1" Margin="0,0,0,20">
+                    <TextBlock Text="Username" Foreground="#333333" FontWeight="SemiBold" FontSize="14" Margin="5,0,0,8" />
+                    <TextBox x:Name="txtUsername"
+                             Text="{Binding GetUsername}"
+                             Style="{StaticResource LoginInputStyle}" />
+                </StackPanel>
 
+                <!-- Ô NHẬP PASSWORD -->
+                <StackPanel Grid.Row="2" Margin="0,0,0,10">
+                    <TextBlock Text="Password" Foreground="#333333" FontWeight="SemiBold" FontSize="14" Margin="5,0,0,8" />
+                    <PasswordBox x:Name="pwbPassword"
+                                 Style="{StaticResource LoginInputStyle}" />
+                </StackPanel>
 
-            <!-- Nút Sign In-->
-            <Button x:Name="btnSignIn"
-                    Content="Sign in"
-                    Width="140"
-                    Height="45"
-                    Background="White"
-                    Foreground="#0077B6"
-                    FontSize="18"
-                    FontFamily="Cascadia Mono"
-                    Margin="10"
-                    Command="{Binding DataContext.SwitchViewCommand, 
-                          RelativeSource={RelativeSource AncestorType=Window}}"
-                    CommandParameter="Register"
-                    Style="{StaticResource ButtonStyle}" />
+                <!-- QUÊN MẬT KHẨU -->
+                <Button x:Name="btnForgetPass"
+                        Content="Forgot password?"
+                        Grid.Row="3"
+                        HorizontalAlignment="Right"
+                        Foreground="#4CAF50" 
+                        Cursor="Hand"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Margin="0,0,0,35">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <TextBlock Text="{TemplateBinding Content}" x:Name="txtFP" Foreground="{TemplateBinding Foreground}" FontWeight="SemiBold"/>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="txtFP" Property="TextDecorations" Value="Underline" />
+                                    <Setter TargetName="txtFP" Property="Foreground" Value="#1B5E20" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
 
+                <!-- HAI NÚT SIGN IN & SIGN UP -->
+                <Grid Grid.Row="4" Margin="0,0,0,25">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="15" />
+                        <!-- Khoảng cách giữa 2 nút -->
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-        </StackPanel>
+                    <Button x:Name="btnLogin"
+                            Content="Sign In"
+                            Height="50"
+                            Grid.Column="0"
+                            Command="{Binding LoginCommand}"
+                            CommandParameter="{Binding ElementName=pwbPassword}"
+                            Style="{StaticResource PrimaryButtonStyle}" />
 
-        <!-- Phần Copyright -->
-        <TextBlock Text="Copyright 2026 Fenda404"
-                   Grid.Row="5"
-                   Grid.ColumnSpan="2"
-                   HorizontalAlignment="Center"
-                   Foreground="#80FFD8BE"
-                   FontSize="11"
-                   VerticalAlignment="Bottom"
-                   FontFamily="Cascadia Mono" />
+                    <Button x:Name="btnRegister"
+                            Content="Sign Up"
+                            Height="50"
+                            Grid.Column="2"
+                            Command="{Binding DataContext.SwitchViewCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                            CommandParameter="Register"
+                            Style="{StaticResource SecondaryButtonStyle}" />
+                </Grid>
+
+                <!-- FOOTER / COPYRIGHT -->
+                <TextBlock Text="© 2026 Fenda404. All rights reserved."
+                           Grid.Row="5"
+                           HorizontalAlignment="Center"
+                           Foreground="#9E9E9E" 
+                           FontSize="12" />
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

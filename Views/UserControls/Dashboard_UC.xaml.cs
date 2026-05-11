@@ -1,5 +1,4 @@
-﻿using Transaction_Management.ViewModels; // SỬA: Cập nhật thư viện ViewModels
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,18 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Transaction_Management.Views.UserControls // SỬA: Đổi tên namespace cho khớp với project
+namespace Transaction_Management.Views.UserControls
 {
     /// <summary>
-    /// Interaction logic for Login_UC.xaml
+    /// Interaction logic for Dashboard_UC.xaml
     /// </summary>
-    public partial class Login_UC : UserControl
+    public partial class Dashboard_UC : UserControl
     {
-        LoginViewModel lgvm;
-        public Login_UC()
+        public Dashboard_UC()
         {
             InitializeComponent();
-            lgvm = (LoginViewModel)DataContext;
         }
     }
 }

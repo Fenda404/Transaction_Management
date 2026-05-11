@@ -1,14 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Style x:Key="TextBlockTitleStyle"
-           TargetType="TextBlock">
-        <Setter Property="FontSize"
-                Value="42" />
-        <Setter Property="FontFamily"
-                Value="Cascadia Code" />
-        <Setter Property="FontWeight"
-                Value="Bold" />
-        <Setter Property="Foreground"
-                Value="White" />
+    <!-- Style cho các tiêu đề lớn như LOGIN, SIGN UP -->
+    <Style x:Key="TextBlockTitleStyle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="32"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="#2E7D32"/>
+        <!-- Xanh lá đậm -->
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,0,0,20"/>
     </Style>
 </ResourceDictionary>

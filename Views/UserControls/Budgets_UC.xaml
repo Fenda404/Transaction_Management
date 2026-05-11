@@ -1,0 +1,126 @@
+﻿<UserControl x:Class="Transaction_Management.Views.UserControls.Budgets_UC"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="1000">
+
+    <UserControl.Resources>
+        <!-- Style cho thẻ Ngân sách -->
+        <Style x:Key="BudgetCardStyle" TargetType="Border">
+            <Setter Property="CornerRadius" Value="15" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Padding" Value="20" />
+            <Setter Property="Margin" Value="10" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="15" ShadowDepth="2" Opacity="0.05" Color="Black" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <!-- Header -->
+            <RowDefinition Height="Auto" />
+            <!-- Summary Area -->
+            <RowDefinition Height="*" />
+            <!-- Budget List -->
+        </Grid.RowDefinitions>
+
+        <!-- 1. HEADER -->
+        <StackPanel Grid.Row="0" Margin="10,0,0,25">
+            <TextBlock Text="QUẢN LÝ NGÂN SÁCH" FontSize="28" FontWeight="Bold" Foreground="#2E7D32" />
+            <TextBlock Text="Thiết lập và theo dõi hạn mức chi tiêu hàng tháng" Foreground="#757575" FontSize="14" />
+        </StackPanel>
+
+        <!-- 2. TỔNG QUAN NGÂN SÁCH CHUNG -->
+        <Border Grid.Row="1" Style="{StaticResource BudgetCardStyle}" Background="#E8F5E9" BorderBrush="#C8E6C9" BorderThickness="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <!-- Đã sửa: ColumnDefinitions khớp với thẻ mở -->
+
+                <StackPanel>
+                    <TextBlock Text="TỔNG NGÂN SÁCH ĐÃ CHI" Foreground="#2E7D32" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding TotalSpent, StringFormat={}{0:N0} đ}" FontSize="32" FontWeight="Bold" Foreground="#1B5E20"/>
+                        <TextBlock Text="{Binding TotalBudgetLimit, StringFormat=/ {0:N0} đ}" FontSize="18" Foreground="#666" VerticalAlignment="Bottom" Margin="10,0,0,5"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding OverallProgress, StringFormat={}{0:F1}%}" HorizontalAlignment="Right" FontSize="24" FontWeight="Bold" Foreground="#2E7D32"/>
+                    <TextBlock Text="Đã sử dụng" Foreground="#757575" FontSize="12" HorizontalAlignment="Right"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 3. DANH SÁCH CHI TIẾT CÁC HẠNG MỤC -->
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Margin="0,10,0,0">
+            <ItemsControl ItemsSource="{Binding BudgetList}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="2" VerticalAlignment="Top"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Style="{StaticResource BudgetCardStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Tên hạng mục & Trạng thái -->
+                                <DockPanel Grid.Row="0" Margin="0,0,0,15">
+                                    <TextBlock Text="{Binding CategoryName}" FontSize="18" FontWeight="Bold" Foreground="#333"/>
+                                    <TextBlock Text="{Binding StatusText}" HorizontalAlignment="Right" FontSize="12" VerticalAlignment="Center">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="#757575"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding UsagePercentage, Converter={StaticResource GreaterThanConverter}, ConverterParameter=100}" Value="True">
+                                                        <Setter Property="Foreground" Value="#D32F2F"/>
+                                                        <Setter Property="FontWeight" Value="Bold"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DockPanel>
+
+                                <!-- Số tiền hiển thị -->
+                                <Grid Grid.Row="1" Margin="0,0,0,10">
+                                    <TextBlock Text="{Binding SpentAmount, StringFormat={}{0:N0} đ}" FontSize="16" FontWeight="SemiBold" Foreground="#1B5E20"/>
+                                    <TextBlock Text="{Binding LimitAmount, StringFormat={}{0:N0} đ}" HorizontalAlignment="Right" FontSize="14" Foreground="#999"/>
+                                </Grid>
+
+                                <!-- Thanh tiến trình (ProgressBar giả lập) -->
+                                <Border Grid.Row="2" Height="12" Background="#F5F5F5" CornerRadius="6">
+                                    <Grid HorizontalAlignment="Left">
+                                        <!-- Ở đây tạm thời dùng Width tĩnh hoặc Converter để tính toán theo Percentage -->
+                                        <Border Background="{Binding ProgressColor}" CornerRadius="6" Width="200" HorizontalAlignment="Left"/>
+                                    </Grid>
+                                </Border>
+
+                                <!-- Con số phần trăm -->
+                                <TextBlock Grid.Row="3" Text="{Binding UsagePercentage, StringFormat={}{0:F0}%}" 
+                                           HorizontalAlignment="Right" Margin="0,5,0,0" Foreground="#757575" FontSize="12"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

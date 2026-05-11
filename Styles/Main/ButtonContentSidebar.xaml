@@ -2,10 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style x:Key="SidebarButtonStyle"
            TargetType="Button">
+        <!-- Nền mặc định trong suốt để lộ màu xanh của Sidebar -->
         <Setter Property="Background"
-                Value="#1AFFFFFF" />
+                Value="Transparent" />
         <Setter Property="FontSize"
-                Value="24" />
+                Value="20" />
         <Setter Property="FontFamily"
                 Value="Cascadia Mono" />
         <Setter Property="Foreground"
@@ -18,27 +19,32 @@
                 Value="0" />
         <Setter Property="HorizontalContentAlignment"
                 Value="Center" />
-        <Setter Property="Opacity"
-                Value="0.7" />
+        <Setter Property="Cursor"
+                Value="Hand" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border Background="{TemplateBinding Background}"
-                            BorderBrush="White"
-                            BorderThickness="2"
                             CornerRadius="10"
+                            Margin="5,2"
                             x:Name="border">
                         <ContentPresenter VerticalAlignment="Center"
                                           HorizontalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <!-- Hiệu ứng khi di chuột vào (Hover) -->
                         <Trigger Property="IsMouseOver"
                                  Value="True">
                             <Setter Property="Background"
-                                    Value="#34495E" />
-                            <Setter TargetName="border"
-                                    Property="BorderBrush"
-                                    Value="#3498DB" />
+                                    Value="#4CAF50" />
+                            <!-- Màu xanh lá sáng hơn -->
+                        </Trigger>
+                        <!-- Hiệu ứng khi nhấn nút (Pressed) -->
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Setter Property="Background"
+                                    Value="#1B5E20" />
+                            <!-- Màu xanh lá đậm đặc -->
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

@@ -9,16 +9,17 @@ using System.Windows.Input;
 
 namespace Transaction_Management.ViewModels
 {
-    class MainLoginViewModel: BaseViewModel
+    // SỬA: Thêm chữ 'public'
+    public class MainLoginViewModel : BaseViewModel
     {
         private object _currentView;
         public object CurrentView
         {
             get => _currentView;
-            set 
-            { 
-                _currentView = value; 
-                OnPropertyChanged(nameof(CurrentView)); 
+            set
+            {
+                _currentView = value;
+                OnPropertyChanged(nameof(CurrentView));
             }
         }
         public ICommand SwitchViewCommand { get; set; }

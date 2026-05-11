@@ -109,17 +109,41 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\BudgetsViewModel.cs" />
+    <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainLoginViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\RegisterViewModel.cs" />
+    <Compile Include="ViewModels\ReportsViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\TransactionsViewModel.cs" />
     <Compile Include="Views\MainViews\MainLoginView.xaml.cs">
       <DependentUpon>MainLoginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainViews\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\Budgets_UC.xaml.cs">
+      <DependentUpon>Budgets_UC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\Dashboard_UC.xaml.cs">
+      <DependentUpon>Dashboard_UC.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\Login_UC.xaml.cs">
       <DependentUpon>Login_UC.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\Register_UC.xaml.cs">
       <DependentUpon>Register_UC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\Reports_UC.xaml.cs">
+      <DependentUpon>Reports_UC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\Settings_UC.xaml.cs">
+      <DependentUpon>Settings_UC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\Transactions_UC.xaml.cs">
+      <DependentUpon>Transactions_UC.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -189,11 +213,35 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MainViews\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\Budgets_UC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\Dashboard_UC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UserControls\Login_UC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserControls\Register_UC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\Reports_UC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\Settings_UC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\Transactions_UC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -210,6 +258,7 @@
       <DependentUpon>Model1.edmx</DependentUpon>
       <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
+    <Resource Include="Resources\Images\hinhnen.png" />
     <Content Include="Resources\Images\Backgrounds\Animation_Pixel_BG.mp4">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

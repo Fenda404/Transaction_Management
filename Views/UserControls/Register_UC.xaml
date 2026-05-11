@@ -5,183 +5,177 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:Transaction_Management.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="650" d:DesignWidth="1000"
+             Background="Transparent">
+
     <UserControl.DataContext>
         <vm:RegisterViewModel />
-
     </UserControl.DataContext>
 
     <UserControl.Resources>
+        <!-- Tái sử dụng Style Nhập liệu từ Login -->
+        <Style x:Key="RegisterInputStyle" TargetType="Control">
+            <Setter Property="Height" Value="48" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Background" Value="#F8FDF8" />
+            <Setter Property="BorderBrush" Value="#A5D6A7" />
+            <Setter Property="BorderThickness" Value="1.5" />
+            <Setter Property="Padding" Value="15,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Control">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="12">
+                            <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="BorderBrush" Value="#4CAF50" />
+                    <Setter Property="Background" Value="#FFFFFF" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
-        <!--<cvts:ListParameterConverter x:Key="ListConverter" />-->
+        <!-- Style cho Nút bấm chính (Register) -->
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#2E7D32" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1B5E20" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-        <!-- Phần riêng của nút back -->
-        <SolidColorBrush x:Key="PrimaryColor"
-                         Color="WhiteSmoke" />
-        <SolidColorBrush x:Key="HoverColor"
-                         Color="#26A0DA" />
-        <SolidColorBrush x:Key="DisabledColor"
-                         Color="#CCCCCC" />
-
-        <ControlTemplate x:Key="BackButtonStyleTemplate"
-                         TargetType="Button">
-            <Border x:Name="border"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    CornerRadius="5"
-                    Padding="8,5">
-                <StackPanel Orientation="Horizontal"
-                            VerticalAlignment="Center">
-                    <Path x:Name="arrowIcon"
-                          Data="M 8,0 L 0,8 L 8,16"
-                          Stroke="{StaticResource PrimaryColor}"
-                          StrokeThickness="2.5"
-                          StrokeEndLineCap="Round"
-                          StrokeStartLineCap="Round"
-                          Margin="0,0,8,0"
-                          VerticalAlignment="Center" />
-
-                    <ContentPresenter x:Name="txtBack"
-                                      Content="Back"
-                                      VerticalAlignment="Center"
-                                      HorizontalAlignment="Center">
-                        <ContentPresenter.Resources>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="Foreground"
-                                        Value="{StaticResource PrimaryColor}" />
-                                <Setter Property="FontSize"
-                                        Value="14" />
-                                <Setter Property="FontWeight"
-                                        Value="SemiBold" />
-                                <Setter Property="FontFamily"
-                                        Value="Cascadia Mono" />
-
-                            </Style>
-                        </ContentPresenter.Resources>
-                    </ContentPresenter>
+        <!-- Style cho Nút Quay lại (Back) -->
+        <ControlTemplate x:Key="BackButtonStyleTemplate" TargetType="Button">
+            <Border x:Name="border" Background="Transparent" Padding="5,10">
+                <StackPanel Orientation="Horizontal">
+                    <Path x:Name="arrowIcon" Data="M 8,0 L 0,8 L 8,16" Stroke="#2E7D32" StrokeThickness="3" StrokeEndLineCap="Round" StrokeStartLineCap="Round" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="txtBack" Text="Quay lại" Foreground="#2E7D32" VerticalAlignment="Center" FontSize="15" FontWeight="Bold" />
                 </StackPanel>
             </Border>
-
             <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver"
-                         Value="True">
-                    <Setter TargetName="arrowIcon"
-                            Property="Stroke"
-                            Value="{StaticResource HoverColor}" />
-                    <Setter Property="Cursor"
-                            Value="Hand" />
-                </Trigger>
-
-
-                <Trigger Property="IsEnabled"
-                         Value="False">
-                    <Setter TargetName="arrowIcon"
-                            Property="Stroke"
-                            Value="{StaticResource DisabledColor}" />
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="arrowIcon" Property="Stroke" Value="#4CAF50" />
+                    <Setter TargetName="txtBack" Property="Foreground" Value="#4CAF50" />
+                    <Setter Property="Cursor" Value="Hand" />
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </UserControl.Resources>
 
-    <!-- Phần Grid của Form -->
-    <Grid Margin="30,40,30,20">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="70" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="80" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="70" />
-            <RowDefinition Height="30" />
-        </Grid.RowDefinitions>
+    <Grid>
+        <!-- KHUNG CHỨA REGISTER CĂN GIỮA -->
+        <Border Background="White"
+                CornerRadius="25"
+                Width="500"
+                Padding="45,40"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center">
 
-        <!-- Tiêu đề + nút Back -->
-        <Button Template="{StaticResource BackButtonStyleTemplate}"
-                Margin="10"
-                Grid.Row="0"
-                Grid.Column="0"
-                Command="{Binding DataContext.SwitchViewCommand, 
-                          RelativeSource={RelativeSource AncestorType=Window}}"
-                CommandParameter="Login" />
+            <!-- Đổ bóng khung -->
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="40" ShadowDepth="10" Opacity="0.08" Color="Black"/>
+            </Border.Effect>
 
-        <TextBlock Text="SIGN IN"
-                   Grid.ColumnSpan="2"
-                   Grid.Row="0"
-                   HorizontalAlignment="Center"
-                   Style="{StaticResource TextBlockTitleStyle}">
-            <TextBlock.Effect>
-                <DropShadowEffect BlurRadius="10"
-                                  ShadowDepth="2"
-                                  Opacity="0.8" />
-            </TextBlock.Effect>
-        </TextBlock>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-        <!-- Nhập Username-->
-        <TextBlock Text="Username:"
-                   Grid.Row="1"
-                   VerticalAlignment="Center"
-                   Style="{StaticResource TextBlockContentStyle}" />
-        <TextBox x:Name="txtUsername"
-                 Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
-                 Grid.Column="1"
-                 Grid.Row="1"
-                 Style="{StaticResource TextBlockInputStyle}" />
+                <!-- HEADER: Nút Quay lại và Tiêu đề -->
+                <Grid Grid.Row="0" Margin="0,0,0,30">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
 
-        <!-- Nhập Password-->
-        <TextBlock Text="Password:"
-                   Grid.Row="2"
-                   VerticalAlignment="Center"
-                   Style="{StaticResource TextBlockContentStyle}" />
-        <StackPanel Grid.Column="1"
-                    Grid.Row="2">
-            <PasswordBox x:Name="pwbPassword"
-                         Style="{StaticResource TextBlockInputStyle}" />
-            <TextBlock Text="* Tối thiểu 8 ký tự, bao gồm chữ hoa, số và ký tự đặc biệt"
-                       Foreground="Red" />
-        </StackPanel>
-        <!-- Xác nhận mật khẩu -->
-        <TextBlock Text="* Password:"
-                   Grid.Row="3"
-                   VerticalAlignment="Center"
-                   Style="{StaticResource TextBlockContentStyle}" />
-        <PasswordBox x:Name="pwbConfirmPass"
-                     Grid.Column="1"
-                     Grid.Row="3"
-                     Style="{StaticResource TextBlockInputStyle}" />
+                    <Button Grid.Column="0"
+                            Template="{StaticResource BackButtonStyleTemplate}"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Command="{Binding DataContext.SwitchViewCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                            CommandParameter="Login" />
 
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                        <TextBlock Text="CREATE ACCOUNT"
+                                   FontSize="24"
+                                   FontWeight="Heavy"
+                                   Foreground="#2E7D32"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,5"/>
+                        <TextBlock Text="Join us today!"
+                                   Foreground="#757575" 
+                                   FontSize="13"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
 
-        <!-- Phần nút Login và Sign In-->
-        <StackPanel Grid.Row="4"
-                    Grid.ColumnSpan="2"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Center">
+                <!-- USERNAME -->
+                <StackPanel Grid.Row="1" Margin="0,0,0,18">
+                    <TextBlock Text="Username" Foreground="#333333" FontWeight="SemiBold" FontSize="14" Margin="5,0,0,8"/>
+                    <TextBox x:Name="txtUsername"
+                             Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource RegisterInputStyle}"/>
+                </StackPanel>
 
+                <!-- PASSWORD -->
+                <StackPanel Grid.Row="2" Margin="0,0,0,18">
+                    <TextBlock Text="Password" Foreground="#333333" FontWeight="SemiBold" FontSize="14" Margin="5,0,0,8"/>
+                    <PasswordBox x:Name="pwbPassword"
+                                 Style="{StaticResource RegisterInputStyle}"/>
+                    <TextBlock Text="* Tối thiểu 8 ký tự, bao gồm chữ và số"
+                               Foreground="#9E9E9E" FontSize="12" Margin="5,6,0,0"/>
+                </StackPanel>
 
-            <!-- Nút Sign In-->
-            <Button x:Name="btnSignIn"
-                    Content="Sign in"
-                    Command="{Binding RegisterCommand}"
-                    Style="{StaticResource ButtonStyle}">
-                <!--<Button.CommandParameter>
-                    <MultiBinding Converter="{StaticResource ListConverter}">
-                        <Binding ElementName="pwbPassword" />
-                        <Binding ElementName="pwbConfirmPass" />
-                    </MultiBinding>
-                </Button.CommandParameter>-->
-            </Button>
-        </StackPanel>
+                <!-- CONFIRM PASSWORD -->
+                <StackPanel Grid.Row="3" Margin="0,0,0,30">
+                    <TextBlock Text="Confirm Password" Foreground="#333333" FontWeight="SemiBold" FontSize="14" Margin="5,0,0,8"/>
+                    <PasswordBox x:Name="pwbConfirmPass"
+                                 Style="{StaticResource RegisterInputStyle}"/>
+                </StackPanel>
 
-        <!-- Phần Copyright -->
-        <TextBlock Text="Copyright 2026 Fenda404"
-                   Grid.Row="5"
-                   Grid.ColumnSpan="2"
-                   HorizontalAlignment="Center"
-                   Foreground="#80FFD8BE"
-                   FontSize="11"
-                   VerticalAlignment="Bottom"
-                   FontFamily="Cascadia Mono" />
+                <!-- NÚT ĐĂNG KÝ -->
+                <Button x:Name="btnRegister"
+                        Grid.Row="4"
+                        Content="Create Account"
+                        Height="50"
+                        Margin="0,0,0,25"
+                        Command="{Binding RegisterCommand}"
+                        Style="{StaticResource PrimaryButtonStyle}">
+                </Button>
+
+                <!-- FOOTER -->
+                <TextBlock Grid.Row="5"
+                           Text="© 2026 Fenda404. All rights reserved."
+                           HorizontalAlignment="Center"
+                           Foreground="#9E9E9E"
+                           FontSize="12"/>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

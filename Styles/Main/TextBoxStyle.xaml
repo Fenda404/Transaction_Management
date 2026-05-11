@@ -1,26 +1,23 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Style x:Key="ModernTextBoxStyle"
-           TargetType="TextBox">
-        <Setter Property="Height"
-                Value="40" />
-        <Setter Property="Background"
-                Value="#1AFFFFFF" />
-        <Setter Property="Foreground"
-                Value="White" />
-        <Setter Property="BorderBrush"
-                Value="#4DFFFFFF" />
-        <Setter Property="Padding"
-                Value="10,0" />
-        <Setter Property="VerticalContentAlignment"
-                Value="Center" />
+    <Style x:Key="ModernTextBoxStyle" TargetType="TextBox">
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Background" Value="#F5F5F5" />
+        <!-- SỬA: Nền xám cực nhạt -->
+        <Setter Property="Foreground" Value="#1B5E20" />
+        <!-- SỬA: Chữ xanh lá đậm -->
+        <Setter Property="BorderBrush" Value="#4CAF50" />
+        <!-- SỬA: Viền xanh lá -->
+        <Setter Property="Padding" Value="10,0" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
                     <Border CornerRadius="10"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="1">
+                            BorderThickness="1.5">
+                        <!-- SỬA: Viền dày hơn xíu -->
                         <ScrollViewer x:Name="PART_ContentHost" />
                     </Border>
                 </ControlTemplate>
