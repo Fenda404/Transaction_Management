@@ -1,0 +1,26 @@
+﻿<Application x:Class="Transaction_Management.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Transaction_Management"
+             StartupUri="Views/MainViews/MainLoginView.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+
+
+                <ResourceDictionary Source="/Styles/User/TextBlockTitle.xaml" />
+                <ResourceDictionary Source="/Styles/User/TextBoxContent.xaml" />
+                <ResourceDictionary Source="/Styles/User/ButtonContent.xaml" />
+                <ResourceDictionary Source="/Styles/User/TextBlockContent.xaml" />
+
+
+
+                <ResourceDictionary Source="/Styles/Main/TextBoxStyle.xaml" />
+                <ResourceDictionary Source="/Styles/Main/ContainerStyle.xaml" />
+                <ResourceDictionary Source="/Styles/Main/ButtonContentSidebar.xaml" />
+
+
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
