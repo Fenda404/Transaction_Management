@@ -175,15 +175,17 @@
                              FontSize="18"
                              FontWeight="Bold"
                              Foreground="#2E7D32"
-                             VerticalContentAlignment="Center" />
+                             VerticalContentAlignment="Center"
+                             Text="{Binding Amount}"/>
 
                     <!-- Chọn Ví (WalletID) -->
                     <TextBlock Text="Chọn ví (Wallet)"
                                Style="{StaticResource LabelStyle}" />
                     <ComboBox x:Name="cbWallet"
                               DisplayMemberPath="WalletName"
-                              SelectedValuePath="WalletID"
-                              ItemsSource="{Binding Wallets}">
+                              SelectedValuePath="WalletName"
+                              ItemsSource="{Binding Wallets}"
+                              SelectedValue="{Binding Wallet}">
                         <!-- WalletID 1: Ví chính, 2: Tiết kiệm... -->
                     </ComboBox>
 
@@ -192,6 +194,7 @@
                                Style="{StaticResource LabelStyle}" />
                     <ComboBox x:Name="cbCategory"
                               ItemsSource="{Binding Categories}"
+                              SelectedItem="{Binding Category}"
                             >
                         <!-- CategoryID 1: Lương, 2: Ăn uống... -->
                     </ComboBox>
@@ -202,7 +205,8 @@
                     <DatePicker x:Name="dpDate"
                                 Height="40"
                                 Margin="0,0,0,15"
-                                VerticalContentAlignment="Center">
+                                VerticalContentAlignment="Center"
+                                SelectedDate="{Binding Date}">
                         <DatePicker.Resources>
                             <Style TargetType="DatePickerTextBox">
                                 <Setter Property="IsReadOnly"
@@ -224,7 +228,8 @@
                              Padding="10"
                              TextWrapping="Wrap"
                              AcceptsReturn="True"
-                             Margin="0,0,0,15" />
+                             Margin="0,0,0,15" 
+                             Text="{Binding Description}"/>
 
                     <!-- Hình ảnh hóa đơn (ReceiptImage - Tùy chọn) -->
                     <Button Content="📁 Tải lên ảnh hóa đơn"
@@ -268,7 +273,8 @@
                         Foreground="White"
                         FontSize="14"
                         FontWeight="Bold"
-                        Cursor="Hand">
+                        Cursor="Hand"
+                        Command="{Binding SaveCommand}">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border Background="{TemplateBinding Background}"

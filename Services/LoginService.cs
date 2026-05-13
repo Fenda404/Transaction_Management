@@ -16,6 +16,7 @@ namespace Transaction_Management.Services
                 if (user == null) return false;
 
                 roleID = (int)user.RoleID;
+                UserSessionService.CurrentUser = user;
                 return true;
             }
         }

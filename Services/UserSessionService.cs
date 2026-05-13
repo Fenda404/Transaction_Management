@@ -5,6 +5,8 @@ namespace Transaction_Management.Services
 {
     public static class UserSessionService
     {
+        public static Users CurrentUser { get; set; }
+
         public static bool IsAdmin(int roleID) => roleID == 1;
         public static bool IsUser(int roleID) => roleID == 2;
 
@@ -22,3 +24,4 @@ namespace Transaction_Management.Services
         }
     }
 }
+

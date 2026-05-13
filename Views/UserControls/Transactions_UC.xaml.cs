@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Transaction_Management.ViewModels;
 
 namespace Transaction_Management.Views.UserControls
 {
@@ -21,6 +22,7 @@ namespace Transaction_Management.Views.UserControls
   
     public partial class Transactions_UC : UserControl
         {
-            public Transactions_UC() { InitializeComponent(); }
+        TransactionsViewModel vm;
+            public Transactions_UC() { InitializeComponent(); vm = (TransactionsViewModel)DataContext; }
         }
 }

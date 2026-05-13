@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,12 +27,14 @@ namespace Transaction_Management.ViewModels
         public TransactionsViewModel()
         {
             LoadData();
+            
             AddTransactionCommand = new RelayCommand(_ => AddNewTransaction(), _ => true);
         }
         #endregion
         #region Methods
         private void LoadData()
         {
+            
             transactionService.LoadData();
             Transactions = transactionService.Transactions;
             Categories = transactionService.Categories;
@@ -40,7 +43,6 @@ namespace Transaction_Management.ViewModels
         {
             AddTransaction addTransactionView = new AddTransaction();
             bool? v = addTransactionView.ShowDialog();
-
         }
         #endregion
     }

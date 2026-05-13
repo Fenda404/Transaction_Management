@@ -9,9 +9,9 @@ using System.Windows.Input;
 
 namespace Transaction_Management.ViewModels
 {
-    // SỬA: Thêm chữ 'public'
     public class MainLoginViewModel : BaseViewModel
     {
+        #region Properties
         private object _currentView;
         public object CurrentView
         {
@@ -23,6 +23,8 @@ namespace Transaction_Management.ViewModels
             }
         }
         public ICommand SwitchViewCommand { get; set; }
+        #endregion
+        #region Constructor
         public MainLoginViewModel()
         {
             // Lúc đầu mới mở app thì hiện Login
@@ -35,5 +37,6 @@ namespace Transaction_Management.ViewModels
                     CurrentView = new LoginViewModel();
             });
         }
+        #endregion
     }
 }
