@@ -12,18 +12,16 @@ namespace Transaction_Management.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Roles
+    public partial class RecurringBills
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Roles()
-        {
-            this.Users = new HashSet<Users>();
-        }
+        public int BillID { get; set; }
+        public int UserID { get; set; }
+        public string BillName { get; set; }
+        public decimal Amount { get; set; }
+        public string Frequency { get; set; }
+        public System.DateTime NextDueDate { get; set; }
+        public Nullable<bool> IsActive { get; set; }
     
-        public int RoleID { get; set; }
-        public string RoleName { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Users> Users { get; set; }
+        public virtual Users Users { get; set; }
     }
 }

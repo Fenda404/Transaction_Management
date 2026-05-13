@@ -12,18 +12,22 @@ namespace Transaction_Management.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Roles
+    public partial class Wallets
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Roles()
+        public Wallets()
         {
-            this.Users = new HashSet<Users>();
+            this.Transactions = new HashSet<Transactions>();
         }
     
-        public int RoleID { get; set; }
-        public string RoleName { get; set; }
+        public int WalletID { get; set; }
+        public int UserID { get; set; }
+        public string WalletName { get; set; }
+        public Nullable<decimal> Balance { get; set; }
+        public string Currency { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Users> Users { get; set; }
+        public virtual ICollection<Transactions> Transactions { get; set; }
+        public virtual Users Users { get; set; }
     }
 }

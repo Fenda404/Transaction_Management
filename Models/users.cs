@@ -12,16 +12,39 @@ namespace Transaction_Management.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class users
+    public partial class Users
     {
-        public int user_id { get; set; }
-        public string username { get; set; }
-        public string password { get; set; }
-        public string email { get; set; }
-        public Nullable<int> role_id { get; set; }
-        public Nullable<byte> status { get; set; }
-        public Nullable<System.DateTime> created_at { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Users()
+        {
+            this.Budgets = new HashSet<Budgets>();
+            this.Debts = new HashSet<Debts>();
+            this.RecurringBills = new HashSet<RecurringBills>();
+            this.Savings = new HashSet<Savings>();
+            this.Transactions = new HashSet<Transactions>();
+            this.Wallets = new HashSet<Wallets>();
+        }
     
-        public virtual roles roles { get; set; }
+        public int UserID { get; set; }
+        public string Username { get; set; }
+        public string PasswordHash { get; set; }
+        public string FullName { get; set; }
+        public string Email { get; set; }
+        public Nullable<System.DateTime> CreatedAt { get; set; }
+        public Nullable<int> RoleID { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Budgets> Budgets { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Debts> Debts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RecurringBills> RecurringBills { get; set; }
+        public virtual Roles Roles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Savings> Savings { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Transactions> Transactions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Wallets> Wallets { get; set; }
     }
 }

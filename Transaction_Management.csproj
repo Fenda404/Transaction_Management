@@ -87,27 +87,56 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="Models\Model1.Context.cs">
+    <Compile Include="Converters\PasswordVisibilityConverter.cs" />
+    <Compile Include="Models\Budgets.cs">
+      <DependentUpon>TM_Database.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Categories.cs">
+      <DependentUpon>TM_Database.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Debts.cs">
+      <DependentUpon>TM_Database.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RecurringBills.cs">
+      <DependentUpon>TM_Database.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Roles.cs">
+      <DependentUpon>TM_Database.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Savings.cs">
+      <DependentUpon>TM_Database.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sysdiagrams.cs">
+      <DependentUpon>TM_Database.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TM_Database.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.Context.tt</DependentUpon>
+      <DependentUpon>TM_Database.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Model1.cs">
+    <Compile Include="Models\TM_Database.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>TM_Database.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Model1.Designer.cs">
+    <Compile Include="Models\TM_Database.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.edmx</DependentUpon>
+      <DependentUpon>TM_Database.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\roles.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+    <Compile Include="Models\Transactions.cs">
+      <DependentUpon>TM_Database.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\users.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+    <Compile Include="Models\Users.cs">
+      <DependentUpon>TM_Database.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Wallets.cs">
+      <DependentUpon>TM_Database.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Services\LoginService.cs" />
+    <Compile Include="Services\TransactionService.cs" />
+    <Compile Include="Services\UserSessionService.cs" />
+    <Compile Include="ViewModels\AddTransactionViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\BudgetsViewModel.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />
@@ -123,6 +152,15 @@
     </Compile>
     <Compile Include="Views\MainViews\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Messages\ConfirmDialog.xaml.cs">
+      <DependentUpon>ConfirmDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Messages\ErrorDialog.xaml.cs">
+      <DependentUpon>ErrorDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SubViews\AddTransaction.xaml.cs">
+      <DependentUpon>AddTransaction.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\Budgets_UC.xaml.cs">
       <DependentUpon>Budgets_UC.xaml</DependentUpon>
@@ -164,12 +202,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EntityDeploy Include="Models\Model1.edmx">
+    <EntityDeploy Include="Models\TM_Database.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
+      <LastGenOutput>TM_Database.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="Models\Model1.edmx.diagram">
-      <DependentUpon>Model1.edmx</DependentUpon>
+    <None Include="Models\TM_Database.edmx.diagram">
+      <DependentUpon>TM_Database.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -193,6 +231,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Styles\Main\ThemeColors.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\User\ButtonContent.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -214,6 +255,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainViews\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Messages\ConfirmDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Messages\ErrorDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SubViews\AddTransaction.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -248,17 +301,19 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Models\Model1.Context.tt">
+    <Resource Include="Resources\Images\hinhnen.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Content Include="Models\TM_Database.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model1.edmx</DependentUpon>
-      <LastGenOutput>Model1.Context.cs</LastGenOutput>
+      <DependentUpon>TM_Database.edmx</DependentUpon>
+      <LastGenOutput>TM_Database.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\Model1.tt">
+    <Content Include="Models\TM_Database.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model1.edmx</DependentUpon>
-      <LastGenOutput>Model1.cs</LastGenOutput>
+      <DependentUpon>TM_Database.edmx</DependentUpon>
+      <LastGenOutput>TM_Database.cs</LastGenOutput>
     </Content>
-    <Resource Include="Resources\Images\hinhnen.png" />
     <Content Include="Resources\Images\Backgrounds\Animation_Pixel_BG.mp4">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

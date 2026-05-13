@@ -1,75 +1,112 @@
-﻿using Transaction_Management.Commands;
-using Transaction_Management.Views.MainViews; // Chú ý: Trỏ đúng thư mục chứa MainView
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Transaction_Management.Commands;
+using Transaction_Management.Services;
+using Transaction_Management.Views.MainViews;
+using Transaction_Management.Views.Messages;
 
 namespace Transaction_Management.ViewModels
 {
-    public class LoginViewModel : BaseViewModel
+    class LoginViewModel : BaseViewModel
     {
-        // 1. Thuộc tính để Binding với ô TextBox Username
-        private string _getUsername;
-        public string GetUsername
+
+
+        #region Properties
+        private readonly LoginService _loginService = new LoginService();
+        private string _username;
+        public string Username
         {
-            get { return _getUsername; }
+            get => _username;
             set
             {
-                _getUsername = value;
-                OnPropertyChanged(nameof(GetUsername));
+                _username = value;
+                OnPropertyChanged(nameof(Username));
+            }
+        }
+        public static string CurrentUser { get; set; }
+
+        private int _roleID;
+        public int RoleID
+        {
+            get => _roleID;
+            set
+            {
+                _roleID = value;
+                OnPropertyChanged(nameof(IsAdmin));
+                OnPropertyChanged(nameof(IsUser));
+                OnPropertyChanged(nameof(CurrentRole));
             }
         }
 
+        public bool IsAdmin => UserSessionService.IsAdmin(RoleID);
+        public bool IsUser => UserSessionService.IsUser(RoleID);
+        public static string CurrentRole { get; set; }
+
+
         public ICommand LoginCommand { get; set; }
+        #endregion
 
-        // Biến static để lưu tên đăng nhập dùng chung toàn ứng dụng
-        public static string CurrentUser { get; set; }
-
+        #region Constructor
         public LoginViewModel()
         {
-            // Khởi tạo lệnh đăng nhập, truyền vào PasswordBox
-            // Đưa điều kiện (p) => true lên trước để khớp với thư viện của bạn
-            // Chỉ cần truyền hành động Login(p). Điều kiện mặc định tự động là true.
-            LoginCommand = new RelayCommand<PasswordBox>((p) => Login(p));
+            LoginCommand = new RelayCommand<object>((p) => LoginExecute(p),(p) => true);
         }
+        #endregion
+        #region Methods
 
-        private void Login(PasswordBox pwb)
+
+        /// <summary>
+        /// Xử lý sự kiện đăng nhập từ giao diện (View).
+        /// </summary>
+        /// <param name="parameter">
+        /// Tham số dạng object, yêu cầu ép kiểu về <see cref="PasswordBox"/> 
+        /// để lấy mật khẩu trực tiếp nhằm đảm bảo an toàn dữ liệu (không lưu Password trong bộ nhớ String quá lâu).
+        /// </param>
+        /// <exception cref="System.NullReferenceException">Ném ra nếu parameter không phải là một PasswordBox hợp lệ.</exception>
+        private void LoginExecute(object parameter)
         {
-            if (pwb == null) return;
+            var passwordBox = parameter as PasswordBox;
+            if (passwordBox == null) return;
 
-            string password = pwb.Password;
-
-            // Kiểm tra rỗng
-            if (string.IsNullOrEmpty(GetUsername) || string.IsNullOrEmpty(password))
+            string password = passwordBox.Password;
+            if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(password))
             {
-                MessageBox.Show("Vui lòng nhập đầy đủ Username và Password!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ShowError("Please enter all the required information!");
                 return;
             }
 
-            // GHI CHÚ: Sau này bạn thêm logic kiểm tra Database ở đây
-            // ...
-            // if (CheckDatabase(GetUsername, password) == false) return;
-
-            // NẾU ĐĂNG NHẬP THÀNH CÔNG:
-
-            // 1. Lưu lại tài khoản đang dùng
-            CurrentUser = GetUsername;
-
-            // 2. Mở cửa sổ trang chính (MainView)
-            MainView mainView = new MainView();
-            mainView.Show();
-
-            // 3. Đóng cửa sổ Đăng nhập (MainLoginView) hiện tại
-            Window loginWindow = Application.Current.Windows.OfType<MainLoginView>().FirstOrDefault();
-            if (loginWindow != null)
+            if (_loginService.Authenticate(Username, password, out int roleId))
             {
-                loginWindow.Close();
+                CurrentUser = Username;
+                
+                RoleID = roleId;
+                CurrentRole = UserSessionService.GetRoleName(RoleID);
+
+                MainView main = new MainView();
+                main.Show();
+
+                Window currentWindow = Application.Current.Windows.OfType<Window>().FirstOrDefault(x => x != main);
+
+                currentWindow?.Close();
+            }
+            else
+            {
+                ShowError("Login failed! Please check your username and password.");
             }
         }
+
+        /// <summary>
+        ///  Xử lý hiển thị nội dung khi có lỗi xảy ra
+        /// </summary>
+        /// <param name="message">Truyền vào nội dung lỗi</param>
+        private void ShowError(string message)
+        {
+            ErrorDialog error = new ErrorDialog(message);
+            error.ShowDialog();
+        }
+        #endregion
     }
 }

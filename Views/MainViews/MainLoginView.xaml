@@ -1,4 +1,4 @@
-﻿<Window x:Class="Transaction_Management.Views.MainViews.MainLoginView"
+﻿    <Window x:Class="Transaction_Management.Views.MainViews.MainLoginView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -31,8 +31,12 @@
 
     <Grid>
         <!-- ẢNH NỀN TRÀN VIỀN -->
-        <Image Source="pack://application:,,,/Resources/Images/hinhnen.png" 
-               Stretch="UniformToFill" />
+        <Image Source="/Resources/Images/hinhnen.png" 
+               Stretch="UniformToFill">
+            <Image.Effect>
+                <BlurEffect Radius="10" />
+            </Image.Effect>
+        </Image>
 
         <!-- Lớp phủ màu đen trong suốt để làm dịu ảnh nền, tôn Form trắng lên -->
         <Rectangle Fill="Black" Opacity="0.15" />

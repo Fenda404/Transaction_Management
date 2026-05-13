@@ -135,7 +135,7 @@
                 <StackPanel Grid.Row="1" Margin="0,0,0,20">
                     <TextBlock Text="Username" Foreground="#333333" FontWeight="SemiBold" FontSize="14" Margin="5,0,0,8" />
                     <TextBox x:Name="txtUsername"
-                             Text="{Binding GetUsername}"
+                             Text="{Binding Username}"
                              Style="{StaticResource LoginInputStyle}" />
                 </StackPanel>
 

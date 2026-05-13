@@ -12,18 +12,16 @@ namespace Transaction_Management.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Roles
+    public partial class Savings
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Roles()
-        {
-            this.Users = new HashSet<Users>();
-        }
+        public int SavingID { get; set; }
+        public int UserID { get; set; }
+        public string GoalName { get; set; }
+        public decimal TargetAmount { get; set; }
+        public Nullable<decimal> CurrentAmount { get; set; }
+        public Nullable<System.DateTime> Deadline { get; set; }
+        public string Status { get; set; }
     
-        public int RoleID { get; set; }
-        public string RoleName { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Users> Users { get; set; }
+        public virtual Users Users { get; set; }
     }
 }

@@ -13,10 +13,10 @@ namespace Transaction_Management.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class TRANSACTION_MANAGEMENTEntities : DbContext
+    public partial class TM_Database : DbContext
     {
-        public TRANSACTION_MANAGEMENTEntities()
-            : base("name=TRANSACTION_MANAGEMENTEntities")
+        public TM_Database()
+            : base("name=TM_Database")
         {
         }
     
@@ -25,7 +25,15 @@ namespace Transaction_Management.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<roles> roles { get; set; }
-        public virtual DbSet<users> users { get; set; }
+        public virtual DbSet<Budgets> Budgets { get; set; }
+        public virtual DbSet<Categories> Categories { get; set; }
+        public virtual DbSet<Debts> Debts { get; set; }
+        public virtual DbSet<RecurringBills> RecurringBills { get; set; }
+        public virtual DbSet<Roles> Roles { get; set; }
+        public virtual DbSet<Savings> Savings { get; set; }
+        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public virtual DbSet<Transactions> Transactions { get; set; }
+        public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Wallets> Wallets { get; set; }
     }
 }

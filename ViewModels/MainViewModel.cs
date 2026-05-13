@@ -35,17 +35,29 @@ namespace Transaction_Management.ViewModels
             }
         }
 
+        private string _getRoleName;
+        public string GetRoleName
+        {
+            get => _getRoleName;
+            set
+            {
+                _getRoleName = value;
+                OnPropertyChanged(nameof(GetRoleName));
+            }
+        }
+
         // Lệnh chuyển đổi trang (Dashboard, Transactions, Reports, Budgets, Settings)
         public ICommand SwitchViewCommand { get; set; }
 
         // Lệnh đăng xuất
-        public ICommand SignOutCommand { get; set; }
+        
 
         public MainViewModel()
         {
             // 1. Khởi tạo trạng thái ban đầu
             // Lấy tên người dùng từ LoginViewModel sau khi đăng nhập thành công
-            GetUsername = LoginViewModel.CurrentUser ?? "Fenda Admin";
+            GetUsername = LoginViewModel.CurrentUser ?? "Admin";
+            GetRoleName = LoginViewModel.CurrentRole ?? "ADMIN";
 
             // Trang mặc định khi vừa mở ứng dụng là Dashboard
             CurrentView = new DashboardViewModel();
@@ -75,19 +87,8 @@ namespace Transaction_Management.ViewModels
             }, (p) => true);
 
             // 3. Khởi tạo logic Đăng xuất
-            SignOutCommand = new RelayCommand<object>((p) =>
-            {
-                // Mở lại cửa sổ Đăng nhập
-                MainLoginView loginWindow = new MainLoginView();
-                loginWindow.Show();
+            
 
-                // Tìm và đóng cửa sổ MainView hiện tại
-                Window currentWin = Application.Current.Windows.OfType<MainView>().FirstOrDefault();
-                if (currentWin != null)
-                {
-                    currentWin.Close();
-                }
-            });
         }
     }
 }

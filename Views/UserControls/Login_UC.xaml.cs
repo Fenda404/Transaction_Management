@@ -1,31 +1,19 @@
-﻿using Transaction_Management.ViewModels; // SỬA: Cập nhật thư viện ViewModels
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using Transaction_Management.ViewModels;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace Transaction_Management.Views.UserControls // SỬA: Đổi tên namespace cho khớp với project
+namespace Transaction_Management.Views.UserControls
 {
     /// <summary>
     /// Interaction logic for Login_UC.xaml
     /// </summary>
     public partial class Login_UC : UserControl
     {
-        LoginViewModel lgvm;
+        private LoginViewModel _viewModel;
+
         public Login_UC()
         {
             InitializeComponent();
-            lgvm = (LoginViewModel)DataContext;
+            _viewModel = DataContext as LoginViewModel;
         }
     }
 }

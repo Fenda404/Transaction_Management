@@ -12,18 +12,23 @@ namespace Transaction_Management.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Roles
+    public partial class Categories
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Roles()
+        public Categories()
         {
-            this.Users = new HashSet<Users>();
+            this.Budgets = new HashSet<Budgets>();
+            this.Transactions = new HashSet<Transactions>();
         }
     
-        public int RoleID { get; set; }
-        public string RoleName { get; set; }
+        public int CategoryID { get; set; }
+        public string CategoryName { get; set; }
+        public string CategoryType { get; set; }
+        public string Description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Users> Users { get; set; }
+        public virtual ICollection<Budgets> Budgets { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Transactions> Transactions { get; set; }
     }
 }

@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 
 namespace Transaction_Management.ViewModels
 {
-    // SỬA: Thêm chữ 'public'
+    
     public class RegisterViewModel : BaseViewModel
     {
 

@@ -6,8 +6,9 @@
         xmlns:vm="clr-namespace:Transaction_Management.ViewModels"
         xmlns:uc="clr-namespace:Transaction_Management.Views.UserControls"
         mc:Ignorable="d"
-        Title="Hệ thống Quản lý Tài chính - Fenda404"
-        Height="800" Width="1400"
+        Title="Hệ thống Quản lý chi tiêu cá nhân"
+        Height="800"
+        Width="1400"
         WindowStartupLocation="CenterScreen"
         Background="Transparent">
 
@@ -38,10 +39,14 @@
         <!-- NỀN GRADIENT TOÀN CỬA SỔ -->
         <Border>
             <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#FFFFFF" Offset="0.0" />
-                    <GradientStop Color="#F1F8E9" Offset="0.5" />
-                    <GradientStop Color="#C8E6C9" Offset="1.0" />
+                <LinearGradientBrush StartPoint="0,0"
+                                     EndPoint="1,1">
+                    <GradientStop Color="#FFFFFF"
+                                  Offset="0.0" />
+                    <GradientStop Color="#F1F8E9"
+                                  Offset="0.5" />
+                    <GradientStop Color="#C8E6C9"
+                                  Offset="1.0" />
                 </LinearGradientBrush>
             </Border.Background>
         </Border>
@@ -55,8 +60,8 @@
             </Grid.ColumnDefinitions>
 
             <!-- 1. SIDEBAR (THANH ĐIỀU HƯỚNG BÊN TRÁI) -->
-            <Border Grid.Column="0" 
-                    Style="{StaticResource BorderSidebarStyle}" 
+            <Border Grid.Column="0"
+                    Style="{StaticResource BorderSidebarStyle}"
                     Margin="0,0,15,0">
                 <Border Style="{StaticResource SidebarContainerStyle}">
                     <Grid>
@@ -70,51 +75,92 @@
                         </Grid.RowDefinitions>
 
                         <!-- Avatar & Profile -->
-                        <StackPanel Grid.Row="0" Margin="0,40,0,30">
-                            <Border Width="90" Height="90" CornerRadius="45" Background="#33FFFFFF" 
-                                    BorderBrush="White" BorderThickness="2" Margin="0,0,0,15">
-                                <TextBlock Text="&#xE77B;" FontFamily="Segoe MDL2 Assets" FontSize="50" 
-                                           Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <WrapPanel Grid.Row="0"
+                                   Margin="30,40,0,30">
+                            <Border Width="90"
+                                    Height="90"
+                                    CornerRadius="45"
+                                    Background="#33FFFFFF"
+                                    BorderBrush="White"
+                                    BorderThickness="2"
+                                    Margin="0,0,0,15">
+                                <TextBlock Text="&#xE77B;"
+                                           FontFamily="Segoe MDL2 Assets"
+                                           FontSize="50"
+                                           Foreground="White"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
                             </Border>
-                            <TextBlock Text="{Binding GetUsername}" Foreground="White" FontSize="22" 
-                                       FontWeight="Bold" HorizontalAlignment="Center" Margin="10,0"/>
-                        </StackPanel>
+                            <StackPanel VerticalAlignment="Center"
+                                        Margin="5,0,0,0">
+                            <TextBlock Text="{Binding GetRoleName}"
+                                       Foreground="White"
+                                       FontSize="22"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Center"
+                                       Margin="10,0" />
+                            <TextBlock Text="{Binding GetUsername}"
+                                       Foreground="White"
+                                       FontSize="22"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Center"
+                                       Margin="10,0" />
+                            </StackPanel>
+                        </WrapPanel>
 
                         <!-- Menu Buttons -->
-                        <StackPanel Grid.Row="1" Margin="10,0">
-                            <Button Style="{StaticResource SidebarButtonStyle}" Content="DASHBOARD" 
-                                    Command="{Binding SwitchViewCommand}" CommandParameter="Dashboard" />
+                        <StackPanel Grid.Row="1"
+                                    Margin="10,0"
+                                    >
+                            <Button Style="{StaticResource SidebarButtonStyle}"
+                                    Content="DASHBOARD"
+                                    Command="{Binding SwitchViewCommand}"
+                                    CommandParameter="Dashboard" 
+                                    Margin="0,10,0,10"
+                                    FontSize="24"/>
 
-                            <Button Style="{StaticResource SidebarButtonStyle}" Content="TRANSACTIONS" 
-                                    Command="{Binding SwitchViewCommand}" CommandParameter="Transactions" />
+                            <Button Style="{StaticResource SidebarButtonStyle}"
+                                    Content="TRANSACTIONS"
+                                    Command="{Binding SwitchViewCommand}"
+                                    CommandParameter="Transactions"
+                                    Margin="0,10,0,10"
+                                    FontSize="24" />
 
-                            <Button Style="{StaticResource SidebarButtonStyle}" Content="REPORTS" 
-                                    Command="{Binding SwitchViewCommand}" CommandParameter="Reports" />
+                            <Button Style="{StaticResource SidebarButtonStyle}"
+                                    Content="REPORTS"
+                                    Command="{Binding SwitchViewCommand}"
+                                    CommandParameter="Reports"
+                                    Margin="0,10,0,10"
+                                    FontSize="24"/>
 
-                            <Button Style="{StaticResource SidebarButtonStyle}" Content="BUDGETS" 
-                                    Command="{Binding SwitchViewCommand}" CommandParameter="Budgets" />
+                            <Button Style="{StaticResource SidebarButtonStyle}"
+                                    Content="BUDGETS"
+                                    Command="{Binding SwitchViewCommand}"
+                                    CommandParameter="Budgets"
+                                    Margin="0,10,0,10" 
+                                    FontSize="24"/>
 
-                            <Button Style="{StaticResource SidebarButtonStyle}" Content="SETTINGS" 
-                                    Command="{Binding SwitchViewCommand}" CommandParameter="Settings" />
+                            <Button Style="{StaticResource SidebarButtonStyle}"
+                                    Content="SETTINGS"
+                                    Command="{Binding SwitchViewCommand}"
+                                    CommandParameter="Settings"
+                                    Margin="0,10,0,10"
+                                    FontSize="24"/>
                         </StackPanel>
-
-                        <!-- Sign Out -->
-                        <Button Grid.Row="2" Style="{StaticResource SidebarButtonStyle}" 
-                                Content="SIGN OUT" Command="{Binding SignOutCommand}" 
-                                Margin="10,0,10,30" Background="#1B5E20" Opacity="0.8"/>
                     </Grid>
                 </Border>
             </Border>
 
             <!-- 2. NỘI DUNG CHÍNH (KHUNG TRẮNG BÊN PHẢI) -->
-            <Border Grid.Column="1" Style="{StaticResource BorderContainerStyle}">
+            <Border Grid.Column="1"
+                    Style="{StaticResource BorderContainerStyle}">
                 <Border Style="{StaticResource MainContainerStyle}">
                     <Grid>
                         <!-- NƠI HIỂN THỊ CÁC USERCONTROL TƯƠNG ỨNG VỚI CURRENT VIEW -->
-                        <ContentControl Content="{Binding CurrentView}" 
-                                        HorizontalAlignment="Stretch" 
-                                        VerticalAlignment="Stretch" 
-                                        Margin="5"/>
+                        <ContentControl Content="{Binding CurrentView}"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        Margin="5" />
                     </Grid>
                 </Border>
             </Border>

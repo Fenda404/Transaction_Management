@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- DYNAMIC THEME COLORS - Sẽ được cập nhật runtime -->
+    
+    <!-- Primary Color (Màu chính) -->
+    <SolidColorBrush x:Key="PrimaryColor" Color="#2E7D32" />
+    <SolidColorBrush x:Key="PrimaryDarkColor" Color="#1B5E20" />
+    <SolidColorBrush x:Key="PrimaryLightColor" Color="#4CAF50" />
+    
+    <!-- Secondary Colors -->
+    <SolidColorBrush x:Key="AccentColor" Color="#FF5722" />
+    <SolidColorBrush x:Key="SuccessColor" Color="#4CAF50" />
+    <SolidColorBrush x:Key="ErrorColor" Color="#F44336" />
+    <SolidColorBrush x:Key="WarningColor" Color="#FF9800" />
+    <SolidColorBrush x:Key="InfoColor" Color="#2196F3" />
+    
+    <!-- Neutral Colors -->
+    <SolidColorBrush x:Key="TextColor" Color="#212121" />
+    <SolidColorBrush x:Key="TextLightColor" Color="#757575" />
+    <SolidColorBrush x:Key="BorderColor" Color="#E0E0E0" />
+    <SolidColorBrush x:Key="BackgroundColor" Color="#F5F5F5" />
+
+</ResourceDictionary>
