@@ -13,12 +13,11 @@ using Transaction_Management.Views.Messages;
 
 namespace Transaction_Management.ViewModels
 {
-    public class AddTransactionViewModel:BaseViewModel
+    public class EditTransactionViewModel : BaseViewModel
     {
         #region Properties
 
-       
-
+        private readonly Transactions _originalTransaction;
         TransactionService transactionService = new TransactionService();
         public ObservableCollection<string> Categories { get; set; }
         public ObservableCollection<Wallets> Wallets { get; set; }
@@ -85,14 +84,27 @@ namespace Transaction_Management.ViewModels
         public ICommand SaveCommand { get; set; }
         #endregion
         #region Constructor
-        public AddTransactionViewModel()
+        public EditTransactionViewModel(Transactions transactionToEdit)
         {
+            _originalTransaction = transactionToEdit ?? throw new ArgumentNullException(nameof(transactionToEdit));
             LoadData();
-            CancelCommand = new RelayCommand<object>((p) => Cancel(p), (p) => true);
-            SaveCommand = new RelayCommand(_ => Save(), _ => true);
+            FillData();
         }
         #endregion
         #region Methods
+
+        private void FillData()
+        {
+            Amount = _originalTransaction.Amount;
+            Date = _originalTransaction.TransactionDate.Value;
+            Description = _originalTransaction.Note;
+
+            // Ép kiểu hiển thị string tương thích với SelectedValue của ComboBox
+            Wallet = _originalTransaction.Wallets?.WalletName;
+            Category = _originalTransaction.Categories?.CategoryName;
+            CancelCommand = new RelayCommand<object>((p) => Cancel(p), (p) => true);
+            SaveCommand = new RelayCommand(_ => Save(), _ => true);
+        }
         private void LoadData()
         {
             Wallets = transactionService.Wallets;
@@ -115,12 +127,14 @@ namespace Transaction_Management.ViewModels
 
         private void Save()
         {
-            var checkSuccess = transactionService.AddTransaction(Amount, Wallet, Category, Date, Description);
+            int targetId = _originalTransaction.TransactionID;
+            var checkSuccess = transactionService.EditTransaction(targetId, Amount, Wallet, Category, Date, Description);
             if (checkSuccess)
             {
                 ConfirmDialog confirmDialog = new ConfirmDialog("Đã lưu thành công");
                 confirmDialog.ShowDialog();
                 SavedCallback?.Invoke();
+
             }
             else
             {
@@ -129,9 +143,6 @@ namespace Transaction_Management.ViewModels
             }
 
         }
-        
-
-        
         #endregion
     }
 }

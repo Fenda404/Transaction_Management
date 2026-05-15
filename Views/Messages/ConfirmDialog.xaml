@@ -65,7 +65,9 @@
                         Foreground="White"
                         BorderThickness="0"
                         Margin="0,0,10,0"
-                        Click="BtnYes_Click">
+                        Click="BtnYes_Click"
+                        IsDefault="True"
+                        >
                     <Button.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius"
@@ -80,7 +82,8 @@
                         Background="#CCCCCC"
                         Foreground="#333"
                         BorderThickness="0"
-                        Click="BtnNo_Click">
+                        Click="BtnNo_Click"
+                        IsCancel="True">
                     <Button.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius"

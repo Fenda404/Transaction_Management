@@ -198,6 +198,7 @@
             </Border.Effect>
 
             <DataGrid ItemsSource="{Binding Transactions}"
+                      SelectedItem="{Binding SelectedTransaction}"
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
                       Background="Transparent"
@@ -211,6 +212,7 @@
                       CanUserResizeRows="False"
                       CanUserSortColumns="False"
                       SelectionUnit="FullRow">
+
 
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
@@ -288,7 +290,7 @@
                     <!-- Cột Mô tả -->
                     <DataGridTextColumn Header="📝 MÔ TẢ"
                                         Binding="{Binding Note}"
-                                        Width="350"
+                                        Width="300"
                                         FontSize="14">
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="DataGridCell">
@@ -370,12 +372,14 @@
                                             Style="{StaticResource ActionButtonStyle}"
                                             Foreground="#4CAF50"
                                             ToolTip="Sửa"
-                                            Margin="5,0" />
+                                            Margin="5,0"
+                                            Command="{Binding DataContext.EditTransactionCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                                     <Button Content="&#xE74D;"
                                             Style="{StaticResource ActionButtonStyle}"
                                             Foreground="#D32F2F"
                                             ToolTip="Xóa"
-                                            Margin="5,0" />
+                                            Margin="5,0"
+                                            Command="{Binding DataContext.DeleteTransactionCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

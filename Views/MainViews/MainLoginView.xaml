@@ -31,7 +31,7 @@
 
     <Grid>
         <!-- ẢNH NỀN TRÀN VIỀN -->
-        <Image Source="/Resources/Images/hinhnen.png" 
+        <Image Source="/Resources/Images/Backgrounds/hinhnen.png" 
                Stretch="UniformToFill">
             <Image.Effect>
                 <BlurEffect Radius="10" />

@@ -140,6 +140,7 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\BudgetsViewModel.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />
+    <Compile Include="ViewModels\EditTransactionViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainLoginViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
@@ -161,6 +162,9 @@
     </Compile>
     <Compile Include="Views\SubViews\AddTransaction.xaml.cs">
       <DependentUpon>AddTransaction.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SubViews\EditTransaction.xaml.cs">
+      <DependentUpon>EditTransaction.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\Budgets_UC.xaml.cs">
       <DependentUpon>Budgets_UC.xaml</DependentUpon>
@@ -270,6 +274,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\SubViews\EditTransaction.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UserControls\Budgets_UC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -301,7 +309,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Resource Include="Resources\Images\hinhnen.png">
+    <Resource Include="Resources\Images\Backgrounds\hinhnen.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Content Include="Models\TM_Database.Context.tt">
