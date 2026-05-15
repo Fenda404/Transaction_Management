@@ -196,7 +196,7 @@
                 </Grid>
 
                 <!-- FOOTER / COPYRIGHT -->
-                <TextBlock Text="© 2026 Fenda404. All rights reserved."
+                <TextBlock Text="© 2026 Team 10. All rights reserved."
                            Grid.Row="5"
                            HorizontalAlignment="Center"
                            Foreground="#9E9E9E" 

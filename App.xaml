@@ -12,11 +12,13 @@
                 <ResourceDictionary Source="/Styles/User/TextBoxContent.xaml" />
                 <ResourceDictionary Source="/Styles/User/ButtonContent.xaml" />
                 <ResourceDictionary Source="/Styles/User/TextBlockContent.xaml" />
+                <ResourceDictionary Source="/Styles/User/SubView.xaml" />
 
 
 
                 <ResourceDictionary Source="/Styles/Main/TextBoxStyle.xaml" />
                 <ResourceDictionary Source="/Styles/Main/ContainerStyle.xaml" />
+                <ResourceDictionary Source="/Styles/Main/ButtonContentSidebar.xaml" />
                 <ResourceDictionary Source="/Styles/Main/ButtonContentSidebar.xaml" />
 
 
