@@ -4,11 +4,13 @@
            TargetType="Button">
         <!-- Nền mặc định trong suốt để lộ màu xanh của Sidebar -->
         <Setter Property="Background"
-                Value="Transparent" />
+                Value="Green" />
         <Setter Property="FontSize"
                 Value="20" />
         <Setter Property="FontFamily"
-                Value="Cascadia Mono" />
+                Value="Arial" />
+        <Setter Property="FontWeight"
+                Value="Bold" />
         <Setter Property="Foreground"
                 Value="White" />
         <Setter Property="Height"
@@ -27,6 +29,8 @@
                     <Border Background="{TemplateBinding Background}"
                             CornerRadius="10"
                             Margin="5,2"
+                            BorderThickness="1"
+                            BorderBrush="DarkGreen"
                             x:Name="border">
                         <ContentPresenter VerticalAlignment="Center"
                                           HorizontalAlignment="Center"/>

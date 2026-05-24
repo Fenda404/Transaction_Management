@@ -141,7 +141,6 @@ namespace Transaction_Management.ViewModels
                 ErrorDialog errorDialog = new ErrorDialog("Lỗi trong quá trình lưu vào database");
                 errorDialog.ShowDialog();
             }
-
         }
         #endregion
     }

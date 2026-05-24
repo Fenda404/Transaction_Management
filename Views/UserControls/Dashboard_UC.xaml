@@ -3,10 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:Transaction_Management.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="600"
              d:DesignWidth="900">
 
+    
+    
+    
+    
     <UserControl.Resources>
         <!-- Style cho các thẻ Thống kê (Cards) -->
         <Style x:Key="DashboardCardStyle" TargetType="Border">
@@ -69,6 +74,10 @@
         </Style>
     </UserControl.Resources>
 
+    <UserControl.DataContext>
+        <vm:DashboardViewModel />
+    </UserControl.DataContext>
+
     <!-- Phần Grid chính của Dashboard -->
     <Grid Margin="15">
         <Grid.RowDefinitions>
@@ -81,16 +90,16 @@
             <!-- Thẻ Tổng số dư -->
             <Border Style="{StaticResource DashboardCardStyle}">
                 <StackPanel>
-                    <TextBlock Text="TOTAL BALANCE" Style="{StaticResource CardTitleStyle}" />
+                    <TextBlock Text="TỔNG TIỀN" Style="{StaticResource CardTitleStyle}" />
                     <!-- StringFormat {0:N0} giúp định dạng số tiền có dấu phẩy: 15,000,000 -->
-                    <TextBlock Text="{Binding TotalBalance, StringFormat={}{0:N0} đ}" Style="{StaticResource CardValueStyle}" />
+                    <TextBlock Text="{Binding GetTotalBalance, StringFormat={}{0:N0} đ}" Style="{StaticResource CardValueStyle}" />
                 </StackPanel>
             </Border>
 
             <!-- Thẻ Thu nhập -->
             <Border Style="{StaticResource DashboardCardStyle}">
                 <StackPanel>
-                    <TextBlock Text="MONTHLY INCOME" Style="{StaticResource CardTitleStyle}" />
+                    <TextBlock Text="THU NHẬP THÁNG" Style="{StaticResource CardTitleStyle}" />
                     <TextBlock Text="{Binding MonthlyIncome, StringFormat={}{0:N0} đ}" Style="{StaticResource CardValueStyle}" />
                 </StackPanel>
             </Border>
@@ -98,7 +107,7 @@
             <!-- Thẻ Chi phí -->
             <Border Style="{StaticResource DashboardCardStyle}">
                 <StackPanel>
-                    <TextBlock Text="MONTHLY EXPENSES" Style="{StaticResource CardTitleStyle}" />
+                    <TextBlock Text="CHI TIÊU THÁNG" Style="{StaticResource CardTitleStyle}" />
                     <TextBlock Text="{Binding MonthlyExpense, StringFormat={}{0:N0} đ}" Style="{StaticResource CardValueStyle}" Foreground="#D32F2F" />
                 </StackPanel>
             </Border>
@@ -122,7 +131,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="Recent Transactions" 
+                <TextBlock Text="GIAO DỊCH GẦN ĐÂY" 
                            FontSize="20" 
                            FontWeight="Bold" 
                            Foreground="#2E7D32" 
@@ -146,16 +155,16 @@
                           FontSize="14"
                           ColumnHeaderStyle="{StaticResource DashboardDataGridStyle}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="DATE"
+                        <DataGridTextColumn Header="NGÀY"
                                             Binding="{Binding Date, StringFormat=dd/MM/yyyy}"
                                             Width="150" />
 
-                        <DataGridTextColumn Header="DESCRIPTION"
+                        <DataGridTextColumn Header="GHI CHÚ"
                                             Binding="{Binding Description}"
                                             Width="*" />
 
                         <!-- Cột số tiền căn phải -->
-                        <DataGridTextColumn Header="AMOUNT"
+                        <DataGridTextColumn Header="SỐ TIỀN"
                                             Binding="{Binding Amount, StringFormat={}{0:N0} đ}"
                                             Width="200">
                             <DataGridTextColumn.ElementStyle>

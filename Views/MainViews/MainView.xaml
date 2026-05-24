@@ -113,35 +113,35 @@
                                     Margin="10,0"
                                     >
                             <Button Style="{StaticResource SidebarButtonStyle}"
-                                    Content="DASHBOARD"
+                                    Content="TỔNG QUAN"
                                     Command="{Binding SwitchViewCommand}"
                                     CommandParameter="Dashboard" 
                                     Margin="0,10,0,10"
                                     FontSize="24"/>
 
                             <Button Style="{StaticResource SidebarButtonStyle}"
-                                    Content="TRANSACTIONS"
+                                    Content="GIAO DỊCH"
                                     Command="{Binding SwitchViewCommand}"
                                     CommandParameter="Transactions"
                                     Margin="0,10,0,10"
                                     FontSize="24" />
 
                             <Button Style="{StaticResource SidebarButtonStyle}"
-                                    Content="REPORTS"
+                                    Content="BÁO CÁO"
                                     Command="{Binding SwitchViewCommand}"
                                     CommandParameter="Reports"
                                     Margin="0,10,0,10"
                                     FontSize="24"/>
 
                             <Button Style="{StaticResource SidebarButtonStyle}"
-                                    Content="BUDGETS"
+                                    Content="NGÂN SÁCH"
                                     Command="{Binding SwitchViewCommand}"
                                     CommandParameter="Budgets"
                                     Margin="0,10,0,10" 
                                     FontSize="24"/>
 
                             <Button Style="{StaticResource SidebarButtonStyle}"
-                                    Content="SETTINGS"
+                                    Content="CÀI ĐẶT"
                                     Command="{Binding SwitchViewCommand}"
                                     CommandParameter="Settings"
                                     Margin="0,10,0,10"

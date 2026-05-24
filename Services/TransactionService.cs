@@ -164,6 +164,14 @@ namespace Transaction_Management.Services
                 return false;
             }
         }
+        public decimal GetSignedAmount(Transactions transaction)
+        {
+            if (transaction.Categories == null) return transaction.Amount;
+            return transaction.Categories.CategoryType.ToLower() == "income" ? transaction.Amount : -transaction.Amount;
+        }
+
+
+        #endregion
     }
 }
-        #endregion
+        
