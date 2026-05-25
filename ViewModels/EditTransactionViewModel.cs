@@ -93,6 +93,9 @@ namespace Transaction_Management.ViewModels
         #endregion
         #region Methods
 
+        /// <summary>
+        /// Hàm này để đổ dữ liệu từ transaction gốc vào các property của ViewModel, giúp hiển thị thông tin hiện tại của transaction trong giao diện người dùng khi mở form chỉnh sửa.
+        /// </summary>
         private void FillData()
         {
             Amount = _originalTransaction.Amount;
@@ -105,6 +108,11 @@ namespace Transaction_Management.ViewModels
             CancelCommand = new RelayCommand<object>((p) => Cancel(p), (p) => true);
             SaveCommand = new RelayCommand(_ => Save(), _ => true);
         }
+
+        /// <summary>
+        /// Hàm này để tải danh sách ví và danh mục từ TransactionService, giúp hiển thị các tùy chọn có sẵn trong ComboBox khi người dùng chỉnh sửa transaction. 
+        /// Việc lấy dữ liệu từ TransactionService thay vì hardcode giúp đảm bảo tính linh hoạt và đồng bộ với dữ liệu thực tế trong ứng dụng.
+        /// </summary>
         private void LoadData()
         {
             Wallets = transactionService.Wallets;
@@ -114,6 +122,12 @@ namespace Transaction_Management.ViewModels
             );
         }
 
+
+        /// <summary>
+        /// Hàm này để xử lý sự kiện khi người dùng nhấn nút "Cancel" trong giao diện chỉnh sửa transaction. Nó nhận một tham số là đối tượng cửa sổ (Window) hiện tại,
+        /// và nếu tham số này không null, nó sẽ đóng cửa sổ đó lại. Điều này cho phép người dùng thoát khỏi form chỉnh sửa mà không lưu bất kỳ thay đổi nào đã thực hiện.
+        /// </summary>
+        /// <param name="parameter">Đối tượng cửa sổ hiện tại</param>
         private void Cancel(object parameter)
         {
             var window = parameter as Window;
@@ -125,6 +139,10 @@ namespace Transaction_Management.ViewModels
 
         }
 
+        /// <summary>
+        /// Hàm này để xử lý sự kiện khi người dùng nhấn nút "Save" trong giao diện chỉnh sửa transaction. 
+        /// Nó sẽ gọi phương thức EditTransaction của TransactionService để cập nhật thông tin transaction trong cơ sở dữ liệu.
+        /// </summary>
         private void Save()
         {
             int targetId = _originalTransaction.TransactionID;

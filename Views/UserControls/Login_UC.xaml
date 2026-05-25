@@ -119,13 +119,13 @@
 
                 <!-- TIÊU ĐỀ -->
                 <StackPanel Grid.Row="0" Margin="0,0,0,35">
-                    <TextBlock Text="WELCOME BACK"
+                    <TextBlock Text="CHÀO MỪNG TRỞ LẠI"
                                HorizontalAlignment="Center"
                                Foreground="#2E7D32" 
                                FontSize="30"
                                FontWeight="Heavy" 
                                Margin="0,0,0,5" />
-                    <TextBlock Text="Please enter your details to sign in"
+                    <TextBlock Text="Vui lòng nhập thông tin để đăng nhập"
                                HorizontalAlignment="Center"
                                Foreground="#757575" 
                                FontSize="14" />
@@ -148,7 +148,7 @@
 
                 <!-- QUÊN MẬT KHẨU -->
                 <Button x:Name="btnForgetPass"
-                        Content="Forgot password?"
+                        Content="Quên mật khẩu?"
                         Grid.Row="3"
                         HorizontalAlignment="Right"
                         Foreground="#4CAF50" 
@@ -179,7 +179,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Button x:Name="btnLogin"
-                            Content="Sign In"
+                            Content="Đăng nhập"
                             Height="50"
                             Grid.Column="0"
                             Command="{Binding LoginCommand}"
@@ -187,7 +187,7 @@
                             Style="{StaticResource PrimaryButtonStyle}" />
 
                     <Button x:Name="btnRegister"
-                            Content="Sign Up"
+                            Content="Đăng ký"
                             Height="50"
                             Grid.Column="2"
                             Command="{Binding DataContext.SwitchViewCommand, RelativeSource={RelativeSource AncestorType=Window}}"

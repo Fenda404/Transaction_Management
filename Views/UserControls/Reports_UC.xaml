@@ -3,10 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:Transaction_Management.ViewModels"
+             xmlns:conv="clr-namespace:Transaction_Management.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1000">
 
+    <UserControl.DataContext>
+        <vm:ReportsViewModel />
+    </UserControl.DataContext>
+    
     <UserControl.Resources>
+        <conv:PercentToWidthConverter x:Key="PercentToWidthConverter" />
+        
         <!-- Style cho các thẻ báo cáo tổng quát -->
         <Style x:Key="ReportCardStyle" TargetType="Border">
             <Setter Property="CornerRadius" Value="20" />
@@ -130,11 +138,10 @@
                                     <Border Grid.Row="1" Grid.ColumnSpan="2" Height="10" Background="#F1F8E9" CornerRadius="5" Margin="0,10,0,0">
                                         <Grid HorizontalAlignment="Left">
                                             <!-- Chú ý: Chiều rộng này phụ thuộc vào Percentage (Cần Converter hoặc bind trực tiếp nếu tính toán sẵn) -->
-                                            <Border Background="{Binding ColorCode}" 
-                                                    CornerRadius="5" 
-                                                    Width="350">
-                                                <!-- Tạm thời để Width minh họa, bạn có thể chỉnh lại cho khớp dữ liệu -->
-                                            </Border>
+                                            <!-- Thay vì Width="350" cứng -->
+                                            <Border Background="{Binding ColorCode}"
+                                                    CornerRadius="5"
+                                                    Width="{Binding Percentage, Converter={StaticResource PercentToWidthConverter}, ConverterParameter=400}" />
                                         </Grid>
                                     </Border>
                                 </Grid>

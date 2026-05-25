@@ -116,6 +116,12 @@ namespace Transaction_Management.ViewModels
         #endregion
         #region Methods
 
+
+        /// <summary>
+        /// Hàm này dùng để load dữ liệu theo UserID của người dùng hiện tại
+        /// Sắp xếp theo TransactionDate giảm dần để giao dịch mới nhất hiển thị lên đầu
+        /// Sử dụng dịch vụ của UserSessionService để lấy thông tin người dùng hiện tại và TransactionService để lấy dữ liệu giao dịch từ database
+        /// </summary>
         private async void LoadData()
         {
             try
@@ -166,6 +172,11 @@ namespace Transaction_Management.ViewModels
             }
         }
 
+        /// <summary>
+        /// Hàm này dùng để thêm mới một giao dịch
+        /// Mở một cửa sổ mới (AddTransaction) để người dùng nhập thông tin giao dịch mới
+        /// </summary>
+
         private void AddNewTransaction()
         {
             var addTransactionView = new AddTransaction();
@@ -175,6 +186,11 @@ namespace Transaction_Management.ViewModels
             addTransactionView.ShowDialog();
         }
 
+
+        /// <summary>
+        /// Hàm này để refresh lại dữ liệu sau khi thêm, sửa hoặc xóa giao dịch
+        /// </summary>
+        /// <returns></returns>
         private async Task RefreshDataAsync()
         {
             try
@@ -216,6 +232,10 @@ namespace Transaction_Management.ViewModels
             }
         }
 
+
+        /// <summary>
+        /// Hàm này dùng để tìm kiếm giao dịch dựa trên biến SearchText
+        /// </summary>
         private async void Search()
         {
             if (_getAllTransactions == null || IsLoading) return;
@@ -271,7 +291,9 @@ namespace Transaction_Management.ViewModels
             }
         }
 
-        // Thêm hàm áp dụng filter riêng (không có debounce)
+        /// <summary>
+        /// Hàm này dùng để áp dụng bộ lọc tìm kiếm dựa trên SearchText lên collection Transactions
+        /// </summary>
         private void ApplySearchFilter()
         {
             if (_getAllTransactions == null) return;
@@ -306,6 +328,10 @@ namespace Transaction_Management.ViewModels
             }
         }
 
+
+        /// <summary>
+        /// Hàm này dùng để sửa một giao dịch đã chọn
+        /// </summary>
         private void EditTransaction()
         {
             if (SelectedTransaction == null)
@@ -322,6 +348,10 @@ namespace Transaction_Management.ViewModels
             editTransactionView.ShowDialog();
         }
 
+
+        /// <summary>
+        /// Hàm này dùng để xóa một giao dịch đã chọn
+        /// </summary>
         private async void DeleteTransaction()
         {
             if (SelectedTransaction == null)

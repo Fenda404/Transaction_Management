@@ -68,11 +68,13 @@ namespace Transaction_Management.ViewModels
         /// <exception cref="System.NullReferenceException">Ném ra nếu parameter không phải là một PasswordBox hợp lệ.</exception>
         private void LoginExecute(object parameter)
         {
-            var passwordBox = parameter as PasswordBox;
-            if (passwordBox == null) return;
+            // Dùng pattern matching để kiểm tra kiểu và chuyển đổi trong một bước
+            if (!(parameter is PasswordBox passwordBox)) return;
 
             string password = passwordBox.Password;
-            if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(password))
+
+            // Dùng IsNullOrWhiteSpace để kiểm tra đồng thời null, rỗng hoặc chỉ toàn khoảng trắng
+            if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(password))
             {
                 ShowError("Please enter all the required information!");
                 return;
@@ -81,16 +83,16 @@ namespace Transaction_Management.ViewModels
             if (_loginService.Authenticate(Username, password, out int roleId))
             {
                 CurrentUser = Username;
-                
                 RoleID = roleId;
-                CurrentRole = UserSessionService.GetRoleName(RoleID);
+                CurrentRole = UserSessionService.GetRoleName(roleId);
 
-                MainView main = new MainView();
-                main.Show();
+                var mainView = new MainView();
+                mainView.Show();
 
-                Window currentWindow = Application.Current.Windows.OfType<Window>().FirstOrDefault(x => x != main);
-
-                currentWindow?.Close();
+                // Lấy trực tiếp cửa sổ chứa PasswordBox (chính là Login Window)
+                // Nhanh hơn nhiều so với duyệt qua Application.Current.Windows
+                var loginWindow = Window.GetWindow(passwordBox);
+                loginWindow?.Close();
             }
             else
             {

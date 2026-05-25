@@ -88,6 +88,7 @@
     </Compile>
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\PasswordVisibilityConverter.cs" />
+    <Compile Include="Converters\PercentToWidthConverter.cs" />
     <Compile Include="Models\Budgets.cs">
       <DependentUpon>TM_Database.tt</DependentUpon>
     </Compile>
@@ -134,11 +135,13 @@
       <DependentUpon>TM_Database.tt</DependentUpon>
     </Compile>
     <Compile Include="Services\LoginService.cs" />
+    <Compile Include="Services\ReportService.cs" />
     <Compile Include="Services\TransactionService.cs" />
     <Compile Include="Services\UserSessionService.cs" />
     <Compile Include="ViewModels\AddTransactionViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\BudgetsViewModel.cs" />
+    <Compile Include="ViewModels\CategoryBreakdownItem.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\EditTransactionViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
@@ -223,20 +226,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Styles\Main\ButtonContentSidebar.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Styles\Main\GreenTheme.xaml">
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\Main\ContainerStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\Main\TextBoxStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles\Main\ThemeColors.xaml">
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\User\ButtonContent.xaml">
       <Generator>MSBuild:Compile</Generator>

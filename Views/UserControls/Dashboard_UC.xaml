@@ -8,69 +8,141 @@
              d:DesignHeight="600"
              d:DesignWidth="900">
 
-    
-    
-    
-    
     <UserControl.Resources>
-        <!-- Style cho các thẻ Thống kê (Cards) -->
-        <Style x:Key="DashboardCardStyle" TargetType="Border">
-            <Setter Property="CornerRadius" Value="15" />
-            <Setter Property="Margin" Value="10" />
-            <Setter Property="Padding" Value="25" />
-            <Setter Property="BorderThickness" Value="1.5" />
-            <Setter Property="BorderBrush" Value="#4CAF50" />
-            <!-- Viền xanh lá -->
-            <Setter Property="Background" Value="#F8FDF8" />
-            <!-- Nền xanh lá cực nhạt -->
+        <!-- Màu sắc chủ đạo -->
+        <SolidColorBrush x:Key="PrimaryColor"
+                         Color="#2E7D32" />
+        <SolidColorBrush x:Key="PrimaryLight"
+                         Color="#4CAF50" />
+        <SolidColorBrush x:Key="PrimaryLighter"
+                         Color="#E8F5E9" />
+        <SolidColorBrush x:Key="PrimarySuperLight"
+                         Color="#F1F8E9" />
+        <SolidColorBrush x:Key="DangerColor"
+                         Color="#D32F2F" />
+        <SolidColorBrush x:Key="TextPrimary"
+                         Color="#212121" />
+        <SolidColorBrush x:Key="TextSecondary"
+                         Color="#6B6B6B" />
+
+        <!-- Style chung cho Card -->
+        <Style x:Key="DashboardCardStyle"
+               TargetType="Border">
+            <Setter Property="CornerRadius"
+                    Value="16" />
+            <Setter Property="Margin"
+                    Value="8" />
+            <Setter Property="Padding"
+                    Value="20,16" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="BorderBrush"
+                    Value="#E0E0E0" />
+            <Setter Property="Background"
+                    Value="White" />
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect BlurRadius="15" ShadowDepth="3" Opacity="0.08" Color="Black" />
+                    <DropShadowEffect BlurRadius="12"
+                                      ShadowDepth="1"
+                                      Opacity="0.06"
+                                      Color="Black" />
                 </Setter.Value>
             </Setter>
         </Style>
 
-        <!-- Style cho Tiêu đề thẻ -->
-        <Style x:Key="CardTitleStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#2E7D32" />
-            <!-- Chữ xanh lá đậm -->
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="FontSize" Value="15" />
-            <Setter Property="Margin" Value="0,0,0,8" />
-            <Setter Property="FontFamily" Value="Segoe UI" />
+        <!-- Style tiêu đề card -->
+        <Style x:Key="CardTitleStyle"
+               TargetType="TextBlock">
+            <Setter Property="Foreground"
+                    Value="{StaticResource TextSecondary}" />
+            <Setter Property="FontSize"
+                    Value="13" />
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
+            <Setter Property="FontFamily"
+                    Value="Segoe UI" />
+            <Setter Property="Margin"
+                    Value="0,0,0,6" />
+            <Setter Property="TextWrapping"
+                    Value="Wrap" />
         </Style>
 
-        <!-- Style cho Giá trị thẻ -->
-        <Style x:Key="CardValueStyle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#1B5E20" />
-            <Setter Property="FontSize" Value="32" />
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="FontFamily" Value="Cascadia Mono" />
+        <!-- Style giá trị card -->
+        <Style x:Key="CardValueStyle"
+               TargetType="TextBlock">
+            <Setter Property="Foreground"
+                    Value="{StaticResource TextPrimary}" />
+            <Setter Property="FontSize"
+                    Value="32" />
+            <Setter Property="FontWeight"
+                    Value="Bold" />
+            <Setter Property="FontFamily"
+                    Value="Segoe UI" />
+            <Setter Property="TextWrapping"
+                    Value="Wrap" />
         </Style>
 
-        <!-- Style cho Header của Bảng dữ liệu (DataGrid) -->
-        <Style x:Key="DashboardDataGridStyle" TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="#4CAF50" />
-            <!-- Nền xanh lá -->
-            <Setter Property="Foreground" Value="White" />
-            <!-- Chữ trắng -->
-            <Setter Property="Padding" Value="15,12" />
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="BorderThickness" Value="0,0,1,0" />
-            <Setter Property="BorderBrush" Value="#388E3C" />
+        <!-- Style cho DataGrid Header -->
+        <Style x:Key="DashboardDataGridStyle"
+               TargetType="DataGridColumnHeader">
+            <Setter Property="Background"
+                    Value="{StaticResource PrimaryColor}" />
+            <Setter Property="Foreground"
+                    Value="White" />
+            <Setter Property="Padding"
+                    Value="16,12" />
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
+            <Setter Property="FontSize"
+                    Value="13" />
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource PrimaryLight}" />
+            <Setter Property="BorderThickness"
+                    Value="0,0,1,0" />
+            <Setter Property="Height"
+                    Value="44" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Left" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="DataGridColumnHeader">
                         <Border Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Left" />
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter Margin="{TemplateBinding Padding}"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+        </Style>
+
+        <!-- Style row cho DataGrid (kẻ sọc và hover) -->
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background"
+                    Value="White" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
+            <Style.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex"
+                         Value="0">
+                    <Setter Property="Background"
+                            Value="White" />
+                </Trigger>
+                <Trigger Property="ItemsControl.AlternationIndex"
+                         Value="1">
+                    <Setter Property="Background"
+                            Value="{StaticResource PrimarySuperLight}" />
+                </Trigger>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter Property="Background"
+                            Value="#E3F2FD" />
+                    <Setter Property="Cursor"
+                            Value="Hand" />
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </UserControl.Resources>
 
@@ -78,100 +150,207 @@
         <vm:DashboardViewModel />
     </UserControl.DataContext>
 
-    <!-- Phần Grid chính của Dashboard -->
-    <Grid Margin="15">
+    <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- HÀNG 1: 3 THẺ TỔNG QUAN -->
-        <UniformGrid Columns="3" Grid.Row="0" Margin="0,0,0,25">
-            <!-- Thẻ Tổng số dư -->
+        <!-- Hàng 1: 3 thẻ chỉ số -->
+        <UniformGrid Grid.Row="0"
+                     Columns="3"
+                     Margin="0,0,0,24">
+            <!-- Card Tổng số dư -->
             <Border Style="{StaticResource DashboardCardStyle}">
-                <StackPanel>
-                    <TextBlock Text="TỔNG TIỀN" Style="{StaticResource CardTitleStyle}" />
-                    <!-- StringFormat {0:N0} giúp định dạng số tiền có dấu phẩy: 15,000,000 -->
-                    <TextBlock Text="{Binding GetTotalBalance, StringFormat={}{0:N0} đ}" Style="{StaticResource CardValueStyle}" />
-                </StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <!-- Biểu tượng -->
+                    <Border Grid.Column="0"
+                            Width="48"
+                            Height="48"
+                            CornerRadius="12"
+                            Background="{StaticResource PrimaryLighter}"
+                            Margin="0,0,16,0">
+                        <TextBlock Text="💰"
+                                   FontSize="24"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Border>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="TỔNG SỐ DƯ"
+                                   Style="{StaticResource CardTitleStyle}" />
+                        <TextBlock Text="{Binding GetTotalBalance, StringFormat={}{0:N0} đ}"
+                                   Style="{StaticResource CardValueStyle}" />
+                    </StackPanel>
+                </Grid>
             </Border>
 
-            <!-- Thẻ Thu nhập -->
+            <!-- Card Thu nhập tháng -->
             <Border Style="{StaticResource DashboardCardStyle}">
-                <StackPanel>
-                    <TextBlock Text="THU NHẬP THÁNG" Style="{StaticResource CardTitleStyle}" />
-                    <TextBlock Text="{Binding MonthlyIncome, StringFormat={}{0:N0} đ}" Style="{StaticResource CardValueStyle}" />
-                </StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0"
+                            Width="48"
+                            Height="48"
+                            CornerRadius="12"
+                            Background="{StaticResource PrimaryLighter}"
+                            Margin="0,0,16,0">
+                        <TextBlock Text="📈"
+                                   FontSize="24"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Border>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="THU NHẬP THÁNG"
+                                   Style="{StaticResource CardTitleStyle}" />
+                        <TextBlock Text="{Binding GetMonthlyIncome, StringFormat={}{0:N0} đ}"
+                                   Style="{StaticResource CardValueStyle}" />
+                    </StackPanel>
+                </Grid>
             </Border>
 
-            <!-- Thẻ Chi phí -->
+            <!-- Card Chi tiêu tháng -->
             <Border Style="{StaticResource DashboardCardStyle}">
-                <StackPanel>
-                    <TextBlock Text="CHI TIÊU THÁNG" Style="{StaticResource CardTitleStyle}" />
-                    <TextBlock Text="{Binding MonthlyExpense, StringFormat={}{0:N0} đ}" Style="{StaticResource CardValueStyle}" Foreground="#D32F2F" />
-                </StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0"
+                            Width="48"
+                            Height="48"
+                            CornerRadius="12"
+                            Background="{StaticResource PrimaryLighter}"
+                            Margin="0,0,16,0">
+                        <TextBlock Text="📉"
+                                   FontSize="24"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Border>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="CHI TIÊU THÁNG"
+                                   Style="{StaticResource CardTitleStyle}" />
+                        <TextBlock Text="{Binding GetMonthlyExpense, StringFormat={}{0:N0} đ}"
+                                   Style="{StaticResource CardValueStyle}"
+                                   Foreground="{StaticResource DangerColor}" />
+                    </StackPanel>
+                </Grid>
             </Border>
         </UniformGrid>
 
-        <!-- HÀNG 2: BẢNG GIAO DỊCH GẦN ĐÂY -->
+        <!-- Hàng 2: Bảng giao dịch gần đây -->
         <Border Grid.Row="1"
                 Background="White"
-                BorderBrush="#A5D6A7"
-                BorderThickness="2"
-                CornerRadius="15"
-                ClipToBounds="True"
-                Margin="10,0,10,10">
+                CornerRadius="16"
+                BorderThickness="1"
+                BorderBrush="#E0E0E0"
+                Margin="0,0,0,8">
             <Border.Effect>
-                <DropShadowEffect BlurRadius="20" ShadowDepth="2" Opacity="0.05" Color="Black" />
+                <DropShadowEffect BlurRadius="12"
+                                  ShadowDepth="1"
+                                  Opacity="0.05"
+                                  Color="Black" />
             </Border.Effect>
-
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="GIAO DỊCH GẦN ĐÂY" 
-                           FontSize="20" 
-                           FontWeight="Bold" 
-                           Foreground="#2E7D32" 
-                           Margin="20,15,0,15"/>
+                <!-- Tiêu đề bảng -->
+                <Border Grid.Row="0"
+                        BorderThickness="0,0,0,1"
+                        BorderBrush="#EEEEEE"
+                        Padding="20,14">
+                    <TextBlock Text="GIAO DỊCH GẦN ĐÂY TRONG THÁNG NÀY"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource PrimaryColor}" />
+                </Border>
 
+                <!-- DataGrid -->
                 <DataGrid Grid.Row="1"
                           ItemsSource="{Binding RecentTransactions}"
+                          AutoGenerateColumns="False"
                           CanUserAddRows="False"
                           CanUserReorderColumns="False"
-                          AutoGenerateColumns="False"
-                          Background="White"
-                          Foreground="Black"
-                          RowBackground="White"
-                          AlternatingRowBackground="#F1F8E9"
-                          BorderThickness="0"
-                          GridLinesVisibility="Horizontal"
-                          HorizontalGridLinesBrush="#E0E0E0"
+                          CanUserSortColumns="True"
                           HeadersVisibility="Column"
                           IsReadOnly="True"
-                          RowHeight="45"
-                          FontSize="14"
+                          RowHeight="48"
+                          AlternationCount="2"
+                          Background="White"
+                          BorderThickness="0"
+                          GridLinesVisibility="Horizontal"
+                          HorizontalGridLinesBrush="#F0F0F0"
                           ColumnHeaderStyle="{StaticResource DashboardDataGridStyle}">
+
                     <DataGrid.Columns>
+                        <!-- Cột ngày -->
                         <DataGridTextColumn Header="NGÀY"
-                                            Binding="{Binding Date, StringFormat=dd/MM/yyyy}"
-                                            Width="150" />
+                                            Binding="{Binding TransactionDate, StringFormat=dd/MM/yyyy}"
+                                            Width="140">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Padding"
+                                            Value="16,0" />
+                                    <Setter Property="VerticalAlignment"
+                                            Value="Center" />
+                                    <Setter Property="Foreground"
+                                            Value="{StaticResource TextPrimary}" />
+                                    <Setter Property="FontSize"
+                                            Value="13" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
 
+                        <!-- Cột ghi chú -->
                         <DataGridTextColumn Header="GHI CHÚ"
-                                            Binding="{Binding Description}"
-                                            Width="*" />
+                                            Binding="{Binding Note}"
+                                            Width="*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Padding"
+                                            Value="16,0" />
+                                    <Setter Property="VerticalAlignment"
+                                            Value="Center" />
+                                    <Setter Property="Foreground"
+                                            Value="{StaticResource TextPrimary}" />
+                                    <Setter Property="FontSize"
+                                            Value="13" />
+                                    <Setter Property="FontWeight"
+                                            Value="Medium" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
 
-                        <!-- Cột số tiền căn phải -->
+                        <!-- Cột số tiền -->
                         <DataGridTextColumn Header="SỐ TIỀN"
                                             Binding="{Binding Amount, StringFormat={}{0:N0} đ}"
                                             Width="200">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="HorizontalAlignment" Value="Right" />
-                                    <Setter Property="Padding" Value="0,0,15,0" />
-                                    <Setter Property="FontWeight" Value="SemiBold" />
+                                    <Setter Property="Padding"
+                                            Value="16,0" />
+                                    <Setter Property="VerticalAlignment"
+                                            Value="Center" />
+                                    <Setter Property="HorizontalAlignment"
+                                            Value="Right" />
+                                    <Setter Property="FontWeight"
+                                            Value="SemiBold" />
+                                    <Setter Property="FontSize"
+                                            Value="13" />
+                                    <Setter Property="Foreground"
+                                            Value="{StaticResource TextPrimary}" />
+                                    <Style.Triggers>
+                                        <!-- Nếu cần phân biệt thu/chi, có thể dùng property IsIncome nhưng giữ nguyên binding -->
+                                    </Style.Triggers>
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>

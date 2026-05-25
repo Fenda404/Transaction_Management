@@ -17,9 +17,8 @@
 
 
                 <ResourceDictionary Source="/Styles/Main/TextBoxStyle.xaml" />
-                <ResourceDictionary Source="/Styles/Main/ContainerStyle.xaml" />
-                <ResourceDictionary Source="/Styles/Main/ButtonContentSidebar.xaml" />
-                <ResourceDictionary Source="/Styles/Main/ButtonContentSidebar.xaml" />
+                <ResourceDictionary Source="/Styles/Main/GreenTheme.xaml" />
+                
 
 
             </ResourceDictionary.MergedDictionaries>

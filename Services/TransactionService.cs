@@ -143,12 +143,9 @@ namespace Transaction_Management.Services
         {
             try
             {
-
                 using (var context = new TM_Database())
                 {
-                    // Tìm bản ghi giao dịch trong DB dựa vào ID
                     var transaction = context.Transactions.FirstOrDefault(t => t.TransactionID == transactionId);
-
                     if (transaction != null)
                     {
                         context.Transactions.Remove(transaction);
@@ -161,7 +158,6 @@ namespace Transaction_Management.Services
             catch (Exception ex)
             {
                 throw new Exception($"Lỗi khi xóa giao dịch: {ex.Message}", ex);
-                return false;
             }
         }
         public decimal GetSignedAmount(Transactions transaction)
