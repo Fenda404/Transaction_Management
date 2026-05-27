@@ -15,6 +15,7 @@ namespace Transaction_Management.ViewModels
    
     public class SettingsViewModel : BaseViewModel
     {
+        #region Properties
         // 1. Thông tin người dùng
         private string _username;
         public string Username
@@ -111,7 +112,8 @@ namespace Transaction_Management.ViewModels
         public ICommand ChangeUsernameCommand { get; set; }
         public ICommand ChangePasswordCommand { get; set; }
         public ICommand ChangeThemeColorCommand { get; set; }
-
+        #endregion
+        #region Constructor
         public SettingsViewModel()
         {
             Username = LoginViewModel.CurrentUser ?? "Admin";
@@ -131,8 +133,11 @@ namespace Transaction_Management.ViewModels
             ChangeUsernameCommand = new RelayCommand(ChangeUsername);
             ChangePasswordCommand = new RelayCommand(ChangePassword);
         }
-
-        // Hàm lấy mật khẩu từ database
+        #endregion
+        #region Methods
+        /// <summary>
+        /// Hàm này để lấy mật khẩu thực tế của user từ database khi khởi tạo ViewModel. Nếu có lỗi hoặc không tìm thấy user, sẽ hiển thị "••••••••••••".
+        /// </summary>
         private void LoadPasswordFromDatabase()
         {
             try
@@ -158,6 +163,11 @@ namespace Transaction_Management.ViewModels
             }
         }
 
+        /// <summary>
+        /// Hàm này để chuyển đổi giữa việc hiển thị mật khẩu thực tế và ẩn nó đi. Khi người dùng nhấn nút toggle, 
+        /// nếu mật khẩu đang bị ẩn, nó sẽ hiển thị mật khẩu thực tế; nếu đang hiển thị, nó sẽ ẩn lại bằng cách thay thế bằng "••••••••••••".
+        /// </summary>
+        /// <param name="parameter"></param>
         private void TogglePasswordVisibility(object parameter)
         {
             IsPasswordVisible = !IsPasswordVisible;
@@ -171,9 +181,13 @@ namespace Transaction_Management.ViewModels
             }
         }
 
+        /// <summary>
+        /// Hàm này để xử lý khi người dùng muốn đăng xuất khỏi ứng dụng. Khi người dùng nhấn nút đăng xuất, 
+        /// sẽ hiển thị một hộp thoại xác nhận để đảm bảo rằng họ thực sự muốn đăng xuất. Nếu người dùng xác nhận, ứng dụng
+        /// </summary>
         private void SignOut()
         {
-            ConfirmDialog confirmDialog = new ConfirmDialog("Do you want to sign out?");
+            ConfirmDialog confirmDialog = new ConfirmDialog("Bạn chắc chắn muốn đăng xuất?");
             confirmDialog.ShowDialog();
 
             if (confirmDialog.Result)
@@ -188,14 +202,25 @@ namespace Transaction_Management.ViewModels
             }
         }
 
+        /// <summary>
+        /// Hàm này để xử lý khi người dùng muốn thay đổi username của họ. Khi người dùng nhấn nút thay đổi username, sẽ mở một hộp thoại hoặc giao diện mới để họ nhập username mới. 
+        /// Sau đó, sẽ có logic để cập nhật username trong database và cập nhật lại thông tin hiển thị trên giao diện người dùng.
+        /// </summary>
+        /// <param name="parameter"></param>
         private void ChangeUsername(object parameter)
         {
             // TODO: Thêm logic để thay đổi username
         }
 
+        /// <summary>
+        /// Hàm này để xử lý khi người dùng muốn thay đổi password của họ. 
+        /// Khi người dùng nhấn nút thay đổi password, sẽ mở một hộp thoại hoặc giao diện mới để họ nhập password mới.
+        /// </summary>
+        /// <param name="parameter"></param>
         private void ChangePassword(object parameter)
         {
             // TODO: Thêm logic để thay đổi password
         }
+        #endregion
     }
 }

@@ -87,6 +87,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Converters\GreaterThanConverter.cs" />
     <Compile Include="Converters\PasswordVisibilityConverter.cs" />
     <Compile Include="Converters\PercentToWidthConverter.cs" />
     <Compile Include="Models\Budgets.cs">
@@ -168,9 +169,6 @@
     </Compile>
     <Compile Include="Views\SubViews\EditTransaction.xaml.cs">
       <DependentUpon>EditTransaction.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\Budgets_UC.xaml.cs">
-      <DependentUpon>Budgets_UC.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\Dashboard_UC.xaml.cs">
       <DependentUpon>Dashboard_UC.xaml</DependentUpon>
@@ -279,7 +277,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserControls\Budgets_UC.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserControls\Dashboard_UC.xaml">

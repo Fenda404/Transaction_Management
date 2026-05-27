@@ -331,6 +331,8 @@
                 <RowDefinition Height="Auto" />
                 <!-- Notifications -->
                 <RowDefinition Height="Auto" />
+                <!-- Delete All Transactions -->
+                <RowDefinition Height="Auto" />
                 <!-- Security -->
             </Grid.RowDefinitions>
 
@@ -526,12 +528,64 @@
                 </Border>
             </StackPanel>
 
-            <!-- 5. BẢO MẬT -->
+
+
+            <!-- 5. XÓA TẤT CẢ GIAO DỊCH -->
             <StackPanel Grid.Row="5">
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,0,0,12">
+                    <TextBlock Text="✖"
+                               FontSize="24"
+                               Margin="0,0,12,0"
+                               VerticalAlignment="Center" />
+                    <TextBlock Text="5. Xóa tất cả giao dịch"
+                               Style="{StaticResource SettingHeaderStyle}" />
+                </StackPanel>
+                <Border Style="{StaticResource SettingCardStyle}">
+                    <Button Content="Xóa tất cả các giao dịch hiện tại?"
+                            Command="{Binding SignOutCommand}"
+                            Background="LightCyan"
+                            Foreground="Black"
+                            BorderBrush="Cyan"
+                            BorderThickness="1.5"
+                            Height="45"
+                            FontWeight="Bold"
+                            FontSize="14"
+                            Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="8">
+                                    <StackPanel Orientation="Horizontal"
+                                                HorizontalAlignment="Center">
+                                        <TextBlock Text="🗑️"
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,0,10,0"
+                                                   FontSize="16" />
+                                        <ContentPresenter VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver"
+                                             Value="True">
+                                        <Setter Property="Background"
+                                                Value="#FFCDD2" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Border>
+            </StackPanel>
+
+            <!-- 5. Bảo mật -->
+            <StackPanel Grid.Row="6">
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                     <TextBlock Text="🔐" FontSize="24" Margin="0,0,12,0"
                                VerticalAlignment="Center"/>
-                    <TextBlock Text="5. Bảo mật" Style="{StaticResource SettingHeaderStyle}"/>
+                    <TextBlock Text="6. Bảo mật" Style="{StaticResource SettingHeaderStyle}"/>
                 </StackPanel>
                 <Border Style="{StaticResource SettingCardStyle}">
                     <Button Content="Đăng xuất khỏi thiết bị này" 
