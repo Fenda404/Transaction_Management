@@ -15,7 +15,7 @@ Dự án được hoàn thiện nhờ sự đóng góp tích cực từ các th�
 | :--- | :--- | :--- | :--- |
 | 1 | Trần Tấn Đạt | 2033240066 | Trưởng nhóm,  Logic Backend |
 | 2 | Bạch Văn Nam | 2001240281 | Thiết kế Giao diện UI/UX (WPF/XAML) |
-| 3 | Nguyễn Hữu Thịnh | 2001240465 | Thiết kế Database & Xử lý SQL Server |
+| 3 | Nguyễn Hữu Thịnh | 2001240465 | Thiết kế Database & SQL Server |
 | 4 | Nguyễn Viết Thiên Định | 2033240070 | Kiểm thử & Xây dựng tài liệu |
 ---
 
