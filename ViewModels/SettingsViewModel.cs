@@ -173,7 +173,7 @@ namespace Transaction_Management.ViewModels
 
         private void SignOut()
         {
-            ConfirmDialog confirmDialog = new ConfirmDialog("Do you want to sign out?");
+            ConfirmDialog confirmDialog = new ConfirmDialog("Bạn có chắc muốn đăng xuất?");
             confirmDialog.ShowDialog();
 
             if (confirmDialog.Result)
