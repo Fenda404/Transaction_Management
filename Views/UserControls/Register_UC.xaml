@@ -4,8 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:Transaction_Management.ViewModels"
-             xmlns:cvt="clr-namespace:Transaction_Management.Converters"
-             xmlns:hp="clr-namespace:Transaction_Management.Helpers"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="1000"
              Background="Transparent">
@@ -66,52 +64,22 @@
             </Setter>
         </Style>
 
-        <ControlTemplate x:Key="BackButtonStyleTemplate"
-                         TargetType="Button">
-            <Border x:Name="border"
-                    Background="Transparent"
-                    Padding="5,10"
-                    Cursor="Hand">
+        <!-- Style cho Nút Quay lại (Back) -->
+        <ControlTemplate x:Key="BackButtonStyleTemplate" TargetType="Button">
+            <Border x:Name="border" Background="Transparent" Padding="5,10">
                 <StackPanel Orientation="Horizontal">
-                    <Path x:Name="arrowIcon"
-                          Data="M 8,0 L 0,8 L 8,16"
-                          Stroke="#2E7D32"
-                          StrokeThickness="3"
-                          StrokeEndLineCap="Round"
-                          StrokeStartLineCap="Round"
-                          Margin="0,0,8,0"
-                          VerticalAlignment="Center" />
-                    <TextBlock x:Name="txtBack"
-                               Text="Quay lại"
-                               Foreground="#2E7D32"
-                               VerticalAlignment="Center"
-                               FontSize="15"
-                               FontWeight="Bold" />
+                    <Path x:Name="arrowIcon" Data="M 8,0 L 0,8 L 8,16" Stroke="#2E7D32" StrokeThickness="3" StrokeEndLineCap="Round" StrokeStartLineCap="Round" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="txtBack" Text="Quay lại" Foreground="#2E7D32" VerticalAlignment="Center" FontSize="15" FontWeight="Bold" />
                 </StackPanel>
             </Border>
-
             <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver"
-                         Value="True">
-                    <Setter TargetName="arrowIcon"
-                            Property="Stroke"
-                            Value="#4CAF50" />
-                    <Setter TargetName="txtBack"
-                            Property="Foreground"
-                            Value="#4CAF50" />
-                </Trigger>
-
-                <Trigger Property="IsPressed"
-                         Value="True">
-                    <Setter TargetName="border"
-                            Property="Opacity"
-                            Value="0.6" />
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="arrowIcon" Property="Stroke" Value="#4CAF50" />
+                    <Setter TargetName="txtBack" Property="Foreground" Value="#4CAF50" />
+                    <Setter Property="Cursor" Value="Hand" />
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
-
-        <cvt:PasswordTupleConverter x:Key="PasswordTupleConverter"/>
-        
     </UserControl.Resources>
 
     <Grid>
@@ -153,15 +121,14 @@
                             Command="{Binding DataContext.SwitchViewCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                             CommandParameter="Login" />
 
-                    <StackPanel Grid.Column="1" HorizontalAlignment="Center"
-                                Grid.ColumnSpan="2">
-                        <TextBlock Text="TẠO TÀI KHOẢN"
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                        <TextBlock Text="CREATE ACCOUNT"
                                    FontSize="24"
                                    FontWeight="Heavy"
                                    Foreground="#2E7D32"
                                    HorizontalAlignment="Center"
                                    Margin="0,0,0,5"/>
-                        <TextBlock Text="Tham gia cùng chúng tôi hôm nay!"
+                        <TextBlock Text="Join us today!"
                                    Foreground="#757575" 
                                    FontSize="13"
                                    HorizontalAlignment="Center"/>
@@ -180,9 +147,7 @@
                 <StackPanel Grid.Row="2" Margin="0,0,0,18">
                     <TextBlock Text="Password" Foreground="#333333" FontWeight="SemiBold" FontSize="14" Margin="5,0,0,8"/>
                     <PasswordBox x:Name="pwbPassword"
-                                 Style="{StaticResource RegisterInputStyle}"
-                                 hp:PasswordBoxHelper.Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 hp:PasswordBoxHelper.BindPassword="True" />
+                                 Style="{StaticResource RegisterInputStyle}"/>
                     <TextBlock Text="* Tối thiểu 8 ký tự, bao gồm chữ và số"
                                Foreground="#9E9E9E" FontSize="12" Margin="5,6,0,0"/>
                 </StackPanel>
@@ -191,15 +156,13 @@
                 <StackPanel Grid.Row="3" Margin="0,0,0,30">
                     <TextBlock Text="Confirm Password" Foreground="#333333" FontWeight="SemiBold" FontSize="14" Margin="5,0,0,8"/>
                     <PasswordBox x:Name="pwbConfirmPass"
-                                 Style="{StaticResource RegisterInputStyle}"
-                                 hp:PasswordBoxHelper.Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 hp:PasswordBoxHelper.BindPassword="True" />
+                                 Style="{StaticResource RegisterInputStyle}"/>
                 </StackPanel>
 
                 <!-- NÚT ĐĂNG KÝ -->
                 <Button x:Name="btnRegister"
                         Grid.Row="4"
-                        Content="Tạo tài khoản"
+                        Content="Create Account"
                         Height="50"
                         Margin="0,0,0,25"
                         Command="{Binding RegisterCommand}"

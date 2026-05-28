@@ -87,10 +87,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="Converters\PasswordTupleConverter.cs" />
     <Compile Include="Converters\PasswordVisibilityConverter.cs" />
     <Compile Include="Converters\PercentToWidthConverter.cs" />
-    <Compile Include="Helpers\PasswordBoxHelper.cs" />
     <Compile Include="Models\Budgets.cs">
       <DependentUpon>TM_Database.tt</DependentUpon>
     </Compile>
@@ -136,9 +134,7 @@
     <Compile Include="Models\Wallets.cs">
       <DependentUpon>TM_Database.tt</DependentUpon>
     </Compile>
-    <Compile Include="Validators\ValidPassword.cs" />
     <Compile Include="Services\LoginService.cs" />
-    <Compile Include="Services\RegisterService.cs" />
     <Compile Include="Services\ReportService.cs" />
     <Compile Include="Services\TransactionService.cs" />
     <Compile Include="Services\UserSessionService.cs" />
