@@ -14,8 +14,6 @@
     </UserControl.DataContext>
 
     <UserControl.Resources>
-        <local:GreaterThanConverter x:Key="GreaterThanConverter" />
-        <local:PercentToWidthConverter x:Key="PercentToWidthConverter" />
 
         <Style x:Key="BudgetCardStyle"
                TargetType="Border">
