@@ -1,5 +1,5 @@
 **Mở dự án:**
-   Mở file `.sln` (Solution) bằng Visual Studio.
+1.   Mở file `.sln` (Solution) bằng Visual Studio.
 2. **Cấu hình Cơ sở dữ liệu:**
    *[Nếu có file script SQL, hãy ghi chú cách chạy script tại đây. Ví dụ: Chạy file script.sql trong thư mục Database]*. Update lại chuỗi kết nối (`ConnectionString`) trong file `App.config` nếu cần.
 3. **Build & Run:**
