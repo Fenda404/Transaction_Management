@@ -12,14 +12,22 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Transaction_Management.ViewModels;
 
 namespace Transaction_Management.Views.UserControls
 {
     /// <summary>
-    /// Interaction logic for BUDGETS_UC.xaml
+    /// Interaction logic for Budgets_UC.xaml
     /// </summary>
     public partial class Budgets_UC : UserControl
     {
-        public Budgets_UC() { InitializeComponent(); }
+        public Budgets_UC()
+        {
+            InitializeComponent();
+            // Lấy UserId từ session hiện tại
+
+
+            this.DataContext = new BudgetsViewModel();
+        }
     }
 }

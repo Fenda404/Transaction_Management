@@ -12,11 +12,20 @@ namespace Transaction_Management.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            double percent = System.Convert.ToDouble(value);
-            double maxWidth = System.Convert.ToDouble(parameter);
-            return (percent / 100.0) * maxWidth;
+            if (value is double percentage && parameter is double containerWidth)
+            {
+                // Giới hạn width không vượt quá containerWidth
+                double width = (percentage / 100) * containerWidth;
+                if (width > containerWidth) width = containerWidth;
+                if (width < 0) width = 0;
+                return width;
+            }
+            return 0;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
