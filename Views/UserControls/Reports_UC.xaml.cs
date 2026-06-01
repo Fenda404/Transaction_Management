@@ -17,10 +17,13 @@ using Transaction_Management.ViewModels;
 namespace Transaction_Management.Views.UserControls
 {
     /// <summary>
-    /// Interaction logic for REPORTS_UC.xaml
+    /// File Code-Behind chuẩn cho Reports_UC.xaml.
     /// </summary>
     public partial class Reports_UC : UserControl
     {
-        public Reports_UC() { InitializeComponent(); this.DataContext = new ReportsViewModel(); }
-    } 
+        public Reports_UC()
+        {
+            InitializeComponent();
+        }
+    }
 }

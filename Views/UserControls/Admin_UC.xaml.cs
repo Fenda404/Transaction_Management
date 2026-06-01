@@ -10,20 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Transaction_Management.ViewModels;
 
-namespace Transaction_Management.Views.SubViews
+namespace Transaction_Management.Views.UserControls
 {
     /// <summary>
-    /// Interaction logic for EditTransaction.xaml
+    /// Interaction logic for Admin_UC.xaml
     /// </summary>
-    public partial class EditTransaction : Window
+    public partial class Admin_UC : UserControl
     {
-        // Khắc phục lỗi DataContext tương tự như ở màn hình thêm mới
-        public EditTransactionViewModel vm => DataContext as EditTransactionViewModel;
-
-        public EditTransaction()
+        public Admin_UC()
         {
             InitializeComponent();
         }

@@ -15,8 +15,14 @@ using System.Windows.Shapes;
 
 namespace Transaction_Management.Views.UserControls
 {
+    /// <summary>
+    /// File Code-Behind chuẩn cho Settings_UC.xaml.
+    /// </summary>
     public partial class Settings_UC : UserControl
     {
-        public Settings_UC() { InitializeComponent(); }
+        public Settings_UC()
+        {
+            InitializeComponent();
+        }
     }
 }
