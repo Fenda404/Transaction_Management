@@ -1,0 +1,49 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Hệ màu Xanh sẫm (Không bị đen quá, vẫn rõ màu xanh lá đậm) -->
+    <SolidColorBrush x:Key="PrimaryColor"
+                     Color="#1E4622" />
+    <SolidColorBrush x:Key="PrimaryLight"
+                     Color="#2E6932" />
+    <SolidColorBrush x:Key="PrimaryLighter"
+                     Color="#D4E1D5" />
+    <!-- Xanh lá nhạt dịu -->
+    <SolidColorBrush x:Key="PrimaryDark"
+                     Color="#122B15" />
+
+    <!-- Hệ chữ và viền cho chế độ Semi-Dark -->
+    <SolidColorBrush x:Key="TextWhite"
+                     Color="#FFFFFF" />
+    <SolidColorBrush x:Key="TextLight"
+                     Color="#ECEFF1" />
+    <SolidColorBrush x:Key="TextGray"
+                     Color="#90A4AE" />
+    <SolidColorBrush x:Key="DividerColor"
+                     Color="#445947" />
+    <!-- Đường viền màu xanh rêu sẫm -->
+
+    <!-- MÀU SIDEBAR: Xanh rừng già sẫm, nhìn vô biết ngay màu xanh (Không bị hóa đen) -->
+    <Color x:Key="SidebarGradStart">#1B3E20</Color>
+    <Color x:Key="SidebarGradEnd">#112915</Color>
+
+    <!-- KHUNG NỘI DUNG CHÍNH: Màu xanh xám rêu nhẹ, rất dịu mắt và sang trọng -->
+    <SolidColorBrush x:Key="MainContainerBg"
+                     Color="#263429" />
+
+    <!-- NỀN GRADIENT CỦA WINDOW: Tông màu xanh sương mù sẫm (Deep Sage background) -->
+    <Color x:Key="WindowGradStart">#2B3A2F</Color>
+    <Color x:Key="WindowGradMedium">#222F26</Color>
+    <Color x:Key="WindowGradEnd">#1A251D</Color>
+
+    <Color x:Key="SrcColor_PrimaryColor">#1E4622</Color>
+    <Color x:Key="SrcColor_PrimaryDark">#122B15</Color>
+    <Color x:Key="SrcColor_MainText">#ECEFF1</Color>
+    <Color x:Key="SrcColor_TextGray">#90A4AE</Color>
+    <Color x:Key="SrcColor_TextWhite">#FFFFFF</Color>
+    <Color x:Key="SrcColor_MainContainerBg">#263429</Color>
+    <Color x:Key="SrcColor_PrimaryLighter">#1B3E20</Color>
+    <Color x:Key="SrcColor_DividerColor">#445947</Color>
+    <SolidColorBrush x:Key="MainTextColor"
+                     Color="#ECEFF1" />
+</ResourceDictionary>

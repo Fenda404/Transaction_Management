@@ -18,12 +18,13 @@ namespace Transaction_Management.ViewModels
         #region Properties
 
         private readonly Transactions _originalTransaction;
-        TransactionService transactionService = new TransactionService();
-        public ObservableCollection<string> Categories { get; set; }
-        public ObservableCollection<Wallets> Wallets { get; set; }
-        TransactionsViewModel transactionViewModel = new TransactionsViewModel();
+        private readonly TransactionService _transactionService = new TransactionService();
+
+        public ObservableCollection<string> Categories { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<Wallets> Wallets { get; set; } = new ObservableCollection<Wallets>();
 
         public bool isSaveSuccess = false;
+
         private decimal _amount;
         public decimal Amount
         {
@@ -83,14 +84,24 @@ namespace Transaction_Management.ViewModels
         public ICommand CancelCommand { get; set; }
         public ICommand SaveCommand { get; set; }
         #endregion
+
         #region Constructor
         public EditTransactionViewModel(Transactions transactionToEdit)
         {
             _originalTransaction = transactionToEdit ?? throw new ArgumentNullException(nameof(transactionToEdit));
-            LoadData();
+
+            // 1. Đăng ký các Lệnh điều hướng
+            CancelCommand = new RelayCommand<object>((p) => Cancel(p), (p) => true);
+            SaveCommand = new RelayCommand(async _ => await SaveAsync(), _ => true);
+
+            // 2. Điền dữ liệu cũ có sẵn lên giao diện lập tức
             FillData();
+
+            // 3. Chạy ngầm tiến trình nạp danh sách ComboBox từ cơ sở dữ liệu
+            _ = LoadDataAsync();
         }
         #endregion
+
         #region Methods
 
         /// <summary>
@@ -99,64 +110,93 @@ namespace Transaction_Management.ViewModels
         private void FillData()
         {
             Amount = _originalTransaction.Amount;
-            Date = _originalTransaction.TransactionDate.Value;
+            Date = _originalTransaction.TransactionDate ?? DateTime.Now;
             Description = _originalTransaction.Note;
 
             // Ép kiểu hiển thị string tương thích với SelectedValue của ComboBox
             Wallet = _originalTransaction.Wallets?.WalletName;
             Category = _originalTransaction.Categories?.CategoryName;
-            CancelCommand = new RelayCommand<object>((p) => Cancel(p), (p) => true);
-            SaveCommand = new RelayCommand(_ => Save(), _ => true);
         }
 
         /// <summary>
-        /// Hàm này để tải danh sách ví và danh mục từ TransactionService, giúp hiển thị các tùy chọn có sẵn trong ComboBox khi người dùng chỉnh sửa transaction. 
-        /// Việc lấy dữ liệu từ TransactionService thay vì hardcode giúp đảm bảo tính linh hoạt và đồng bộ với dữ liệu thực tế trong ứng dụng.
+        /// Hàm này để tải danh sách ví và danh mục từ TransactionService dưới dạng bất đồng bộ, giúp hiển thị các tùy chọn có sẵn trong ComboBox khi người dùng chỉnh sửa transaction. 
         /// </summary>
-        private void LoadData()
+        private async Task LoadDataAsync()
         {
-            Wallets = transactionService.Wallets;
-            // Lấy danh mục từ TransactionService thay vì hardcode
-            Categories = new ObservableCollection<string>(
-                transactionService.Categories.Select(c => c.CategoryName).ToList()
-            );
+            try
+            {
+                // Nạp danh sách ví
+                var walletsData = await _transactionService.GetWalletsAsync();
+                Wallets.Clear();
+                foreach (var wallet in walletsData)
+                {
+                    Wallets.Add(wallet);
+                }
+
+                // Nạp danh sách danh mục
+                var categoriesData = await _transactionService.GetCategoriesAsync();
+                Categories.Clear();
+                foreach (var categoryName in categoriesData.Select(c => c.CategoryName))
+                {
+                    Categories.Add(categoryName);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Lỗi khi tải danh mục chỉnh sửa: {ex.Message}");
+            }
         }
 
-
         /// <summary>
-        /// Hàm này để xử lý sự kiện khi người dùng nhấn nút "Cancel" trong giao diện chỉnh sửa transaction. Nó nhận một tham số là đối tượng cửa sổ (Window) hiện tại,
-        /// và nếu tham số này không null, nó sẽ đóng cửa sổ đó lại. Điều này cho phép người dùng thoát khỏi form chỉnh sửa mà không lưu bất kỳ thay đổi nào đã thực hiện.
+        /// Hàm này để xử lý sự kiện khi người dùng nhấn nút "Cancel" trong giao diện chỉnh sửa transaction.
         /// </summary>
-        /// <param name="parameter">Đối tượng cửa sổ hiện tại</param>
         private void Cancel(object parameter)
         {
             var window = parameter as Window;
-
             if (window != null)
             {
                 window.Close();
             }
-
         }
 
         /// <summary>
-        /// Hàm này để xử lý sự kiện khi người dùng nhấn nút "Save" trong giao diện chỉnh sửa transaction. 
-        /// Nó sẽ gọi phương thức EditTransaction của TransactionService để cập nhật thông tin transaction trong cơ sở dữ liệu.
+        /// Hàm này để xử lý sự kiện khi người dùng nhấn nút "Save" dưới dạng bất đồng bộ (async/await).
         /// </summary>
-        private void Save()
+        private async Task SaveAsync()
         {
-            int targetId = _originalTransaction.TransactionID;
-            var checkSuccess = transactionService.EditTransaction(targetId, Amount, Wallet, Category, Date, Description);
-            if (checkSuccess)
+            try
             {
-                ConfirmDialog confirmDialog = new ConfirmDialog("Đã lưu thành công");
-                confirmDialog.ShowDialog();
-                SavedCallback?.Invoke();
+                // Kiểm tra dữ liệu hợp lệ cơ bản trước khi xử lý cập nhật
+                if (string.IsNullOrEmpty(Wallet) || string.IsNullOrEmpty(Category) || Amount <= 0)
+                {
+                    ErrorDialog validationDialog = new ErrorDialog("Vui lòng nhập đầy đủ thông tin số tiền, ví và danh mục thích hợp!");
+                    validationDialog.ShowDialog();
+                    return;
+                }
 
+                int targetId = _originalTransaction.TransactionID;
+
+                // Gọi hàm Edit bất đồng bộ từ Service
+                var checkSuccess = await _transactionService.EditTransactionAsync(targetId, Amount, Wallet, Category, Date, Description);
+
+                if (checkSuccess)
+                {
+                    isSaveSuccess = true;
+                    ConfirmDialog confirmDialog = new ConfirmDialog("Đã cập nhật giao dịch thành công");
+                    confirmDialog.ShowDialog();
+
+                    // Kích hoạt callback thông báo cập nhật UI cho màn hình danh sách chính
+                    SavedCallback?.Invoke();
+                }
+                else
+                {
+                    ErrorDialog errorDialog = new ErrorDialog("Lỗi trong quá trình cập nhật vào database");
+                    errorDialog.ShowDialog();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                ErrorDialog errorDialog = new ErrorDialog("Lỗi trong quá trình lưu vào database");
+                ErrorDialog errorDialog = new ErrorDialog($"Lỗi hệ thống: {ex.Message}");
                 errorDialog.ShowDialog();
             }
         }

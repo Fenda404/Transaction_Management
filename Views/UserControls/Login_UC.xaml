@@ -155,7 +155,8 @@
                         Cursor="Hand"
                         Background="Transparent"
                         BorderThickness="0"
-                        Margin="0,0,0,35">
+                        Margin="0,0,0,35"
+                        Click="btnForgetPass_Click">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <TextBlock Text="{TemplateBinding Content}" x:Name="txtFP" Foreground="{TemplateBinding Foreground}" FontWeight="SemiBold"/>
@@ -184,8 +185,9 @@
                             Grid.Column="0"
                             Command="{Binding LoginCommand}"
                             CommandParameter="{Binding ElementName=pwbPassword}"
-                            Style="{StaticResource PrimaryButtonStyle}" />
-
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            IsDefault="True" />
+                    
                     <Button x:Name="btnRegister"
                             Content="Đăng ký"
                             Height="50"

@@ -11,7 +11,7 @@ namespace Transaction_Management.Services
     {
         public bool Register(string username, string password)
         {
-            using (var db = new TM_Database())
+            using (var db = new TMDatabase())
             {
                 if (db.Users.Any(u => u.Username == username))
                     return false;
@@ -21,6 +21,7 @@ namespace Transaction_Management.Services
                     PasswordHash = password,
                     CreatedAt = DateTime.Now,
                     RoleID = 2,
+                    Currency = "VNĐ",
                 };
                 db.Users.Add(newUser);
                 db.SaveChanges();

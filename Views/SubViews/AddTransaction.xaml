@@ -46,9 +46,8 @@
                            HorizontalAlignment="Center"
                            Foreground="LightGray"
                            FontWeight="Bold"
-                           FontSize="11"
-                           />
-                
+                           FontSize="11" />
+
             </StackPanel>
 
             <!-- 2. Form -->
@@ -65,7 +64,7 @@
                              FontWeight="Bold"
                              Foreground="#2E7D32"
                              VerticalContentAlignment="Center"
-                             Text="{Binding Amount}"/>
+                             Text="{Binding Amount}" />
 
                     <!-- Chọn Ví (WalletID) -->
                     <TextBlock Text="Chọn ví (Wallet)"
@@ -83,8 +82,7 @@
                                Style="{StaticResource LabelStyle}" />
                     <ComboBox x:Name="cbCategory"
                               ItemsSource="{Binding Categories}"
-                              SelectedItem="{Binding Category}"
-                            >
+                              SelectedItem="{Binding Category}">
                         <!-- CategoryID 1: Lương, 2: Ăn uống... -->
                     </ComboBox>
 
@@ -117,8 +115,8 @@
                              Padding="10"
                              TextWrapping="Wrap"
                              AcceptsReturn="True"
-                             Margin="0,0,0,15" 
-                             Text="{Binding Description}"/>
+                             Margin="0,0,0,15"
+                             Text="{Binding Description}" />
 
                     <!-- Hình ảnh hóa đơn (ReceiptImage - Tùy chọn) -->
                     <Button Content="📁 Tải lên ảnh hóa đơn"
@@ -151,7 +149,7 @@
                         BorderThickness="0"
                         Foreground="Gray"
                         FontWeight="SemiBold"
-                        Cursor="Hand" 
+                        Cursor="Hand"
                         Command="{Binding CancelCommand}"
                         CommandParameter="{Binding ElementName=AddTransactionWindow}" />
 

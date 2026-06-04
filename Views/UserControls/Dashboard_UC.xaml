@@ -4,28 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="clr-namespace:Transaction_Management.ViewModels"
+             xmlns:cvt="clr-namespace:Transaction_Management.Converters"
              mc:Ignorable="d"
              d:DesignHeight="600"
              d:DesignWidth="900">
 
     <UserControl.Resources>
-        <!-- Màu sắc chủ đạo -->
-        <SolidColorBrush x:Key="PrimaryColor"
-                         Color="#2E7D32" />
-        <SolidColorBrush x:Key="PrimaryLight"
-                         Color="#4CAF50" />
-        <SolidColorBrush x:Key="PrimaryLighter"
-                         Color="#E8F5E9" />
-        <SolidColorBrush x:Key="PrimarySuperLight"
-                         Color="#F1F8E9" />
+        <cvt:CurrencyConverter x:Key="CurrencyConverter" />
+
         <SolidColorBrush x:Key="DangerColor"
                          Color="#D32F2F" />
-        <SolidColorBrush x:Key="TextPrimary"
-                         Color="#212121" />
-        <SolidColorBrush x:Key="TextSecondary"
-                         Color="#6B6B6B" />
 
-        <!-- Style chung cho Card -->
         <Style x:Key="DashboardCardStyle"
                TargetType="Border">
             <Setter Property="CornerRadius"
@@ -37,9 +26,9 @@
             <Setter Property="BorderThickness"
                     Value="1" />
             <Setter Property="BorderBrush"
-                    Value="#E0E0E0" />
+                    Value="{DynamicResource DividerColor}" />
             <Setter Property="Background"
-                    Value="White" />
+                    Value="{DynamicResource MainContainerBg}" />
             <Setter Property="Effect">
                 <Setter.Value>
                     <DropShadowEffect BlurRadius="12"
@@ -50,11 +39,10 @@
             </Setter>
         </Style>
 
-        <!-- Style tiêu đề card -->
         <Style x:Key="CardTitleStyle"
                TargetType="TextBlock">
             <Setter Property="Foreground"
-                    Value="{StaticResource TextSecondary}" />
+                    Value="{DynamicResource TextGray}" />
             <Setter Property="FontSize"
                     Value="13" />
             <Setter Property="FontWeight"
@@ -67,11 +55,10 @@
                     Value="Wrap" />
         </Style>
 
-        <!-- Style giá trị card -->
         <Style x:Key="CardValueStyle"
                TargetType="TextBlock">
             <Setter Property="Foreground"
-                    Value="{StaticResource TextPrimary}" />
+                    Value="{DynamicResource TextPrimary}" />
             <Setter Property="FontSize"
                     Value="32" />
             <Setter Property="FontWeight"
@@ -82,11 +69,10 @@
                     Value="Wrap" />
         </Style>
 
-        <!-- Style cho DataGrid Header -->
         <Style x:Key="DashboardDataGridStyle"
                TargetType="DataGridColumnHeader">
             <Setter Property="Background"
-                    Value="{StaticResource PrimaryColor}" />
+                    Value="{DynamicResource PrimaryColor}" />
             <Setter Property="Foreground"
                     Value="White" />
             <Setter Property="Padding"
@@ -96,7 +82,7 @@
             <Setter Property="FontSize"
                     Value="13" />
             <Setter Property="BorderBrush"
-                    Value="{StaticResource PrimaryLight}" />
+                    Value="{DynamicResource PrimaryLight}" />
             <Setter Property="BorderThickness"
                     Value="0,0,1,0" />
             <Setter Property="Height"
@@ -118,27 +104,28 @@
             </Setter>
         </Style>
 
-        <!-- Style row cho DataGrid (kẻ sọc và hover) -->
         <Style TargetType="DataGridRow">
             <Setter Property="Background"
-                    Value="White" />
+                    Value="{DynamicResource MainContainerBg}" />
             <Setter Property="BorderThickness"
                     Value="0" />
             <Style.Triggers>
                 <Trigger Property="ItemsControl.AlternationIndex"
                          Value="0">
                     <Setter Property="Background"
-                            Value="White" />
+                            Value="{DynamicResource MainContainerBg}" />
                 </Trigger>
                 <Trigger Property="ItemsControl.AlternationIndex"
                          Value="1">
                     <Setter Property="Background"
-                            Value="{StaticResource PrimarySuperLight}" />
+                            Value="{DynamicResource PrimaryLighter}" />
                 </Trigger>
                 <Trigger Property="IsMouseOver"
                          Value="True">
                     <Setter Property="Background"
-                            Value="#E3F2FD" />
+                            Value="{DynamicResource PrimaryLight}" />
+                    <Setter Property="Foreground"
+                            Value="White" />
                     <Setter Property="Cursor"
                             Value="Hand" />
                 </Trigger>
@@ -156,23 +143,21 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- Hàng 1: 3 thẻ chỉ số -->
         <UniformGrid Grid.Row="0"
                      Columns="3"
                      Margin="0,0,0,24">
-            <!-- Card Tổng số dư -->
+
             <Border Style="{StaticResource DashboardCardStyle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <!-- Biểu tượng -->
                     <Border Grid.Column="0"
                             Width="48"
                             Height="48"
                             CornerRadius="12"
-                            Background="{StaticResource PrimaryLighter}"
+                            Background="{DynamicResource PrimaryLighter}"
                             Margin="0,0,16,0">
                         <TextBlock Text="💰"
                                    FontSize="24"
@@ -182,13 +167,12 @@
                     <StackPanel Grid.Column="1">
                         <TextBlock Text="TỔNG SỐ DƯ"
                                    Style="{StaticResource CardTitleStyle}" />
-                        <TextBlock Text="{Binding GetTotalBalance, StringFormat={}{0:N0} đ}"
+                        <TextBlock Text="{Binding GetTotalBalance, Converter={StaticResource CurrencyConverter}}"
                                    Style="{StaticResource CardValueStyle}" />
                     </StackPanel>
                 </Grid>
             </Border>
 
-            <!-- Card Thu nhập tháng -->
             <Border Style="{StaticResource DashboardCardStyle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -199,7 +183,7 @@
                             Width="48"
                             Height="48"
                             CornerRadius="12"
-                            Background="{StaticResource PrimaryLighter}"
+                            Background="{DynamicResource PrimaryLighter}"
                             Margin="0,0,16,0">
                         <TextBlock Text="📈"
                                    FontSize="24"
@@ -209,13 +193,12 @@
                     <StackPanel Grid.Column="1">
                         <TextBlock Text="THU NHẬP THÁNG"
                                    Style="{StaticResource CardTitleStyle}" />
-                        <TextBlock Text="{Binding GetMonthlyIncome, StringFormat={}{0:N0} đ}"
+                        <TextBlock Text="{Binding GetMonthlyIncome, Converter={StaticResource CurrencyConverter}}"
                                    Style="{StaticResource CardValueStyle}" />
                     </StackPanel>
                 </Grid>
             </Border>
 
-            <!-- Card Chi tiêu tháng -->
             <Border Style="{StaticResource DashboardCardStyle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -226,7 +209,7 @@
                             Width="48"
                             Height="48"
                             CornerRadius="12"
-                            Background="{StaticResource PrimaryLighter}"
+                            Background="{DynamicResource PrimaryLighter}"
                             Margin="0,0,16,0">
                         <TextBlock Text="📉"
                                    FontSize="24"
@@ -236,7 +219,7 @@
                     <StackPanel Grid.Column="1">
                         <TextBlock Text="CHI TIÊU THÁNG"
                                    Style="{StaticResource CardTitleStyle}" />
-                        <TextBlock Text="{Binding GetMonthlyExpense, StringFormat={}{0:N0} đ}"
+                        <TextBlock Text="{Binding GetMonthlyExpense, Converter={StaticResource CurrencyConverter}}"
                                    Style="{StaticResource CardValueStyle}"
                                    Foreground="{StaticResource DangerColor}" />
                     </StackPanel>
@@ -244,12 +227,11 @@
             </Border>
         </UniformGrid>
 
-        <!-- Hàng 2: Bảng giao dịch gần đây -->
         <Border Grid.Row="1"
-                Background="White"
+                Background="{DynamicResource MainContainerBg}"
                 CornerRadius="16"
                 BorderThickness="1"
-                BorderBrush="#E0E0E0"
+                BorderBrush="{DynamicResource DividerColor}"
                 Margin="0,0,0,8">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="12"
@@ -263,18 +245,16 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <!-- Tiêu đề bảng -->
                 <Border Grid.Row="0"
                         BorderThickness="0,0,0,1"
-                        BorderBrush="#EEEEEE"
+                        BorderBrush="{DynamicResource DividerColor}"
                         Padding="20,14">
                     <TextBlock Text="GIAO DỊCH GẦN ĐÂY TRONG THÁNG NÀY"
                                FontSize="18"
                                FontWeight="Bold"
-                               Foreground="{StaticResource PrimaryColor}" />
+                               Foreground="{DynamicResource PrimaryColor}" />
                 </Border>
 
-                <!-- DataGrid -->
                 <DataGrid Grid.Row="1"
                           ItemsSource="{Binding RecentTransactions}"
                           AutoGenerateColumns="False"
@@ -285,14 +265,20 @@
                           IsReadOnly="True"
                           RowHeight="48"
                           AlternationCount="2"
-                          Background="White"
+                          Background="Transparent"
                           BorderThickness="0"
                           GridLinesVisibility="Horizontal"
-                          HorizontalGridLinesBrush="#F0F0F0"
+                          HorizontalGridLinesBrush="{DynamicResource DividerColor}"
                           ColumnHeaderStyle="{StaticResource DashboardDataGridStyle}">
-
+                    <DataGrid.Resources>
+                        <Style TargetType="ScrollViewer">
+                            <Style.Resources>
+                                <Style TargetType="ScrollBar"
+                                       BasedOn="{StaticResource CustomScrollBarStyle}" />
+                            </Style.Resources>
+                        </Style>
+                    </DataGrid.Resources>
                     <DataGrid.Columns>
-                        <!-- Cột ngày -->
                         <DataGridTextColumn Header="NGÀY"
                                             Binding="{Binding TransactionDate, StringFormat=dd/MM/yyyy}"
                                             Width="140">
@@ -303,14 +289,13 @@
                                     <Setter Property="VerticalAlignment"
                                             Value="Center" />
                                     <Setter Property="Foreground"
-                                            Value="{StaticResource TextPrimary}" />
+                                            Value="{DynamicResource TextPrimary}" />
                                     <Setter Property="FontSize"
                                             Value="13" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <!-- Cột ghi chú -->
                         <DataGridTextColumn Header="GHI CHÚ"
                                             Binding="{Binding Note}"
                                             Width="*">
@@ -321,7 +306,7 @@
                                     <Setter Property="VerticalAlignment"
                                             Value="Center" />
                                     <Setter Property="Foreground"
-                                            Value="{StaticResource TextPrimary}" />
+                                            Value="{DynamicResource TextPrimary}" />
                                     <Setter Property="FontSize"
                                             Value="13" />
                                     <Setter Property="FontWeight"
@@ -330,9 +315,8 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <!-- Cột số tiền -->
                         <DataGridTextColumn Header="SỐ TIỀN"
-                                            Binding="{Binding Amount, StringFormat={}{0:N0} đ}"
+                                            Binding="{Binding Amount, Converter={StaticResource CurrencyConverter}}"
                                             Width="200">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
@@ -347,10 +331,7 @@
                                     <Setter Property="FontSize"
                                             Value="13" />
                                     <Setter Property="Foreground"
-                                            Value="{StaticResource TextPrimary}" />
-                                    <Style.Triggers>
-                                        <!-- Nếu cần phân biệt thu/chi, có thể dùng property IsIncome nhưng giữ nguyên binding -->
-                                    </Style.Triggers>
+                                            Value="{DynamicResource TextPrimary}" />
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>

@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Transaction_Management.Views.UserControls
+namespace Transaction_Management.Views.MainViews
 {
     /// <summary>
-    /// Interaction logic for Admin_UC.xaml
+    /// Interaction logic for AdminView.xaml
     /// </summary>
-    public partial class Admin_UC : UserControl
+    public partial class AdminView : Window
     {
-        public Admin_UC()
+        public AdminView()
         {
             InitializeComponent();
         }

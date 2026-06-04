@@ -13,10 +13,10 @@ namespace Transaction_Management.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class TM_Database : DbContext
+    public partial class TMDatabase : DbContext
     {
-        public TM_Database()
-            : base("name=TM_Database")
+        public TMDatabase()
+            : base("name=TMDatabase")
         {
         }
     

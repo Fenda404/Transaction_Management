@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="clr-namespace:Transaction_Management.ViewModels"
+             xmlns:cvt="clr-namespace:Transaction_Management.Converters"
              mc:Ignorable="d"
              Background="Transparent">
 
@@ -12,7 +13,8 @@
     </UserControl.DataContext>
 
     <UserControl.Resources>
-        <!-- Style cho thanh tìm kiếm -->
+        <cvt:CurrencyConverter x:Key="CurrencyConverter" />
+
         <Style x:Key="SearchTextBoxStyle"
                TargetType="TextBox">
             <Setter Property="Height"
@@ -20,9 +22,9 @@
             <Setter Property="FontSize"
                     Value="14" />
             <Setter Property="Background"
-                    Value="#F1F8E9" />
+                    Value="{DynamicResource PrimaryLighter}" />
             <Setter Property="BorderBrush"
-                    Value="#4CAF50" />
+                    Value="{DynamicResource PrimaryLight}" />
             <Setter Property="BorderThickness"
                     Value="1.5" />
             <Setter Property="Padding"
@@ -30,7 +32,7 @@
             <Setter Property="VerticalContentAlignment"
                     Value="Center" />
             <Setter Property="Foreground"
-                    Value="#424242" />
+                    Value="{DynamicResource PrimaryDark}" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
@@ -42,7 +44,7 @@
                                 <Grid>
                                     <TextBlock Text="&#xE721;"
                                                FontFamily="Segoe MDL2 Assets"
-                                               Foreground="#2E7D32"
+                                               Foreground="{DynamicResource PrimaryColor}"
                                                FontSize="18"
                                                Margin="15,0,0,0"
                                                VerticalAlignment="Center"
@@ -59,13 +61,12 @@
             </Setter>
         </Style>
 
-        <!-- Style cho Nút Thêm mới -->
         <Style x:Key="AddButtonStyle"
                TargetType="Button">
             <Setter Property="Background"
-                    Value="#2E7D32" />
+                    Value="{DynamicResource PrimaryColor}" />
             <Setter Property="Foreground"
-                    Value="White" />
+                    Value="{DynamicResource TextWhite}" />
             <Setter Property="FontSize"
                     Value="14" />
             <Setter Property="FontWeight"
@@ -96,7 +97,7 @@
                             <Trigger Property="IsMouseOver"
                                      Value="True">
                                 <Setter Property="Background"
-                                        Value="#1B5E20" />
+                                        Value="{DynamicResource PrimaryDark}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -104,7 +105,6 @@
             </Setter>
         </Style>
 
-        <!-- Style cho nút Action -->
         <Style x:Key="ActionButtonStyle"
                TargetType="Button">
             <Setter Property="Background"
@@ -131,7 +131,7 @@
                             <Trigger Property="IsMouseOver"
                                      Value="True">
                                 <Setter Property="Background"
-                                        Value="#E8F5E9" />
+                                        Value="{DynamicResource PrimaryLighter}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -143,12 +143,9 @@
     <Grid Margin="25">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <!-- Tiêu đề và Search -->
             <RowDefinition Height="*" />
-            <!-- Bảng dữ liệu -->
         </Grid.RowDefinitions>
 
-        <!-- PHẦN ĐẦU: TIÊU ĐỀ & CÔNG CỤ -->
         <Grid Grid.Row="0"
               Margin="0,0,0,30">
             <Grid.ColumnDefinitions>
@@ -161,34 +158,30 @@
                 <TextBlock Text="📊 LỊCH SỬ GIAO DỊCH"
                            FontSize="32"
                            FontWeight="Bold"
-                           Foreground="#2E7D32" />
+                           Foreground="{DynamicResource PrimaryColor}" />
                 <TextBlock Text="Quản lý và theo dõi các hoạt động tài chính của bạn"
-                           Foreground="#757575"
+                           Foreground="{DynamicResource TextGray}"
                            FontSize="14"
                            Margin="0,8,0,0" />
             </StackPanel>
 
-            <!-- Ô Tìm kiếm -->
             <TextBox Grid.Column="1"
                      Width="320"
                      Style="{StaticResource SearchTextBoxStyle}"
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                     Foreground="#757575"
                      Tag="Tìm kiếm theo mô tả hoặc loại..."
                      Margin="0,0,20,0" />
 
-            <!-- Nút Thêm mới -->
             <Button Grid.Column="2"
                     Content="THÊM GIAO DỊCH"
                     Style="{StaticResource AddButtonStyle}"
                     Command="{Binding AddTransactionCommand}" />
         </Grid>
 
-        <!-- PHẦN THÂN: BẢNG GIAO DỊCH -->
         <Border Grid.Row="1"
-                Background="White"
+                Background="{DynamicResource MainContainerBg}"
                 CornerRadius="16"
-                BorderBrush="#E8F5E9"
+                BorderBrush="{DynamicResource DividerColor}"
                 BorderThickness="1">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="12"
@@ -204,7 +197,7 @@
                       Background="Transparent"
                       BorderThickness="0"
                       GridLinesVisibility="Horizontal"
-                      HorizontalGridLinesBrush="#F1F1F1"
+                      HorizontalGridLinesBrush="{DynamicResource DividerColor}"
                       RowHeight="65"
                       HeadersVisibility="Column"
                       IsReadOnly="True"
@@ -213,13 +206,12 @@
                       CanUserSortColumns="False"
                       SelectionUnit="FullRow">
 
-
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="Background"
                                 Value="Transparent" />
                         <Setter Property="Foreground"
-                                Value="#2E7D32" />
+                                Value="{DynamicResource PrimaryColor}" />
                         <Setter Property="FontWeight"
                                 Value="Bold" />
                         <Setter Property="FontSize"
@@ -229,20 +221,26 @@
                         <Setter Property="BorderThickness"
                                 Value="0,0,0,2" />
                         <Setter Property="BorderBrush"
-                                Value="#4CAF50" />
+                                Value="{DynamicResource PrimaryLight}" />
                     </Style>
                 </DataGrid.ColumnHeaderStyle>
+
                 <DataGrid.Resources>
-                    <!-- 1. Xóa màu xanh nước biển mặc định của Windows -->
+                    <Style TargetType="ScrollViewer">
+                        <Style.Resources>
+                            <Style TargetType="ScrollBar"
+                                   BasedOn="{StaticResource CustomScrollBarStyle}" />
+                        </Style.Resources>
+                    </Style>
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
                                      Color="Transparent" />
                     <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
                                      Color="Transparent" />
 
-                    <!-- 2. Giữ chữ màu đen/tối khi hàng được chọn -->
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
                                      Color="Black" />
                 </DataGrid.Resources>
+
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
                         <Setter Property="Background"
@@ -251,7 +249,7 @@
                             <Trigger Property="IsSelected"
                                      Value="True">
                                 <Setter Property="Background"
-                                        Value="#F1F8E9" />
+                                        Value="{DynamicResource PrimaryLighter}" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -259,7 +257,6 @@
 
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
-                        <!-- 3. Tắt viền và các hiệu ứng Focus của ô lẻ -->
                         <Setter Property="BorderThickness"
                                 Value="0" />
                         <Setter Property="FocusVisualStyle"
@@ -268,7 +265,6 @@
                 </DataGrid.CellStyle>
 
                 <DataGrid.Columns>
-                    <!-- Cột Ngày tháng -->
                     <DataGridTextColumn Header="📅 NGÀY THÁNG"
                                         Binding="{Binding TransactionDate, StringFormat=dd/MM/yyyy HH:mm}"
                                         Width="180"
@@ -282,12 +278,11 @@
                                 <Setter Property="VerticalAlignment"
                                         Value="Center" />
                                 <Setter Property="Foreground"
-                                        Value="#424242" />
+                                        Value="{DynamicResource TextGray}" />
                             </Style>
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
-                    <!-- Cột Mô tả -->
                     <DataGridTextColumn Header="📝 MÔ TẢ"
                                         Binding="{Binding Note}"
                                         Width="300"
@@ -301,12 +296,11 @@
                                 <Setter Property="VerticalAlignment"
                                         Value="Center" />
                                 <Setter Property="Foreground"
-                                        Value="#424242" />
+                                        Value="{DynamicResource TextGray}" />
                             </Style>
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
-                    <!-- Cột Loại -->
                     <DataGridTextColumn Header="🏷️ LOẠI"
                                         Binding="{Binding Categories.CategoryType}"
                                         Width="140"
@@ -320,24 +314,21 @@
                                 <Setter Property="VerticalAlignment"
                                         Value="Center" />
                                 <Setter Property="Foreground"
-                                        Value="#2E7D32" />
+                                        Value="{DynamicResource PrimaryColor}" />
                                 <Setter Property="FontWeight"
                                         Value="SemiBold" />
                             </Style>
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
 
-                    <!-- Cột Số tiền với màu sắc động (Xanh/Đỏ) -->
                     <DataGridTemplateColumn Header="💰 SỐ TIỀN"
-                                            Width="160"
-                                            >
+                                            Width="160">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Amount, StringFormat={}{0:N0} đ}"
+                                <TextBlock Text="{Binding Amount, Converter={StaticResource CurrencyConverter}}"
                                            FontWeight="Bold"
                                            FontSize="14"
                                            VerticalAlignment="Center"
-                       
                                            Margin="20,0,20,0">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
@@ -360,7 +351,6 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <!-- Nút hành động -->
                     <DataGridTemplateColumn Header="⚙️ HÀNH ĐỘNG"
                                             Width="*">
                         <DataGridTemplateColumn.CellTemplate>
@@ -370,21 +360,22 @@
                                             VerticalAlignment="Center">
                                     <Button Content="&#xE70F;"
                                             Style="{StaticResource ActionButtonStyle}"
-                                            Foreground="#4CAF50"
+                                            Foreground="{DynamicResource PrimaryLight}"
                                             ToolTip="Sửa"
                                             Margin="5,0"
-                                            Command="{Binding DataContext.EditTransactionCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                            Command="{Binding DataContext.EditTransactionCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                                     <Button Content="&#xE74D;"
                                             Style="{StaticResource ActionButtonStyle}"
                                             Foreground="#D32F2F"
                                             ToolTip="Xóa"
                                             Margin="5,0"
-                                            Command="{Binding DataContext.DeleteTransactionCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                            Command="{Binding DataContext.DeleteTransactionCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
+
             </DataGrid>
         </Border>
     </Grid>

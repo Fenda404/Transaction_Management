@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Transaction_Management.Converters"
              xmlns:vm="clr-namespace:Transaction_Management.ViewModels"
+             xmlns:cvt="clr-namespace:Transaction_Management.Converters"
              mc:Ignorable="d"
              d:DesignHeight="600"
              d:DesignWidth="1000">
@@ -14,18 +15,25 @@
     </UserControl.DataContext>
 
     <UserControl.Resources>
-        <!-- KHẮC PHỤC LỖI: Liên kết bộ chuyển đổi phần trăm sang độ rộng thực tế -->
         <local:PercentToWidthConverter x:Key="PercentToWidthConverter" />
+        <cvt:CurrencyConverter x:Key="CurrencyConverter" />
 
-        <!-- Style Card Ngân sách bo góc đổ bóng nhẹ -->
-        <Style x:Key="BudgetCardStyle" TargetType="Border">
-            <Setter Property="CornerRadius" Value="15" />
-            <Setter Property="Background" Value="White" />
-            <Setter Property="Padding" Value="20" />
-            <Setter Property="Margin" Value="10" />
+        <Style x:Key="BudgetCardStyle"
+               TargetType="Border">
+            <Setter Property="CornerRadius"
+                    Value="15" />
+            <Setter Property="Background"
+                    Value="{DynamicResource MainContainerBg}" />
+            <Setter Property="Padding"
+                    Value="20" />
+            <Setter Property="Margin"
+                    Value="10" />
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect BlurRadius="15" ShadowDepth="2" Opacity="0.05" Color="Black" />
+                    <DropShadowEffect BlurRadius="15"
+                                      ShadowDepth="2"
+                                      Opacity="0.05"
+                                      Color="Black" />
                 </Setter.Value>
             </Setter>
         </Style>
@@ -34,41 +42,48 @@
     <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <!-- Tiêu đề & Công cụ -->
             <RowDefinition Height="Auto" />
-            <!-- Tổng quan -->
             <RowDefinition Height="*" />
-            <!-- Danh sách chi tiết -->
         </Grid.RowDefinitions>
 
-        <!-- PHẦN ĐẦU: TIÊU ĐỀ & NÚT THÊM MỚI -->
-        <Grid Grid.Row="0" Margin="10,0,10,20">
+        <Grid Grid.Row="0"
+              Margin="10,0,10,20">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0">
-                <TextBlock Text="QUẢN LÝ NGÂN SÁCH" FontSize="26" FontWeight="Bold" Foreground="#2E7D32" />
-                <TextBlock Text="Thiết lập hạn mức chi tiêu để kiểm soát nguồn tiền tối ưu" Foreground="#757575" FontSize="13" />
+                <TextBlock Text="QUẢN LÝ NGÂN SÁCH"
+                           FontSize="26"
+                           FontWeight="Bold"
+                           Foreground="{DynamicResource PrimaryColor}" />
+                <TextBlock Text="Thiết lập hạn mức chi tiêu để kiểm soát nguồn tiền tối ưu"
+                           Foreground="{DynamicResource TextGray}"
+                           FontSize="13" />
             </StackPanel>
-            <Button Grid.Column="1" 
-                    Content="➕ THÊM NGÂN SÁCH" 
-                    Width="180" Height="40" 
-                    Background="#2E7D32" 
-                    Foreground="White" 
-                    FontWeight="Bold" 
+            <Button Grid.Column="1"
+                    Content="➕ THÊM NGÂN SÁCH"
+                    Width="180"
+                    Height="40"
+                    Background="{DynamicResource PrimaryColor}"
+                    Foreground="{DynamicResource TextWhite}"
+                    FontWeight="Bold"
                     Cursor="Hand"
                     Command="{Binding AddBudgetCommand}">
                 <Button.Resources>
                     <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="20"/>
+                        <Setter Property="CornerRadius"
+                                Value="20" />
                     </Style>
                 </Button.Resources>
             </Button>
         </Grid>
 
-        <!-- PHẦN TỔNG QUAN -->
-        <Border Grid.Row="1" Style="{StaticResource BudgetCardStyle}" Background="#F1F8E9" BorderBrush="#C8E6C9" BorderThickness="1">
+        <Border Grid.Row="1"
+                Style="{StaticResource BudgetCardStyle}"
+                Background="{DynamicResource PrimaryLighter}"
+                BorderBrush="{DynamicResource DividerColor}"
+                BorderThickness="1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -76,23 +91,46 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel>
-                    <TextBlock Text="TỔNG NGÂN SÁCH ĐÃ SỬ DỤNG" Foreground="#2E7D32" FontSize="13" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <TextBlock Text="TỔNG NGÂN SÁCH ĐÃ SỬ DỤNG"
+                               Foreground="{DynamicResource PrimaryColor}"
+                               FontSize="13"
+                               FontWeight="Bold"
+                               Margin="0,0,0,5" />
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding TotalSpent, StringFormat={}{0:N0} đ}" FontSize="30" FontWeight="Bold" Foreground="#1B5E20"/>
-                        <TextBlock Text="{Binding TotalLimit, StringFormat=/ {0:N0} đ}" FontSize="16" Foreground="#666" VerticalAlignment="Bottom" Margin="8,0,0,4"/>
+                        <TextBlock Text="{Binding TotalSpent, Converter={StaticResource CurrencyConverter}}"
+                                   FontSize="30"
+                                   FontWeight="Bold"
+                                   Foreground="{DynamicResource PrimaryDark}" />
+                        <TextBlock Text="/"
+                                   FontSize="24"
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource TextGray}"
+                                   Margin="8,0,0,0" />
+                        <TextBlock Text="{Binding TotalLimit, Converter={StaticResource CurrencyConverter}}"
+                                   FontSize="16"
+                                   Foreground="{DynamicResource TextGray}"
+                                   VerticalAlignment="Bottom"
+                                   Margin="8,0,0,4" />
                     </StackPanel>
                 </StackPanel>
 
-                <TextBlock Grid.Column="1" Text="{Binding OverallProgress, StringFormat={}{0:F1}%}" FontSize="24" FontWeight="Bold" Foreground="#2E7D32" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1"
+                           Text="{Binding OverallProgress, StringFormat={}{0:F1}%}"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Foreground="{DynamicResource PrimaryColor}"
+                           VerticalAlignment="Center" />
             </Grid>
         </Border>
 
-        <!-- PHẦN DANH SÁCH CHI TIẾT -->
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Margin="0,10,0,0">
+        <ScrollViewer Grid.Row="2"
+                      VerticalScrollBarVisibility="Auto"
+                      Margin="0,10,0,0">
             <ItemsControl ItemsSource="{Binding Budgets}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Columns="2" VerticalAlignment="Top" />
+                        <UniformGrid Columns="2"
+                                     VerticalAlignment="Top" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
@@ -100,45 +138,89 @@
                         <Border Style="{StaticResource BudgetCardStyle}">
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
-                                <!-- Tên Hạng Mục -->
-                                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Categories.CategoryName}" FontSize="16" FontWeight="Bold" Foreground="#333" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Row="0"
+                                           Grid.Column="0"
+                                           Text="{Binding Categories.CategoryName}"
+                                           FontSize="16"
+                                           FontWeight="Bold"
+                                           Foreground="{DynamicResource PrimaryColor}"
+                                           VerticalAlignment="Center" />
 
-                                <!-- Nhóm nút bấm Thao tác Hành động Sửa/Xóa Ngân sách -->
-                                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                                    <Button Content="✏️" Background="Transparent" BorderThickness="0" Cursor="Hand" ToolTip="Sửa hạn mức" FontSize="14"
-                                            Command="{Binding DataContext.EditBudgetCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}"/>
-                                    <Button Content="🗑️" Background="Transparent" BorderThickness="0" Cursor="Hand" ToolTip="Xóa ngân sách" FontSize="14" Margin="10,0,0,0"
-                                            Command="{Binding DataContext.DeleteBudgetCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}"/>
+                                <StackPanel Grid.Row="0"
+                                            Grid.Column="1"
+                                            Orientation="Horizontal"
+                                            VerticalAlignment="Center">
+                                    <Button Content="✏️"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Cursor="Hand"
+                                            ToolTip="Sửa hạn mức"
+                                            FontSize="14"
+                                            Command="{Binding DataContext.EditBudgetCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}" />
+                                    <Button Content="🗑️"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Cursor="Hand"
+                                            ToolTip="Xóa ngân sách"
+                                            FontSize="14"
+                                            Margin="10,0,0,0"
+                                            Command="{Binding DataContext.DeleteBudgetCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}" />
                                 </StackPanel>
 
-                                <!-- Chi tiêu thực tế -->
-                                <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10,0,8">
-                                    <TextBlock Text="{Binding SpentAmount, StringFormat={}{0:N0} đ}" FontSize="14" FontWeight="SemiBold" Foreground="#1B5E20" />
-                                    <TextBlock Text="{Binding AmountLimit, StringFormat={}{0:N0} đ}" HorizontalAlignment="Right" FontSize="13" Foreground="#999" />
+                                <Grid Grid.Row="1"
+                                      Grid.ColumnSpan="2"
+                                      Margin="0,10,0,8">
+                                    <TextBlock Text="{Binding SpentAmount, Converter={StaticResource CurrencyConverter}}"
+                                               FontSize="14"
+                                               FontWeight="SemiBold"
+                                               Foreground="{DynamicResource PrimaryDark}" />
+                                    <TextBlock Text="{Binding AmountLimit, Converter={StaticResource CurrencyConverter}}"
+                                               HorizontalAlignment="Right"
+                                               FontSize="13"
+                                               Foreground="{DynamicResource TextGray}" />
                                 </Grid>
 
-                                <!-- Tiến trình chi tiêu ProgressBar -->
-                                <Border Grid.Row="2" Grid.ColumnSpan="2" Height="10" Background="#F5F5F5" CornerRadius="5" ClipToBounds="True">
-                                    <Grid HorizontalAlignment="Left">
-                                        <Border Background="{Binding ProgressColor}" CornerRadius="5"
-                                                Width="{Binding UsagePercentage, Converter={StaticResource PercentToWidthConverter}, ConverterParameter=400}" />
+                                <Border Grid.Row="2"
+                                        Grid.ColumnSpan="2"
+                                        Height="10"
+                                        Background="{DynamicResource DividerColor}"
+                                        CornerRadius="5"
+                                        ClipToBounds="True"
+                                        Margin="0,5">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="{Binding UsagePercentage, StringFormat={}{0}*}" />
+                                            <ColumnDefinition Width="{Binding RemainingPercentage, StringFormat={}{0}*}" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Grid.Column="0"
+                                                Background="{Binding ProgressColor}"
+                                                CornerRadius="5" />
                                     </Grid>
                                 </Border>
 
-                                <!-- Số tiền còn lại và phần trăm -->
-                                <Grid Grid.Row="3" Grid.ColumnSpan="2" Margin="0,6,0,0">
-                                    <TextBlock Text="{Binding RemainingAmount, StringFormat=Còn lại {0:N0} đ}" FontSize="12" Foreground="#2E7D32"/>
-                                    <TextBlock Text="{Binding UsagePercentage, StringFormat={}{0:F0}% đã dùng}" HorizontalAlignment="Right" Foreground="#757575" FontSize="12" />
+                                <Grid Grid.Row="3"
+                                      Grid.ColumnSpan="2"
+                                      Margin="0,6,0,0">
+                                    <TextBlock Text="{Binding RemainingAmount, Converter={StaticResource CurrencyConverter}}"
+                                               FontSize="12"
+                                               Foreground="{DynamicResource PrimaryColor}" />
+                                    <TextBlock Text="{Binding UsagePercentage, StringFormat={}{0:F0}% đã dùng}"
+                                               HorizontalAlignment="Right"
+                                               Foreground="{DynamicResource TextGray}"
+                                               FontSize="12" />
                                 </Grid>
                             </Grid>
                         </Border>

@@ -12,6 +12,13 @@ namespace Transaction_Management.ViewModels
     public class MainViewModel : BaseViewModel
     {
         // View hiện tại đang được hiển thị trong ContentControl của MainView
+
+        private string _themeColor;
+        public string ThemeColor
+        {
+            get => _themeColor;
+            set { _themeColor = value; OnPropertyChanged(nameof(ThemeColor)); }
+        }
         private object _currentView;
         public object CurrentView
         {
@@ -48,8 +55,6 @@ namespace Transaction_Management.ViewModels
 
         // Lệnh chuyển đổi trang (Dashboard, Transactions, Reports, Budgets, Settings)
         public ICommand SwitchViewCommand { get; set; }
-
-        // Lệnh đăng xuất
         
 
         public MainViewModel()
@@ -58,13 +63,13 @@ namespace Transaction_Management.ViewModels
             // Lấy tên người dùng từ LoginViewModel sau khi đăng nhập thành công
             GetUsername = LoginViewModel.CurrentUser ?? "Admin";
             GetRoleName = LoginViewModel.CurrentRole ?? "ADMIN";
-
+            
             // Trang mặc định khi vừa mở ứng dụng là Dashboard
             CurrentView = new DashboardViewModel();
 
             // 2. Khởi tạo logic chuyển trang
             // Sử dụng RelayCommand<string> để nhận tham số từ CommandParameter trong XAML
-            SwitchViewCommand = new RelayCommand<string>((p) =>
+            SwitchViewCommand = new RelayCommand<string>(async (p) =>
             {
                 switch (p)
                 {
@@ -79,6 +84,11 @@ namespace Transaction_Management.ViewModels
                         break;
                     case "Budgets":
                         CurrentView = new BudgetsViewModel();
+                        if (CurrentView is BudgetsViewModel budgetVM)
+                        {
+                            // Gọi một hàm public ngoài BudgetViewModel (Chúng ta sẽ viết ở Bước 2)
+                            await budgetVM.CheckBudgetViolationsOnNavigatedAsync();
+                        }
                         break;
                     case "Settings":
                         CurrentView = new SettingsViewModel();
@@ -86,7 +96,7 @@ namespace Transaction_Management.ViewModels
                 }
             }, (p) => true);
 
-            // 3. Khởi tạo logic Đăng xuất
+            
             
 
         }

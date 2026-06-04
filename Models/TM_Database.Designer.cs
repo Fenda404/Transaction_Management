@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\code\Đồ án Công Nghệ.NET\Transaction_Management\Models\TM_Database.edmx'. 
+﻿// T4 code generation is enabled for model 'E:\Projects\.NET\Transaction_Management_Github\Models\TM_Database.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

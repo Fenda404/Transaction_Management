@@ -29,5 +29,7 @@ namespace Transaction_Management.Views.UserControls
 
             this.DataContext = new BudgetsViewModel();
         }
+
+
     }
 }

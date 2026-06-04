@@ -9,6 +9,7 @@
                      Color="#E8F5E9" />
     <SolidColorBrush x:Key="PrimaryDark"
                      Color="#1B5E20" />
+
     <SolidColorBrush x:Key="TextWhite"
                      Color="#FFFFFF" />
     <SolidColorBrush x:Key="TextLight"
@@ -17,4 +18,26 @@
                      Color="#757575" />
     <SolidColorBrush x:Key="DividerColor"
                      Color="#E0E0E0" />
+
+    <Color x:Key="SidebarGradStart">#2E7D32</Color>
+    <Color x:Key="SidebarGradEnd">#1B5E20</Color>
+
+    <SolidColorBrush x:Key="MainContainerBg"
+                     Color="#FFFFFF" />
+
+    <Color x:Key="WindowGradStart">#F8FDF8</Color>
+    <Color x:Key="WindowGradMedium">#F1F8E9</Color>
+    <Color x:Key="WindowGradEnd">#E8F5E9</Color>
+
+    <Color x:Key="SrcColor_PrimaryColor">#2E7D32</Color>
+    <Color x:Key="SrcColor_PrimaryDark">#1B5E20</Color>
+    <Color x:Key="SrcColor_MainText">#333333</Color>
+    <Color x:Key="SrcColor_TextGray">#757575</Color>
+    <Color x:Key="SrcColor_TextWhite">#FFFFFF</Color>
+    <Color x:Key="SrcColor_MainContainerBg">#FFFFFF</Color>
+    <Color x:Key="SrcColor_PrimaryLighter">#F1F8E9</Color>
+    <Color x:Key="SrcColor_DividerColor">#E0E0E0</Color>
+
+    <SolidColorBrush x:Key="MainTextColor"
+                     Color="#333333" />
 </ResourceDictionary>

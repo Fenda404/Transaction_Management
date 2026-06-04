@@ -13,18 +13,20 @@ using Transaction_Management.Views.Messages;
 
 namespace Transaction_Management.ViewModels
 {
-    public class AddTransactionViewModel:BaseViewModel
+    public class AddTransactionViewModel : BaseViewModel
     {
         #region Properties
 
-       
+        // Khởi tạo đối tượng Service để làm việc với DB
+        private readonly TransactionService _transactionService = new TransactionService();
 
-        TransactionService transactionService = new TransactionService();
-        public ObservableCollection<string> Categories { get; set; }
-        public ObservableCollection<Wallets> Wallets { get; set; }
-        TransactionsViewModel transactionViewModel = new TransactionsViewModel();
+        public ObservableCollection<string> Categories { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<Wallets> Wallets { get; set; } = new ObservableCollection<Wallets>();
+
+        // Loại bỏ việc khởi tạo new TransactionsViewModel() ở đây nếu không dùng tới để tránh rò rỉ bộ nhớ
 
         public bool isSaveSuccess = false;
+
         private decimal _amount;
         public decimal Amount
         {
@@ -84,54 +86,99 @@ namespace Transaction_Management.ViewModels
         public ICommand CancelCommand { get; set; }
         public ICommand SaveCommand { get; set; }
         #endregion
+
         #region Constructor
         public AddTransactionViewModel()
         {
-            LoadData();
+            // Gọi hàm Load dữ liệu bất đồng bộ một cách an toàn từ Constructor
+            _ = LoadDataAsync();
+
             CancelCommand = new RelayCommand<object>((p) => Cancel(p), (p) => true);
-            SaveCommand = new RelayCommand(_ => Save(), _ => true);
+
+            // Chuyển SaveCommand thành một Action bất đồng bộ (async/await)
+            SaveCommand = new RelayCommand(async _ => await SaveAsync(), _ => true);
         }
         #endregion
+
         #region Methods
-        private void LoadData()
+
+        /// <summary>
+        /// Nạp danh sách Ví và Danh mục bất đồng bộ từ Service
+        /// </summary>
+        private async Task LoadDataAsync()
         {
-            Wallets = transactionService.Wallets;
-            // Lấy danh mục từ TransactionService thay vì hardcode
-            Categories = new ObservableCollection<string>(
-                transactionService.Categories.Select(c => c.CategoryName).ToList()
-            );
+            try
+            {
+                // Lấy danh sách ví từ DB
+                var walletsData = await _transactionService.GetWalletsAsync();
+                Wallets.Clear();
+                foreach (var wallet in walletsData)
+                {
+                    Wallets.Add(wallet);
+                }
+
+                // Lấy danh sách tên danh mục từ DB
+                var categoriesData = await _transactionService.GetCategoriesAsync();
+                Categories.Clear();
+                foreach (var categoryName in categoriesData.Select(c => c.CategoryName))
+                {
+                    Categories.Add(categoryName);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Lỗi nạp dữ liệu ComboBox: {ex.Message}");
+            }
         }
 
         private void Cancel(object parameter)
         {
             var window = parameter as Window;
-
             if (window != null)
             {
                 window.Close();
             }
-
         }
 
-        private void Save()
+        /// <summary>
+        /// Lưu giao dịch bất đồng bộ xuống Database và phản hồi UI
+        /// </summary>
+        private async Task SaveAsync()
         {
-            var checkSuccess = transactionService.AddTransaction(Amount, Wallet, Category, Date, Description);
-            if (checkSuccess)
+            try
             {
-                ConfirmDialog confirmDialog = new ConfirmDialog("Đã lưu thành công");
-                confirmDialog.ShowDialog();
-                SavedCallback?.Invoke();
+                // Kiểm tra dữ liệu đầu vào cơ bản trước khi đẩy xuống Service
+                if (string.IsNullOrEmpty(Wallet) || string.IsNullOrEmpty(Category) || Amount <= 0)
+                {
+                    ErrorDialog validationDialog = new ErrorDialog("Vui lòng điền đầy đủ số tiền, ví và danh mục!");
+                    validationDialog.ShowDialog();
+                    return;
+                }
+
+                // Gọi hàm nạp dữ liệu bất đồng bộ từ tầng Service mới viết lại
+                var checkSuccess = await _transactionService.AddTransactionAsync(Amount, Wallet, Category, Date, Description);
+
+                if (checkSuccess)
+                {
+                    isSaveSuccess = true;
+                    ConfirmDialog confirmDialog = new ConfirmDialog("Đã lưu thành công");
+                    confirmDialog.ShowDialog();
+
+                    // Kích hoạt callback để thông báo cho View lớn bên ngoài cập nhật lại danh sách hiển thị
+                    SavedCallback?.Invoke();
+                }
+                else
+                {
+                    ErrorDialog errorDialog = new ErrorDialog("Lỗi trong quá trình lưu vào database");
+                    errorDialog.ShowDialog();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                ErrorDialog errorDialog = new ErrorDialog("Lỗi trong quá trình lưu vào database");
+                ErrorDialog errorDialog = new ErrorDialog($"Lỗi hệ thống: {ex.Message}");
                 errorDialog.ShowDialog();
             }
-
         }
-        
-
-        
         #endregion
     }
 }

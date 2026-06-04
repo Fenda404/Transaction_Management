@@ -88,8 +88,11 @@
     </Compile>
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\BoolToBrushConverter.cs" />
+    <Compile Include="Converters\CurrencyConverter.cs" />
     <Compile Include="Converters\PasswordVisibilityConverter.cs" />
     <Compile Include="Converters\PercentToWidthConverter.cs" />
+    <Compile Include="Helpers\AppConfig.cs" />
+    <Compile Include="Helpers\ThemeHelper.cs" />
     <Compile Include="Models\Budgets.cs">
       <DependentUpon>TM_Database.tt</DependentUpon>
     </Compile>
@@ -135,14 +138,20 @@
     <Compile Include="Models\Wallets.cs">
       <DependentUpon>TM_Database.tt</DependentUpon>
     </Compile>
+    <Compile Include="Services\AdminService.cs" />
+    <Compile Include="Services\BudgetService.cs" />
+    <Compile Include="Services\CurrencyConfigService.cs" />
     <Compile Include="Services\LoginService.cs" />
     <Compile Include="Services\RegisterService.cs" />
     <Compile Include="Services\ReportService.cs" />
+    <Compile Include="Services\ThemeService.cs" />
     <Compile Include="Services\TransactionService.cs" />
+    <Compile Include="Services\UserService.cs" />
     <Compile Include="Services\UserSessionService.cs" />
     <Compile Include="ViewModels\AddTransactionViewModel.cs" />
     <Compile Include="ViewModels\AdminViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\BudgetDialogViewModel.cs" />
     <Compile Include="ViewModels\BudgetsViewModel.cs" />
     <Compile Include="ViewModels\CategoryBreakdownItem.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />
@@ -154,6 +163,9 @@
     <Compile Include="ViewModels\ReportsViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\TransactionsViewModel.cs" />
+    <Compile Include="Views\MainViews\AdminView.xaml.cs">
+      <DependentUpon>AdminView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainViews\MainLoginView.xaml.cs">
       <DependentUpon>MainLoginView.xaml</DependentUpon>
     </Compile>
@@ -169,14 +181,20 @@
     <Compile Include="Views\SubViews\AddTransaction.xaml.cs">
       <DependentUpon>AddTransaction.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SubViews\BudgetAlert.xaml.cs">
+      <DependentUpon>BudgetAlert.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SubViews\BudgetDialog.xaml.cs">
       <DependentUpon>BudgetDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SubViews\ChangeInfomation.xaml.cs">
+      <DependentUpon>ChangeInfomation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SubViews\DailyReminder.xaml.cs">
+      <DependentUpon>DailyReminder.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SubViews\EditTransaction.xaml.cs">
       <DependentUpon>EditTransaction.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\Admin_UC.xaml.cs">
-      <DependentUpon>Admin_UC.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\Budgets_UC.xaml.cs">
       <DependentUpon>Budgets_UC.xaml</DependentUpon>
@@ -235,7 +253,31 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Styles\Main\BlueDarkTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Main\BlueLightTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Main\DarkGreenTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Main\GreenTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Main\RedDarkTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Main\RedLightTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Main\SharedBrushes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -246,6 +288,10 @@
     <Page Include="Styles\User\ButtonContent.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\User\ScrollBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\User\SubView.xaml">
       <SubType>Designer</SubType>
@@ -262,6 +308,10 @@
     <Page Include="Styles\User\TextBoxContent.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainViews\AdminView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainViews\MainLoginView.xaml">
       <SubType>Designer</SubType>
@@ -283,15 +333,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\SubViews\BudgetAlert.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SubViews\BudgetDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SubViews\EditTransaction.xaml">
+    <Page Include="Views\SubViews\ChangeInfomation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UserControls\Admin_UC.xaml">
+    <Page Include="Views\SubViews\DailyReminder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SubViews\EditTransaction.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -326,9 +384,12 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Resource Include="Resources\Images\Backgrounds\background_01.jpg" />
     <Resource Include="Resources\Images\Backgrounds\hinhnen.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Images\Backgrounds\admin_background.jpg" />
+    <Resource Include="Resources\Images\Backgrounds\admin_back_2.png" />
     <Content Include="Models\TM_Database.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>TM_Database.edmx</DependentUpon>

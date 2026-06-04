@@ -1,0 +1,41 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <SolidColorBrush x:Key="PrimaryColor"
+                     Color="#E53935" />
+    <SolidColorBrush x:Key="PrimaryLight"
+                     Color="#EF5350" />
+    <SolidColorBrush x:Key="PrimaryLighter"
+                     Color="#FFEBEE" />
+    <SolidColorBrush x:Key="PrimaryDark"
+                     Color="#C62828" />
+
+    <SolidColorBrush x:Key="TextWhite"
+                     Color="#FFFFFF" />
+    <SolidColorBrush x:Key="TextLight"
+                     Color="#F5F5F5" />
+    <SolidColorBrush x:Key="TextGray"
+                     Color="#757575" />
+    <SolidColorBrush x:Key="DividerColor"
+                     Color="#E0E0E0" />
+
+    <Color x:Key="SidebarGradStart">#E53935</Color>
+    <Color x:Key="SidebarGradEnd">#C62828</Color>
+
+    <SolidColorBrush x:Key="MainContainerBg"
+                     Color="#FFFFFF" />
+
+    <Color x:Key="WindowGradStart">#FFFAFA</Color>
+    <Color x:Key="WindowGradMedium">#FFEBEE</Color>
+    <Color x:Key="WindowGradEnd">#FFCDD2</Color>
+    
+    <Color x:Key="SrcColor_PrimaryColor">#E53935</Color>
+    <Color x:Key="SrcColor_PrimaryDark">#C62828</Color>
+    <Color x:Key="SrcColor_MainText">#212121</Color>
+    <Color x:Key="SrcColor_TextGray">#757575</Color>
+    <Color x:Key="SrcColor_TextWhite">#FFFFFF</Color>
+    <Color x:Key="SrcColor_MainContainerBg">#FFFFFF</Color>
+    <Color x:Key="SrcColor_PrimaryLighter">#FFEBEE</Color> <Color x:Key="SrcColor_DividerColor">#E0E0E0</Color>
+
+    <SolidColorBrush x:Key="MainTextColor"
+                     Color="#333333" />
+</ResourceDictionary>

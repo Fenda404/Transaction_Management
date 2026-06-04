@@ -1,12 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using Transaction_Management.Commands;
+using Transaction_Management.Helpers;
 using Transaction_Management.Models;
+using Transaction_Management.Services;
 using Transaction_Management.Views.Messages;
+using Transaction_Management.Views.SubViews;
 
 namespace Transaction_Management.Models
 {
@@ -60,7 +66,11 @@ namespace Transaction_Management.ViewModels
     public class BudgetsViewModel : BaseViewModel
     {
         #region Properties
-        private ObservableCollection<Budgets> _budgets;
+        private readonly BudgetService _budgetService = new BudgetService();
+        private readonly TransactionService _transactionService = new TransactionService();
+        public List<Categories> AllCategories { get; set; } = new List<Categories>();
+
+        private ObservableCollection<Budgets> _budgets = new ObservableCollection<Budgets>();
         public ObservableCollection<Budgets> Budgets
         {
             get => _budgets;
@@ -68,17 +78,17 @@ namespace Transaction_Management.ViewModels
             {
                 _budgets = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(BudgetList)); // Cập nhật đồng thời cho giao diện cũ/mới
+                OnPropertyChanged(nameof(BudgetList)); // Đồng bộ cho XAML cũ sử dụng danh sách này
             }
         }
 
-        // Tạo thuộc tính bí danh (Alias) để tương thích hoàn toàn với Budgets_UC.xaml sử dụng BudgetList
         public ObservableCollection<Budgets> BudgetList
         {
             get => Budgets;
             set => Budgets = value;
         }
 
+        // --- Các thuộc tính hiển thị cho Khung Tổng Ngân Sách Đã Sử Dụng ở trên cùng ---
         private decimal _totalSpent;
         public decimal TotalSpent
         {
@@ -94,11 +104,10 @@ namespace Transaction_Management.ViewModels
             {
                 _totalLimit = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(TotalBudgetLimit)); // Đồng bộ bí danh
+                OnPropertyChanged(nameof(TotalBudgetLimit));
             }
         }
 
-        // Tạo thuộc tính bí danh cho tổng hạn mức ngân sách
         public decimal TotalBudgetLimit => TotalLimit;
 
         private double _overallProgress;
@@ -108,7 +117,7 @@ namespace Transaction_Management.ViewModels
             set { _overallProgress = value; OnPropertyChanged(); }
         }
 
-        // Khai báo các lệnh CRUD cho giao diện Ngân sách
+        // Hệ thống Command điều hướng nút bấm
         public ICommand AddBudgetCommand { get; set; }
         public ICommand EditBudgetCommand { get; set; }
         public ICommand DeleteBudgetCommand { get; set; }
@@ -117,93 +126,85 @@ namespace Transaction_Management.ViewModels
         #region Constructor
         public BudgetsViewModel()
         {
-            // Liên kết các nút bấm đến các hành động giả lập nhanh
+            // Gán lệnh hoạt động thực tế
             AddBudgetCommand = new RelayCommand(_ => ExecuteAddBudget());
             EditBudgetCommand = new RelayCommand(p => ExecuteEditBudget(p as Budgets));
             DeleteBudgetCommand = new RelayCommand(p => ExecuteDeleteBudget(p as Budgets));
 
-            // Nạp dữ liệu giả lập
-            LoadMockBudgetData();
+            // Kích hoạt tiến trình tải dữ liệu thật bất đồng bộ từ SQL Server
+            _ = LoadDataAsync();
+            _ = CheckBudgetViolationsOnNavigatedAsync();
         }
         #endregion
 
         #region Methods
+
         /// <summary>
-        /// Tạo và nạp dữ liệu giả để hiển thị trực quan các dải màu tiến trình (Xanh, Cam, Đỏ)
+        /// Hàm lấy dữ liệu thật từ SQL, đối chiếu thời gian thực với các giao dịch trong tháng
         /// </summary>
-        private void LoadMockBudgetData()
+        public async Task LoadDataAsync()
         {
-            Budgets = new ObservableCollection<Budgets>();
-
-            // 1. Ngân sách Ăn uống - Mức chi tiêu bình thường (Màu xanh lá - Dưới 80%)
-            Budgets.Add(new Budgets
+            try
             {
-                BudgetID = 1,
-                UserID = 1,
-                CategoryID = 101,
-                AmountLimit = 5000000,   // Hạn mức: 5 Triệu
-                SpentAmount = 2500000,   // Thực chi: 2.5 Triệu (Đạt 50%)
-                Categories = new Categories { CategoryID = 101, CategoryName = "Ăn uống & Thực phẩm", CategoryType = "Expense" }
-            });
+                // 1. Kiểm tra session đăng nhập người dùng
+                if (UserSessionService.CurrentUser == null)
+                {
+                    Budgets.Clear();
+                    ResetOverview();
+                    return;
+                }
 
-            // 2. Ngân sách Thuê nhà & Điện nước - Cố định an toàn (Màu xanh lá - Dưới 80%)
-            Budgets.Add(new Budgets
+                int currentUserId = UserSessionService.CurrentUser.UserID;
+
+                // 2. Chạy song song 2 luồng DB: Lấy danh sách Ngân sách đặt ra và Toàn bộ giao dịch
+                var budgetsTask = _budgetService.LoadDataByUserIdAsync(currentUserId);
+                var transactionsTask = _transactionService.LoadDataByUserIdAsync(currentUserId);
+
+                await Task.WhenAll(budgetsTask, transactionsTask);
+
+                var dbBudgets = await budgetsTask ?? new List<Budgets>();
+                var allTransactions = await transactionsTask ?? new List<Transactions>();
+
+                // 3. Định vị mốc thời gian tháng hiện tại
+                var currentYear = DateTime.Now.Year;
+                var currentMonth = DateTime.Now.Month;
+
+                // Lọc giao dịch chi tiêu tháng này
+                var monthlyExpenses = allTransactions
+                    .Where(t => t.TransactionDate.HasValue &&
+                                t.TransactionDate.Value.Month == currentMonth &&
+                                t.TransactionDate.Value.Year == currentYear)
+                    .ToList();
+
+                // 4. Liên kết tính toán SpentAmount trực tiếp trên RAM
+                Budgets.Clear();
+                foreach (var budget in dbBudgets)
+                {
+                    // Sum tổng số tiền của các giao dịch CHI TIÊU có CategoryID trùng khớp ngân sách này
+                    decimal spent = monthlyExpenses
+                        .Where(t => t.CategoryID == budget.CategoryID && _transactionService.GetSignedAmount(t) < 0)
+                        .Sum(t => Math.Abs(_transactionService.GetSignedAmount(t)));
+
+                    budget.SpentAmount = spent; // Đổ số tiền thật vào biến mở rộng
+                    Budgets.Add(budget);
+                }
+
+                // 5. Cập nhật thanh tiến trình tổng quát (Hộp màu xanh nhạt phía trên UI)
+                CalculateTotals();
+            }
+            catch (Exception ex)
             {
-                BudgetID = 2,
-                UserID = 1,
-                CategoryID = 102,
-                AmountLimit = 4500000,   // Hạn mức: 4.5 Triệu
-                SpentAmount = 3000000,   // Thực chi: 3 Triệu (Đạt ~66.7%)
-                Categories = new Categories { CategoryID = 102, CategoryName = "Thuê nhà & Tiện ích", CategoryType = "Expense" }
-            });
-
-            // 3. Ngân sách Di chuyển, xăng xe - Mức cảnh báo (Màu cam - Từ 80% đến dưới 100%)
-            Budgets.Add(new Budgets
-            {
-                BudgetID = 3,
-                UserID = 1,
-                CategoryID = 103,
-                AmountLimit = 1500000,   // Hạn mức: 1.5 Triệu
-                SpentAmount = 1300000,   // Thực chi: 1.3 Triệu (Đạt ~86.7%)
-                Categories = new Categories { CategoryID = 103, CategoryName = "Di chuyển & Xăng xe", CategoryType = "Expense" }
-            });
-
-            // 4. Ngân sách Mua sắm & Shopping - Đã vượt định mức quá tải (Màu đỏ - Từ 100% trở lên)
-            Budgets.Add(new Budgets
-            {
-                BudgetID = 4,
-                UserID = 1,
-                CategoryID = 104,
-                AmountLimit = 3000000,   // Hạn mức: 3 Triệu
-                SpentAmount = 3400000,   // Thực chi: 3.4 Triệu (Đạt ~113.3%)
-                Categories = new Categories { CategoryID = 104, CategoryName = "Mua sắm & Quần áo", CategoryType = "Expense" }
-            });
-
-            // 5. Ngân sách Giải trí, Du lịch - Sắp chạm hạn mức (Màu cam - Từ 80% đến dưới 100%)
-            Budgets.Add(new Budgets
-            {
-                BudgetID = 5,
-                UserID = 1,
-                CategoryID = 105,
-                AmountLimit = 2000000,   // Hạn mức: 2 Triệu
-                SpentAmount = 1800000,   // Thực chi: 1.8 Triệu (Đạt 90%)
-                Categories = new Categories { CategoryID = 105, CategoryName = "Vui chơi & Giải trí", CategoryType = "Expense" }
-            });
-
-            // Tính toán các thông số tổng hợp cho Thẻ tổng quan
-            CalculateTotals();
+                System.Diagnostics.Debug.WriteLine($"Lỗi load dữ liệu thực tế: {ex.Message}");
+                Budgets.Clear();
+                ResetOverview();
+            }
         }
 
-        /// <summary>
-        /// Cộng dồn tổng hạn mức và tổng thực chi dựa trên danh sách giả lập
-        /// </summary>
         private void CalculateTotals()
         {
             if (Budgets == null || Budgets.Count == 0)
             {
-                TotalSpent = 0;
-                TotalLimit = 0;
-                OverallProgress = 0;
+                ResetOverview();
                 return;
             }
 
@@ -212,68 +213,132 @@ namespace Transaction_Management.ViewModels
             OverallProgress = TotalLimit > 0 ? (double)(TotalSpent / TotalLimit) * 100 : 0;
         }
 
-        #region Mock Action Handlers (Chạy thử nút bấm trên UI)
+        private void ResetOverview()
+        {
+            TotalSpent = 0;
+            TotalLimit = 0;
+            OverallProgress = 0;
+        }
+
+        #region CRUD Actions Logic Real
         private void ExecuteAddBudget()
         {
-            // Hiển thị thông báo khi bấm nút Thêm
-            var dialog = new ConfirmDialog("Hệ thống nhận diện lệnh [THÊM NGÂN SÁCH MỚI]. Bạn muốn tạo dữ liệu thử nghiệm không?");
-            dialog.ShowDialog();
-
-            if (dialog.Result == true)
+            try
             {
-                // Thêm một mục ngân sách mới giả lập vào danh sách để kiểm tra tính năng cập nhật giao diện tự động
-                Budgets.Add(new Budgets
-                {
-                    BudgetID = Budgets.Count + 1,
-                    UserID = 1,
-                    CategoryID = 106,
-                    AmountLimit = 2500000,
-                    SpentAmount = 400000,
-                    Categories = new Categories { CategoryID = 106, CategoryName = "Mục thử nghiệm " + (Budgets.Count + 1), CategoryType = "Expense" }
-                });
+                // 1. Kiểm tra nếu chưa đăng nhập thì không mở màn hình
+                if (UserSessionService.CurrentUser == null) return;
 
-                CalculateTotals();
-                new ConfirmDialog("Đã giả lập thêm ngân sách mới thành công!").ShowDialog();
+                int currentUserId = UserSessionService.CurrentUser.UserID;
+
+                // 2. Tạo một đối tượng Budget rỗng chuẩn bị cho việc thêm mới
+                Budgets newBudget = new Budgets
+                {
+                    UserID = currentUserId,
+                    AmountLimit = 0 // Giá trị mặc định ban đầu
+                };
+
+
+
+                // 3. Khởi tạo Dialog và truyền đủ 2 tham số: UserId và đối tượng Budget mới
+                BudgetDialog budgetDialog = new BudgetDialog(currentUserId, newBudget);
+
+                // 4. Hiển thị dưới dạng Dialog (ShowDialog) để đóng băng màn hình chính, 
+                // bắt buộc người dùng tương tác xong với cửa sổ Thêm mới.
+
+                
+
+                bool? result = budgetDialog.ShowDialog();
+
+                // 5. Nếu người dùng nhấn "Lưu" (thường trả về true)
+                if (result == true)
+                {
+                    // Tự động làm mới (Refresh) lại danh sách trên giao diện quản lý ngân sách từ DB thật
+                    LoadDataAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Lỗi khi mở cửa sổ thêm ngân sách: {ex.Message}");
             }
         }
 
         private void ExecuteEditBudget(Budgets target)
         {
-            if (target == null) return;
+            if (target == null || UserSessionService.CurrentUser == null) return;
 
-            var dialog = new ConfirmDialog($"Bạn muốn giả lập sửa đổi hạn mức cho mục [{target.CategoryName}]?");
-            dialog.ShowDialog();
+            int currentUserId = UserSessionService.CurrentUser.UserID;
 
-            if (dialog.Result == true)
+            // Truyền đối tượng ngân sách cũ cần sửa vào tham số thứ 2
+
+
+            BudgetDialog budgetDialog = new BudgetDialog(currentUserId, target);
+            var resultDialog = budgetDialog.ShowDialog();
+
+            if (resultDialog == true)
             {
-                // Giả lập sửa đổi tăng hạn mức gấp đôi
-                target.AmountLimit *= 2;
-
-                // Refresh lại danh sách
-                var temp = Budgets;
-                Budgets = null;
-                Budgets = temp;
-
-                CalculateTotals();
-                new ConfirmDialog("Cập nhật hạn mức giả lập thành công!").ShowDialog();
+                
+                LoadDataAsync(); // Lưu xong tự động cập nhật lại giao diện
             }
         }
 
-        private void ExecuteDeleteBudget(Budgets target)
+        private async void ExecuteDeleteBudget(Budgets target)
         {
             if (target == null) return;
 
-            var dialog = new ConfirmDialog($"Bạn có chắc chắn muốn xóa ngân sách [{target.CategoryName}]?");
+            var dialog = new ConfirmDialog($"Bạn có chắc chắn muốn xóa ngân sách danh mục [{target.CategoryName}] không?");
             dialog.ShowDialog();
 
             if (dialog.Result == true)
             {
-                Budgets.Remove(target);
-                CalculateTotals();
-                new ConfirmDialog("Đã gỡ bỏ ngân sách khỏi danh sách thành công!").ShowDialog();
+                bool success = await _budgetService.DeleteAsync(target.BudgetID);
+                if (success) { await LoadDataAsync(); }
+            }
+        }
+
+        public async Task CheckBudgetViolationsOnNavigatedAsync()
+        {
+            if (UserSessionService.CurrentUser == null) return;
+
+            bool isAlertEnabled = UserSessionService.CurrentUser.IsBudgetAlert;
+
+            if (isAlertEnabled)
+            {
+                int userId = UserSessionService.CurrentUser.UserID;
+                string violations = await _transactionService.CheckBudgetViolationsAsync(userId);
+
+                if (!string.IsNullOrEmpty(violations))
+                {
+                    // Bắn tiến trình hiển thị vào Dispatcher chạy ở mức ưu tiên Background 
+                    // để đảm bảo trang chính đã render xong hoàn toàn, tránh gây đơ UI
+                    await Application.Current.Dispatcher.InvokeAsync(() =>
+                    {
+                        // Kiểm tra xem cửa sổ loại BudgetAlert này đã mở sẵn trên màn hình chưa
+                        // để tránh việc người dùng bấm qua bấm lại nó đè thêm 4, 5 cửa sổ giống nhau
+                        var alreadyOpen = Application.Current.Windows.OfType<BudgetAlert>().FirstOrDefault();
+
+                        if (alreadyOpen != null)
+                        {
+                            alreadyOpen.Activate(); // Nếu mở rồi thì chỉ đẩy nó lên trước mặt, không tạo mới
+                            return;
+                        }
+
+                        var alertWindow = new BudgetAlert(violations);
+
+                        if (Application.Current.MainWindow != null && Application.Current.MainWindow.IsVisible)
+                        {
+                            alertWindow.Owner = Application.Current.MainWindow;
+                        }
+
+                        alertWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+                        // THAY THẾ: Sử dụng Show() thay vì ShowDialog() để giải phóng hoàn toàn UI Thread
+                        alertWindow.Show();
+                    }, System.Windows.Threading.DispatcherPriority.Background);
+                }
             }
         }
         #endregion
+
         #endregion
     }
 }

@@ -5,6 +5,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Transaction_Management.Helpers;
+using Transaction_Management.Services;
 
 namespace Transaction_Management
 {
@@ -13,5 +15,6 @@ namespace Transaction_Management
     /// </summary>
     public partial class App : Application
     {
+       
     }
 }

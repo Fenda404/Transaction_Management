@@ -12,7 +12,7 @@ namespace Transaction_Management.Services
 {
     internal class ReportService
     {
-        public TM_Database db_transactions = new TM_Database();
+        public TMDatabase db_transactions = new TMDatabase();
         public ObservableCollection<Transactions> Transactions { get; set; }
         public ObservableCollection<Categories> Categories { get; set; }
 

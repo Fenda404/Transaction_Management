@@ -13,7 +13,7 @@
         Background="Transparent"
         WindowStyle="SingleBorderWindow"
         ResizeMode="CanResize">
-    
+
     <Window.DataContext>
         <vm:MainViewModel />
     </Window.DataContext>
@@ -21,42 +21,64 @@
     <Window.Resources>
 
         <!-- STYLE SIDEBAR OUTER BORDER (BÓ ĐỔ BÓNG) -->
-        <Style x:Key="BorderSidebarStyle" TargetType="Border">
-            <Setter Property="CornerRadius" Value="20"/>
+        <Style x:Key="BorderSidebarStyle"
+               TargetType="Border">
+            <Setter Property="CornerRadius"
+                    Value="20" />
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect BlurRadius="20" ShadowDepth="3" Opacity="0.15" Color="Black"/>
+                    <DropShadowEffect BlurRadius="20"
+                                      ShadowDepth="3"
+                                      Opacity="0.15"
+                                      Color="Black" />
                 </Setter.Value>
             </Setter>
         </Style>
-        
-        <!-- STYLE SIDEBAR CONTAINER (NỀN GRADIENT) -->
-        <Style x:Key="SidebarContainerStyle" TargetType="Border">
-            <Setter Property="CornerRadius" Value="20"/>
+
+        <Style x:Key="SidebarContainerStyle"
+               TargetType="Border">
+            <Setter Property="CornerRadius"
+                    Value="20" />
             <Setter Property="Background">
                 <Setter.Value>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                        <GradientStop Color="#2E7D32" Offset="0"/>
-                        <GradientStop Color="#1B5E20" Offset="1"/>
+                    <LinearGradientBrush StartPoint="0,0"
+                                         EndPoint="0,1">
+                        <GradientStop Color="{DynamicResource SidebarGradStart}"
+                                      Offset="0" />
+                        <GradientStop Color="{DynamicResource SidebarGradEnd}"
+                                      Offset="1" />
                     </LinearGradientBrush>
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <!-- STYLE NÚT MENU TRÊN SIDEBAR (CÓ ICON & HOVER) -->
-        <Style x:Key="SidebarButtonStyle" TargetType="Button">
-            <Setter Property="Foreground" Value="{StaticResource TextWhite}"/>
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Height" Value="48"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="24,0"/>
-            <Setter Property="Margin" Value="12,4"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
+        <Style x:Key="SidebarButtonStyle"
+               TargetType="Button">
+            <Setter Property="Foreground"
+                    Value="{StaticResource TextWhite}" />
+            <Setter Property="FontFamily"
+                    Value="Segoe UI" />
+            <Setter Property="FontSize"
+                    Value="15" />
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
+            <Setter Property="Height"
+                    Value="48" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Left" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
+            <Setter Property="Padding"
+                    Value="24,0" />
+            <Setter Property="Margin"
+                    Value="12,4" />
+            <Setter Property="Cursor"
+                    Value="Hand" />
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -65,8 +87,8 @@
                                 Padding="{TemplateBinding Padding}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <!-- Icon dùng Segoe MDL2 Assets -->
                                 <TextBlock x:Name="Icon"
@@ -76,43 +98,57 @@
                                            Foreground="{TemplateBinding Foreground}"
                                            Margin="0,0,12,0"
                                            VerticalAlignment="Center"
-                                           Text="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                           Text="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" />
                                 <ContentPresenter Grid.Column="1"
                                                   Content="{TemplateBinding Content}"
-                                                  VerticalAlignment="Center"/>
+                                                  VerticalAlignment="Center" />
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#33FFFFFF"/>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        Value="#33FFFFFF" />
                             </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="#44FFFFFF"/>
+                            <Trigger Property="IsPressed"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        Value="#44FFFFFF" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <!-- STYLE BORDER BAO QUANH MAIN CONTENT -->
-        <Style x:Key="BorderContainerStyle" TargetType="Border">
-            <Setter Property="CornerRadius" Value="20"/>
+        <Style x:Key="BorderContainerStyle"
+               TargetType="Border">
+            <Setter Property="CornerRadius"
+                    Value="20" />
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect BlurRadius="20" ShadowDepth="2" Opacity="0.08" Color="Black"/>
+                    <DropShadowEffect BlurRadius="20"
+                                      ShadowDepth="2"
+                                      Opacity="0.08"
+                                      Color="Black" />
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <!-- STYLE NỀN TRẮNG CHO MAIN CONTENT -->
-        <Style x:Key="MainContainerStyle" TargetType="Border">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="CornerRadius" Value="20"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="{StaticResource DividerColor}"/>
+        <Style x:Key="MainContainerStyle"
+               TargetType="Border">
+            <Setter Property="Background"
+                    Value="{DynamicResource MainContainerBg}" />
+            <Setter Property="CornerRadius"
+                    Value="20" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource DividerColor}" />
         </Style>
-        
+
         <!-- DATA TEMPLATES (GIỮ NGUYÊN) -->
         <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
             <uc:Dashboard_UC />
@@ -130,25 +166,29 @@
             <uc:Settings_UC />
         </DataTemplate>
     </Window.Resources>
-    
+
     <Grid>
         <!-- NỀN GRADIENT TOÀN CỬA SỔ (NHẸ NHÀNG) -->
         <Border>
             <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#F8FDF8" Offset="0.0"/>
-                    <GradientStop Color="#F1F8E9" Offset="0.5"/>
-                    <GradientStop Color="#E8F5E9" Offset="1.0"/>
+                <LinearGradientBrush StartPoint="0,0"
+                                     EndPoint="1,1">
+                    <GradientStop Color="{DynamicResource WindowGradStart}"
+                                  Offset="0.0" />
+                    <GradientStop Color="{DynamicResource WindowGradMedium}"
+                                  Offset="0.5" />
+                    <GradientStop Color="{DynamicResource WindowGradEnd}"
+                                  Offset="1.0" />
                 </LinearGradientBrush>
             </Border.Background>
         </Border>
-        
+
         <Grid Margin="20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="300" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            
+
             <!-- 1. SIDEBAR (THANH ĐIỀU HƯỚNG BÊN TRÁI) -->
             <Border Grid.Column="0"
                     Style="{StaticResource BorderSidebarStyle}"
@@ -156,11 +196,14 @@
                 <Border Style="{StaticResource SidebarContainerStyle}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />   <!-- Profile -->
-                            <RowDefinition Height="*" />      <!-- Menu -->
-                            <RowDefinition Height="Auto" />   <!-- Footer (có thể thêm logout) -->
+                            <RowDefinition Height="Auto" />
+                            <!-- Profile -->
+                            <RowDefinition Height="*" />
+                            <!-- Menu -->
+                            <RowDefinition Height="Auto" />
+                            <!-- Footer (có thể thêm logout) -->
                         </Grid.RowDefinitions>
-                        
+
                         <!-- AVATAR & PROFILE -->
                         <WrapPanel Grid.Row="0"
                                    Margin="30,35,0,25"
@@ -185,14 +228,14 @@
                                            Foreground="{StaticResource TextLight}"
                                            FontSize="13"
                                            Opacity="0.9"
-                                           Margin="0,0,0,4"/>
+                                           Margin="0,0,0,4" />
                                 <TextBlock Text="{Binding GetUsername}"
                                            Foreground="{StaticResource TextWhite}"
                                            FontSize="20"
-                                           FontWeight="Bold"/>
+                                           FontWeight="Bold" />
                             </StackPanel>
                         </WrapPanel>
-                        
+
                         <!-- MENU BUTTONS (CÓ ICON) -->
                         <StackPanel Grid.Row="1"
                                     Margin="0,15,0,0">
@@ -201,37 +244,37 @@
                                     Tag="&#xE80F;"
                                     Command="{Binding SwitchViewCommand}"
                                     CommandParameter="Dashboard"
-                                    Margin="12,5,12,5"/>
-                            
+                                    Margin="12,5,12,5" />
+
                             <Button Style="{StaticResource SidebarButtonStyle}"
                                     Content="GIAO DỊCH"
                                     Tag="&#xE8B1;"
                                     Command="{Binding SwitchViewCommand}"
                                     CommandParameter="Transactions"
-                                    Margin="12,5,12,5"/>
-                            
+                                    Margin="12,5,12,5" />
+
                             <Button Style="{StaticResource SidebarButtonStyle}"
                                     Content="BÁO CÁO"
                                     Tag="&#xE9D9;"
                                     Command="{Binding SwitchViewCommand}"
                                     CommandParameter="Reports"
-                                    Margin="12,5,12,5"/>
-                            
+                                    Margin="12,5,12,5" />
+
                             <Button Style="{StaticResource SidebarButtonStyle}"
                                     Content="NGÂN SÁCH"
                                     Tag="&#xE941;"
                                     Command="{Binding SwitchViewCommand}"
                                     CommandParameter="Budgets"
-                                    Margin="12,5,12,5"/>
-                            
+                                    Margin="12,5,12,5" />
+
                             <Button Style="{StaticResource SidebarButtonStyle}"
                                     Content="CÀI ĐẶT"
                                     Tag="&#xE713;"
                                     Command="{Binding SwitchViewCommand}"
                                     CommandParameter="Settings"
-                                    Margin="12,5,12,5"/>
+                                    Margin="12,5,12,5" />
                         </StackPanel>
-                        
+
                         <!-- FOOTER (CÓ THỂ THÊM LOGOUT SAU, HIỆN ĐỂ TRỐNG NHƯNG VẪN GIỮ ROW) -->
                         <StackPanel Grid.Row="2"
                                     Margin="12,0,12,25">
@@ -240,7 +283,7 @@
                     </Grid>
                 </Border>
             </Border>
-            
+
             <!-- 2. NỘI DUNG CHÍNH (KHUNG TRẮNG BÊN PHẢI) -->
             <Border Grid.Column="1"
                     Style="{StaticResource BorderContainerStyle}">

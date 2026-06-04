@@ -1,0 +1,114 @@
+﻿<Window x:Class="Transaction_Management.Views.SubViews.BudgetAlert"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Transaction_Management.Views.SubViews"
+        mc:Ignorable="d"
+        Title="Cảnh Báo Ngân Sách"
+        Height="350"
+        Width="450"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent">
+    <Border Background="#FFFFFF"
+            CornerRadius="12"
+            BorderThickness="1"
+            BorderBrush="#E0E0E0">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="15"
+                              Direction="270"
+                              RenderingBias="Quality"
+                              ShadowDepth="3"
+                              Opacity="0.15" />
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="60" />
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0"
+                    Background="#FFF0F1"
+                    CornerRadius="12,12,0,0"
+                    Padding="15,0">
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center">
+                    <Path Data="M12,2L1,21H23L12,2M12,6L19.8,19H4.2L12,6M11,10V14H13V10H11M11,16V18H13V16H11Z"
+                          Fill="#D32F2F"
+                          Width="24"
+                          Height="24"
+                          Stretch="Uniform"
+                          Margin="0,0,10,0" />
+                    <TextBlock Text="CẢNH BÁO VƯỢT NGÂN SÁCH"
+                               Foreground="#D32F2F"
+                               FontWeight="Bold"
+                               FontSize="15"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+            </Border>
+
+            <Grid Grid.Row="1"
+                  Margin="20,15">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           Text="Hệ thống ghi nhận bạn đã chi tiêu vượt quá hạn mức cho phép trong tháng này tại các danh mục:"
+                           TextWrapping="Wrap"
+                           Foreground="#555555"
+                           FontSize="13"
+                           Margin="0,0,0,15"
+                           LineHeight="18" />
+
+                <ScrollViewer Grid.Row="1"
+                              VerticalScrollBarVisibility="Auto">
+                    <TextBlock x:Name="TxtViolations"
+                               Text="Danh sách chi tiết..."
+                               TextWrapping="Wrap"
+                               Foreground="#333333"
+                               FontSize="13"
+                               FontFamily="Segoe UI"
+                               FontWeight="Medium"
+                               LineHeight="22" />
+                </ScrollViewer>
+            </Grid>
+
+            <Border Grid.Row="2"
+                    Background="#F9F9F9"
+                    CornerRadius="0,0,12,12">
+                <Button Content="Đã Hiểu"
+                        Width="100"
+                        Height="35"
+                        HorizontalAlignment="Right"
+                        Margin="0,0,20,0"
+                        Click="BtnClose_Click"
+                        Background="#D32F2F"
+                        Foreground="White"
+                        FontWeight="SemiBold"
+                        BorderThickness="0">
+                    <Button.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}"
+                                                CornerRadius="6">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                                              VerticalAlignment="Center" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

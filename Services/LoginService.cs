@@ -12,7 +12,7 @@ namespace Transaction_Management.Services
         public bool Authenticate(string username, string password, out int roleID)
         {
             roleID = 0;
-            using (var db = new TM_Database())
+            using (var db = new TMDatabase())
             {
                 var user = db.Users
                              .FirstOrDefault(u => u.Username == username

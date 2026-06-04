@@ -1,0 +1,31 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush x:Key="PrimaryColorBrush"
+                     Color="{Binding Color, Source={DynamicResource PrimaryColor}}" />
+
+    <SolidColorBrush x:Key="HighlightTextBrush"
+                     Color="{Binding Color, Source={DynamicResource PrimaryDark}}" />
+
+    <SolidColorBrush x:Key="TextColorBrush"
+                     Color="{Binding Color, Source={DynamicResource TextLight}}" />
+
+    <SolidColorBrush x:Key="SubTextColorBrush"
+                     Color="{Binding Color, Source={DynamicResource TextGray}}" />
+
+    <SolidColorBrush x:Key="ButtonForegroundBrush"
+                     Color="{Binding Color, Source={DynamicResource TextWhite}}" />
+
+    <SolidColorBrush x:Key="CardBackgroundBrush"
+                     Color="{Binding Color, Source={DynamicResource MainContainerBg}}" />
+
+    <SolidColorBrush x:Key="OverviewBackgroundBrush"
+                     Color="{Binding Color, Source={DynamicResource PrimaryLighter}}" />
+
+    <SolidColorBrush x:Key="OverviewBorderBrush"
+                     Color="{Binding Color, Source={DynamicResource DividerColor}}" />
+
+    <SolidColorBrush x:Key="ProgressBarTrackBrush"
+                     Color="{Binding Color, Source={DynamicResource DividerColor}}" />
+
+</ResourceDictionary>

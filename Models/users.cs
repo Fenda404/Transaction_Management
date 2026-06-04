@@ -32,6 +32,11 @@ namespace Transaction_Management.Models
         public string Email { get; set; }
         public Nullable<System.DateTime> CreatedAt { get; set; }
         public Nullable<int> RoleID { get; set; }
+        public string Currency { get; set; }
+        public bool IsBudgetAlert { get; set; }
+        public bool IsDailyReminder { get; set; }
+        public string ThemeColor { get; set; }
+        public bool IsDarkMode { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Budgets> Budgets { get; set; }

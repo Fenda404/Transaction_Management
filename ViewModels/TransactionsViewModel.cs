@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.Entity;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Transaction_Management.Commands;
+using Transaction_Management.Helpers;
 using Transaction_Management.Models;
 using Transaction_Management.Services;
 using Transaction_Management.Views.Messages;
@@ -19,7 +18,10 @@ namespace Transaction_Management.ViewModels
     public class TransactionsViewModel : BaseViewModel
     {
         #region Properties
-        private ObservableCollection<Transactions> _transactions;
+        private readonly TransactionService _transactionService;
+
+        // Danh sách chính hiển thị và binding trực tiếp lên DataGrid/ListView của UI
+        private ObservableCollection<Transactions> _transactions = new ObservableCollection<Transactions>();
         public ObservableCollection<Transactions> Transactions
         {
             get => _transactions;
@@ -30,7 +32,7 @@ namespace Transaction_Management.ViewModels
             }
         }
 
-        private ObservableCollection<Categories> _categories;
+        private ObservableCollection<Categories> _categories = new ObservableCollection<Categories>();
         public ObservableCollection<Categories> Categories
         {
             get => _categories;
@@ -41,7 +43,8 @@ namespace Transaction_Management.ViewModels
             }
         }
 
-        private TransactionService _transactionService;
+        // Biến lưu trữ tạm thời toàn bộ giao dịch gốc để phục vụ tính năng tìm kiếm (Search/Filter) lập tức trên RAM
+        private List<Transactions> _allTransactionsCache = new List<Transactions>();
 
         private string _searchText;
         public string SearchText
@@ -51,11 +54,10 @@ namespace Transaction_Management.ViewModels
             {
                 _searchText = value;
                 OnPropertyChanged(nameof(SearchText));
-                Search();
+                _ = SearchAsync(); // Kích hoạt Debounce Search bất đồng bộ
             }
         }
 
-        private ObservableCollection<Transactions> _getAllTransactions;
         private int _getTransactionID;
         public int GetTransactionID
         {
@@ -98,72 +100,71 @@ namespace Transaction_Management.ViewModels
         public ICommand EditTransactionCommand { get; set; }
         public ICommand DeleteTransactionCommand { get; set; }
         #endregion
+
         #region Constructor
         public TransactionsViewModel()
         {
-
+            // Sử dụng duy nhất 1 thực thể Service xuyên suốt vòng đời màn hình
             _transactionService = new TransactionService();
-            Transactions = new ObservableCollection<Transactions>();
-            Categories = new ObservableCollection<Categories>();
-            _getAllTransactions = new ObservableCollection<Transactions>();
 
             AddTransactionCommand = new RelayCommand(_ => AddNewTransaction(), _ => true);
             EditTransactionCommand = new RelayCommand(_ => EditTransaction(), _ => true);
-            DeleteTransactionCommand = new RelayCommand(_ => DeleteTransaction(), _ => true);
-
-            LoadData();
+            DeleteTransactionCommand = new RelayCommand(async _ => await DeleteTransactionAsync(), _ => true);
+            AppConfig.CurrencyChanged += RefreshUI;
+            // Gọi hàm khởi tạo dữ liệu bất đồng bộ an toàn
+            _ = LoadDataAsync();
+            _ = CheckDailyReminderOnNavigatedAsync();
         }
         #endregion
+
         #region Methods
 
+        private void RefreshUI()
+        {
+            // 2. Báo cho XAML biết danh sách đã đổi để DataGrid chạy lại Converter
+            OnPropertyChanged(nameof(Transactions));
+        }
 
         /// <summary>
-        /// Hàm này dùng để load dữ liệu theo UserID của người dùng hiện tại
-        /// Sắp xếp theo TransactionDate giảm dần để giao dịch mới nhất hiển thị lên đầu
-        /// Sử dụng dịch vụ của UserSessionService để lấy thông tin người dùng hiện tại và TransactionService để lấy dữ liệu giao dịch từ database
+        /// Nạp dữ liệu ban đầu từ Database lên UI hoàn toàn bất đồng bộ
         /// </summary>
-        private async void LoadData()
+        private async Task LoadDataAsync()
         {
             try
             {
                 IsLoading = true;
 
-                // Kiểm tra đăng nhập
                 if (UserSessionService.CurrentUser == null)
                 {
                     Transactions.Clear();
                     return;
                 }
 
-                // Chạy trên thread riêng để không đơ giao diện
-                var data = await Task.Run(() =>
-                {
-                    return _transactionService.LoadData()
-                        .Where(t => t.UserID == UserSessionService.CurrentUser.UserID)
-                        .OrderByDescending(t => t.TransactionDate)
-                        .ToList();
-                });
+                int currentUserId = UserSessionService.CurrentUser.UserID;
 
-                // Cập nhật UI trên main thread
-                _getAllTransactions = new ObservableCollection<Transactions>(data);
+                // Gọi trực tiếp hàm Async đã tối ưu lọc từ Database ở bước trước
+                var data = await _transactionService.LoadDataByUserIdAsync(currentUserId);
+
+                // Lưu vào bộ nhớ Cache RAM để tìm kiếm tức thì không cần gọi lại DB
+                _allTransactionsCache = data ?? new List<Transactions>();
 
                 Transactions.Clear();
-                foreach (var item in data)
+                foreach (var item in _allTransactionsCache)
                 {
                     Transactions.Add(item);
                 }
 
-                // Load categories
-                var categories = await Task.Run(() => _transactionService.Categories);
+                // Tải danh mục bất đồng bộ
+                var categoriesData = await _transactionService.GetCategoriesAsync();
                 Categories.Clear();
-                foreach (var category in categories)
+                foreach (var category in categoriesData)
                 {
                     Categories.Add(category);
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Lỗi load dữ liệu: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Lỗi load dữ liệu giao dịch: {ex.Message}");
                 Transactions.Clear();
             }
             finally
@@ -173,53 +174,46 @@ namespace Transaction_Management.ViewModels
         }
 
         /// <summary>
-        /// Hàm này dùng để thêm mới một giao dịch
-        /// Mở một cửa sổ mới (AddTransaction) để người dùng nhập thông tin giao dịch mới
+        /// Kích hoạt popup thêm mới giao dịch
         /// </summary>
-
         private void AddNewTransaction()
         {
             var addTransactionView = new AddTransaction();
             var addTM = new AddTransactionViewModel();
             addTransactionView.DataContext = addTM;
+
+            // Đăng ký callback làm mới danh sách khi cửa sổ con lưu thành công
             addTM.SavedCallback = async () => await RefreshDataAsync();
             addTransactionView.ShowDialog();
         }
 
-
         /// <summary>
-        /// Hàm này để refresh lại dữ liệu sau khi thêm, sửa hoặc xóa giao dịch
+        /// Làm mới lại dữ liệu nhanh chóng sau khi Thêm / Sửa / Xóa
         /// </summary>
-        /// <returns></returns>
         private async Task RefreshDataAsync()
         {
             try
             {
                 IsLoading = true;
+                if (UserSessionService.CurrentUser == null) return;
 
-                // Load lại dữ liệu mới
-                var updatedData = await Task.Run(() =>
-                {
-                    _transactionService = new TransactionService();
-                    return _transactionService.LoadData()
-                        .Where(t => t.UserID == UserSessionService.CurrentUser.UserID)
-                        .OrderByDescending(t => t.TransactionDate)
-                        .ToList();
-                });
+                // Tuyệt đối KHÔNG tạo mới 'new TransactionService()' tại đây để tránh rò rỉ kết nối DB
+                var updatedData = await _transactionService.LoadDataByUserIdAsync(UserSessionService.CurrentUser.UserID);
 
-                // Cập nhật collection
-                _getAllTransactions = new ObservableCollection<Transactions>(updatedData);
+                _allTransactionsCache = updatedData ?? new List<Transactions>();
 
-                Transactions.Clear();
-                foreach (var item in updatedData)
-                {
-                    Transactions.Add(item);
-                }
-
-                // Nếu đang có từ khóa tìm kiếm thì áp dụng lại
+                // Áp dụng bộ lọc tìm kiếm nếu người dùng đang gõ dở văn bản tìm kiếm
                 if (!string.IsNullOrWhiteSpace(SearchText))
                 {
                     ApplySearchFilter();
+                }
+                else
+                {
+                    Transactions.Clear();
+                    foreach (var item in _allTransactionsCache)
+                    {
+                        Transactions.Add(item);
+                    }
                 }
             }
             catch (Exception ex)
@@ -232,105 +226,59 @@ namespace Transaction_Management.ViewModels
             }
         }
 
-
         /// <summary>
-        /// Hàm này dùng để tìm kiếm giao dịch dựa trên biến SearchText
+        /// Bộ lọc tìm kiếm thông minh có Debounce hoãn tác vụ tránh xung đột khi gõ phím nhanh
         /// </summary>
-        private async void Search()
+        private async Task SearchAsync()
         {
-            if (_getAllTransactions == null || IsLoading) return;
+            if (_allTransactionsCache == null) return;
 
             string currentKeyword = SearchText;
-            bool hasKeyword = !string.IsNullOrWhiteSpace(currentKeyword);
 
-            // Tránh search quá nhiều khi gõ nhanh
-            await Task.Delay(300); // Debounce 300ms
+            // Chờ người dùng dừng gõ 300ms
+            await Task.Delay(300);
 
-            // Kiểm tra lại keyword vì có thể đã thay đổi trong lúc delay
+            // Nếu người dùng vẫn đang gõ từ khóa mới thì bỏ qua luồng xử lý cũ này
             if (currentKeyword != SearchText) return;
 
-            try
-            {
-                IsLoading = true;
-
-                var filteredList = await Task.Run(() =>
-                {
-                    if (!hasKeyword)
-                    {
-                        return _getAllTransactions.ToList();
-                    }
-                    else
-                    {
-                        string keywordLower = currentKeyword.ToLower();
-                        return _getAllTransactions
-                            .Where(t =>
-                                (t.Note != null && t.Note.ToLower().Contains(keywordLower)) ||
-                                (t.Categories != null && t.Categories.CategoryType != null &&
-                                 t.Categories.CategoryType.ToLower().Contains(keywordLower)) ||
-                                t.Amount.ToString().Contains(currentKeyword) ||
-                                t.TransactionDate.ToString().Contains(currentKeyword)
-                            )
-                            .ToList();
-                    }
-                });
-
-                // Cập nhật UI
-                Transactions.Clear();
-                foreach (var item in filteredList)
-                {
-                    Transactions.Add(item);
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Lỗi tìm kiếm: {ex.Message}");
-            }
-            finally
-            {
-                IsLoading = false;
-            }
+            ApplySearchFilter();
         }
 
         /// <summary>
-        /// Hàm này dùng để áp dụng bộ lọc tìm kiếm dựa trên SearchText lên collection Transactions
+        /// Hàm nội bộ thực hiện trích xuất dữ liệu từ bộ nhớ đệm hiển thị lên giao diện
         /// </summary>
         private void ApplySearchFilter()
         {
-            if (_getAllTransactions == null) return;
-
-            string currentKeyword = SearchText;
-            bool hasKeyword = !string.IsNullOrWhiteSpace(currentKeyword);
-
-            if (!hasKeyword)
+            string keyword = SearchText;
+            if (string.IsNullOrWhiteSpace(keyword))
             {
                 Transactions.Clear();
-                foreach (var item in _getAllTransactions)
+                foreach (var item in _allTransactionsCache)
                 {
                     Transactions.Add(item);
                 }
+                return;
             }
-            else
-            {
-                string keywordLower = currentKeyword.ToLower();
-                var filtered = _getAllTransactions.Where(t =>
-                    (t.Note != null && t.Note.ToLower().Contains(keywordLower)) ||
-                    (t.Categories != null && t.Categories.CategoryType != null &&
-                     t.Categories.CategoryType.ToLower().Contains(keywordLower)) ||
-                    t.Amount.ToString().Contains(currentKeyword) ||
-                    t.TransactionDate.ToString().Contains(currentKeyword)
-                ).ToList();
 
-                Transactions.Clear();
-                foreach (var item in filtered)
-                {
-                    Transactions.Add(item);
-                }
+            string keywordLower = keyword.ToLower();
+
+
+            var filtered = _allTransactionsCache.Where(t =>
+                (t.Note != null && t.Note.ToLower().Contains(keywordLower)) ||
+                (t.Categories != null && t.Categories.CategoryName != null && t.Categories.CategoryName.ToLower().Contains(keywordLower)) ||
+                t.Amount.ToString().Contains(keyword) ||
+                (t.TransactionDate.HasValue && t.TransactionDate.Value.ToString("dd/MM/yyyy").Contains(keyword))
+            ).ToList();
+
+            Transactions.Clear();
+            foreach (var item in filtered)
+            {
+                Transactions.Add(item);
             }
         }
 
-
         /// <summary>
-        /// Hàm này dùng để sửa một giao dịch đã chọn
+        /// Mở màn hình cập nhật thông tin giao dịch
         /// </summary>
         private void EditTransaction()
         {
@@ -344,15 +292,15 @@ namespace Transaction_Management.ViewModels
             var editTransactionView = new EditTransaction();
             var editTM = new EditTransactionViewModel(SelectedTransaction);
             editTransactionView.DataContext = editTM;
+
             editTM.SavedCallback = async () => await RefreshDataAsync();
             editTransactionView.ShowDialog();
         }
 
-
         /// <summary>
-        /// Hàm này dùng để xóa một giao dịch đã chọn
+        /// Xóa giao dịch được chọn hoàn toàn bất đồng bộ
         /// </summary>
-        private async void DeleteTransaction()
+        private async Task DeleteTransactionAsync()
         {
             if (SelectedTransaction == null)
             {
@@ -364,19 +312,22 @@ namespace Transaction_Management.ViewModels
             var confirmView = new ConfirmDialog("Bạn có chắc chắn muốn xóa giao dịch này không?");
             confirmView.ShowDialog();
 
+            // Nếu người dùng đồng ý xóa (Xác nhận từ Custom Dialog Window)
             if (confirmView.Result == true)
             {
                 try
                 {
                     IsLoading = true;
-
                     int targetId = SelectedTransaction.TransactionID;
-                    var checkSuccess = await Task.Run(() => _transactionService.DeleteTransaction(targetId));
+
+                    // Gọi hàm Xóa bất đồng bộ trực tiếp từ tầng Service
+                    var checkSuccess = await _transactionService.DeleteTransactionAsync(targetId);
 
                     if (checkSuccess)
                     {
                         var successDialog = new ConfirmDialog("Đã xóa giao dịch thành công!");
                         successDialog.ShowDialog();
+
                         await RefreshDataAsync();
                     }
                     else
@@ -387,7 +338,7 @@ namespace Transaction_Management.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    var errorDialog = new ErrorDialog($"Lỗi: {ex.Message}");
+                    var errorDialog = new ErrorDialog($"Lỗi hệ thống: {ex.Message}");
                     errorDialog.ShowDialog();
                 }
                 finally
@@ -396,8 +347,56 @@ namespace Transaction_Management.ViewModels
                 }
             }
         }
+        public async Task CheckDailyReminderOnNavigatedAsync()
+        {
+            // 1. CHẶN NGAY TỪ ĐẦU: Nếu chưa có user đăng nhập thì thoát
+            if (UserSessionService.CurrentUser == null) return;
 
+            // 2. KIỂM TRA CẤU HÌNH: Người dùng có bật tính năng nhắc nhở hàng ngày không
+            bool isReminderEnabled = UserSessionService.CurrentUser.IsDailyReminder;
 
-        #endregion
+            if (isReminderEnabled)
+            {
+                int userId = UserSessionService.CurrentUser.UserID;
+
+                // 3. KIỂM TRA LOGIC: Hôm nay người dùng đã nhập giao dịch nào chưa?
+                // (Gọi xuống Service để check xem hôm nay có bản ghi nào của UserId này chưa)
+                bool hasEnteredToday = await _transactionService.CheckUserHasEnteredTransactionTodayAsync(userId);
+
+                // Nếu HÔM NAY CHƯA NHẬP giao dịch nào thì mới hiện thông báo nhắc nhở
+                if (!hasEnteredToday)
+                {
+                    // Nhường luồng 200ms cho UI vẽ xong tab để tránh gây đơ cứng ứng dụng
+                    await Task.Delay(200);
+
+                    await Application.Current.Dispatcher.InvokeAsync(() =>
+                    {
+                        // CHẶN TRÙNG LẶP: Nếu cửa sổ nhắc nhở đang mở sẵn rồi thì không mở thêm cái nữa
+                        var alreadyOpen = Application.Current.Windows.OfType<DailyReminder>().FirstOrDefault();
+                        if (alreadyOpen != null)
+                        {
+                            alreadyOpen.Activate();
+                            return;
+                        }
+
+                        // Khởi tạo cửa sổ nhắc nhở nhập liệu
+                        var reminderWindow = new DailyReminder();
+
+                        // Gán Owner để căn giữa theo App chính một cách an toàn
+                        if (Application.Current.MainWindow != null && Application.Current.MainWindow.IsVisible)
+                        {
+                            reminderWindow.Owner = Application.Current.MainWindow;
+                        }
+
+                        reminderWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+                        // Dùng Show() để giải phóng hoàn toàn luồng, không lo bị đơ App khi chuyển tab
+                        reminderWindow.Show();
+
+                    }, System.Windows.Threading.DispatcherPriority.Background);
+                }
+            }
+            #endregion
+        }
     }
 }
