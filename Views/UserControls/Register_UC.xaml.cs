@@ -21,11 +21,14 @@ namespace Transaction_Management.Views.UserControls
     /// </summary>
     public partial class Register_UC : UserControl
     {
-        RegisterViewModel vm;
+        private readonly RegisterViewModel vm;
         public Register_UC()
         {
             InitializeComponent();
-            vm = (RegisterViewModel)DataContext;
+            vm = new RegisterViewModel();
+
+            vm.GetPasswords = () => (pwbPassword.Password,pwbConfirmPass.Password);
+            this.DataContext = vm;
         }
     }
 }

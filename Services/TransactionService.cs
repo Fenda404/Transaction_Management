@@ -166,6 +166,23 @@ namespace Transaction_Management.Services
             return transaction.Categories.CategoryType.ToLower() == "income" ? transaction.Amount : -transaction.Amount;
         }
 
+        public bool DeleteAllTransactions()
+        {
+            try
+            {
+                using (var context = new TM_Database())
+                {
+                    var allTransactions = context.Transactions.ToList();
+                    context.Transactions.RemoveRange(allTransactions);
+                    context.SaveChanges();
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Lỗi khi xóa tất cả giao dịch: {ex.Message}", ex);
+            }
+        }
 
         #endregion
     }
