@@ -19,11 +19,12 @@ namespace Transaction_Management.Views.SubViews
     /// </summary>
     public partial class AddTransaction : Window
     {
-        AddTransactionViewModel vm;
+        // Khắc phục lỗi DataContext sớm bằng cách sử dụng thuộc tính Expression nhận diện động
+        public AddTransactionViewModel vm => DataContext as AddTransactionViewModel;
+
         public AddTransaction()
         {
             InitializeComponent();
-            vm = (AddTransactionViewModel)DataContext;
         }
     }
 }

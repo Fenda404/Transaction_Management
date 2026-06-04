@@ -19,10 +19,15 @@ namespace Transaction_Management.Views.UserControls
     /// <summary>
     /// Interaction logic for TRANSACTIONS_UC.xaml
     /// </summary>
-  
+
     public partial class Transactions_UC : UserControl
+    {
+        // Sử dụng Property Expression để nạp DataContext động, chống lỗi NullReference
+        public TransactionsViewModel vm => DataContext as TransactionsViewModel;
+
+        public Transactions_UC()
         {
-        TransactionsViewModel vm;
-            public Transactions_UC() { InitializeComponent(); vm = (TransactionsViewModel)DataContext; }
+            InitializeComponent();
         }
+    }
 }
