@@ -329,7 +329,7 @@ namespace Transaction_Management.ViewModels
             }
             finally
             {
-                _isLoadingData = false; // 🟢 Tắt cờ chặn: Bây giờ người dùng click thật mới ghi nhận DB
+                _isLoadingData = false;
             }
         }
 

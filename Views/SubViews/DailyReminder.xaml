@@ -55,11 +55,8 @@
                        LineHeight="20"
                        VerticalAlignment="Center" />
 
-            <StackPanel Grid.Row="2"
-                        Orientation="Horizontal"
-                        HorizontalAlignment="Right"
-                        >
-                <Button Content="Để sau"
+            
+                <Button Content="Đã hiểu"
                         Width="90"
                         Height="32"
                         Click="BtnClose_Click"
@@ -67,7 +64,9 @@
                         Foreground="#4A5568"
                         FontWeight="SemiBold"
                         BorderThickness="0"
-                        Margin="0,0,10,0">
+                        Margin="0,0,10,0"
+                        Grid.Row="2"
+                        HorizontalAlignment="Right">
                     <Button.Resources>
                         <Style TargetType="Button">
                             <Setter Property="Template">
@@ -85,31 +84,7 @@
                     </Button.Resources>
                 </Button>
 
-                <Button Content="Nhập Ngay"
-                        Width="100"
-                        Height="32"
-                        Click="BtnInputNow_Click"
-                        Background="#2E7D32"
-                        Foreground="White"
-                        FontWeight="SemiBold"
-                        BorderThickness="0">
-                    <Button.Resources>
-                        <Style TargetType="Button">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Background="{TemplateBinding Background}"
-                                                CornerRadius="6">
-                                            <ContentPresenter HorizontalAlignment="Center"
-                                                              VerticalAlignment="Center" />
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Button.Resources>
-                </Button>
-            </StackPanel>
+               
         </Grid>
     </Border>
 </Window>

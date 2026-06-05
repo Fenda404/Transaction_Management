@@ -12,9 +12,9 @@
     <SolidColorBrush x:Key="TextWhite"
                      Color="#FFFFFF" />
     <SolidColorBrush x:Key="TextLight"
-                     Color="#ECEFF1" />
+                     Color="#F5F5F5" />
     <SolidColorBrush x:Key="TextGray"
-                     Color="#90A4AE" />
+                     Color="#B0B0B0" />
     <SolidColorBrush x:Key="DividerColor"
                      Color="#5E3E3E" />
 
@@ -30,12 +30,12 @@
 
     <Color x:Key="SrcColor_PrimaryColor">#4A1E1E</Color>
     <Color x:Key="SrcColor_PrimaryDark">#2B1010</Color>
-    <Color x:Key="SrcColor_MainText">#ECEFF1</Color>
-    <Color x:Key="SrcColor_TextGray">#90A4AE</Color>
+    <Color x:Key="SrcColor_MainText">#FFFFFF</Color>
+    <Color x:Key="SrcColor_TextGray">#B0B0B0</Color>
     <Color x:Key="SrcColor_TextWhite">#FFFFFF</Color>
     <Color x:Key="SrcColor_MainContainerBg">#342626</Color>
     <Color x:Key="SrcColor_PrimaryLighter">#3E1B1B</Color>
     <Color x:Key="SrcColor_DividerColor">#5E3E3E</Color>
     <SolidColorBrush x:Key="MainTextColor"
-                     Color="#ECEFF1" />
+                     Color="#FFFFFF" />
 </ResourceDictionary>

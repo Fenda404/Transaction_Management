@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
-using System.Data.Entity;
 using System.Threading.Tasks;
 using Transaction_Management.Models;
 
@@ -88,25 +89,30 @@ namespace Transaction_Management.Services
             }
         }
 
-        public async Task<bool> DeleteUserAsync(int userId)
+        public async Task<(bool Success, string Message)> DeleteUserAsync(int userId)
         {
             try
             {
                 using (var db = new TMDatabase())
                 {
-                    // Tìm user cần xóa
                     var user = await db.Users.FindAsync(userId);
-                    if (user == null) return false;
+                    if (user == null) return (false, "Người dùng không tồn tại.");
 
+                    
                     db.Users.Remove(user);
                     await db.SaveChangesAsync();
-                    return true;
+
+                    return (true, "Xóa tài khoản và toàn bộ dữ liệu liên quan thành công.");
                 }
+            }
+            catch (DbUpdateException ex)
+            {
+                string inner = ex.InnerException?.Message ?? ex.Message;
+                return (false, $"Lỗi ràng buộc dữ liệu: {inner}. (Gợi ý: Cần bật Cascade Delete trong DB)");
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Lỗi DeleteUserAsync: {ex.Message}");
-                return false;
+                return (false, $"Lỗi: {ex.Message}");
             }
         }
     }

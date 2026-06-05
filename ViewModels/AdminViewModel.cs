@@ -120,32 +120,49 @@ namespace Transaction_Management.ViewModels
         /// </summary>
         private async Task ExecuteCreateUser()
         {
+            // 1. Validate dữ liệu đầu vào cơ bản
             if (string.IsNullOrWhiteSpace(FormUsername) || string.IsNullOrWhiteSpace(FormEmail))
             {
                 MessageBox.Show("Vui lòng điền đầy đủ Tên đăng nhập và Email!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
+            // 2. Tạo đối tượng User mới với dữ liệu mặc định
             var newUser = new Users
             {
                 Username = FormUsername.Trim(),
                 Email = FormEmail.Trim(),
-                RoleID = FormRoleIndex == 0 ? 1 : 2
+                RoleID = FormRoleIndex == 0 ? 1 : 2,
+                Currency = "VNĐ",
+                IsBudgetAlert = true,
+                IsDailyReminder = true,
+                ThemeColor = "0",
+                IsDarkMode = false
             };
 
-            newUser.PasswordHash = !string.IsNullOrWhiteSpace(FormPassword) ? FormPassword : "123";
+            // 3. Xử lý mật khẩu (Gợi ý: Nên dùng thư viện Hash mật khẩu thay vì text thô ở đây)
+            string rawPassword = !string.IsNullOrWhiteSpace(FormPassword) ? FormPassword.Trim() : "123";
+            newUser.PasswordHash = rawPassword; // Ví dụ dùng BCrypt, nếu lưu thô thì dùng: newUser.PasswordHash = rawPassword;
 
-            bool isSuccess = await _adminService.AddUserAsync(newUser);
-
-            if (isSuccess)
+            try
             {
-                MessageBox.Show("Tạo tài khoản thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
-                ClearForm();
-                await LoadUsersAsync();
+                // 4. Gọi Service để thêm vào DB
+                bool isSuccess = await _adminService.AddUserAsync(newUser);
+
+                if (isSuccess)
+                {
+                    MessageBox.Show("Tạo tài khoản thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                    ClearForm();
+                    await LoadUsersAsync(); // Load lại danh sách hiển thị trên UI
+                }
+                else
+                {
+                    MessageBox.Show("Tạo tài khoản thất bại! (Tên đăng nhập hoặc Email có thể đã tồn tại)", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Tạo tài khoản thất bại! (Tên đăng nhập có thể đã tồn tại)", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Đã xảy ra lỗi hệ thống: {ex.Message}", "Lỗi hệ thống", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -197,18 +214,19 @@ namespace Transaction_Management.ViewModels
 
             if (confirm == MessageBoxResult.Yes)
             {
-                var userToDelete = SelectedUser; // Giữ tạm biến để xóa trên RAM sau khi gọi DB
-                bool isSuccess = await _adminService.DeleteUserAsync(userToDelete.UserID);
+                var userToDelete = SelectedUser;
+                var (isSuccess, message) = await _adminService.DeleteUserAsync(userToDelete.UserID);
 
                 if (isSuccess)
                 {
                     MessageBox.Show("Xóa tài khoản thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
-                    ClearForm(); // Làm sạch form trước
-                    UserList.Remove(userToDelete); // Xóa khỏi bộ nhớ RAM để UI cập nhật ngay
+                    ClearForm();
+                    UserList.Remove(userToDelete);
                 }
                 else
                 {
-                    MessageBox.Show("Xóa tài khoản thất bại!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    // Hiển thị lỗi chi tiết từ service
+                    MessageBox.Show($"Xóa tài khoản thất bại!\nLý do: {message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

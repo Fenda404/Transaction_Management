@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,73 +6,113 @@ using System.Threading.Tasks;
 
 namespace Transaction_Management.Services
 {
+    /// <summary>
+    /// Service qu?n l? c?u h?nh ti?n t? và ğ?nh d?ng hi?n th? s? cho ?ng d?ng.
+    /// </summary>
     internal class CurrencyConfigService
     {
-        // Cáº¥u trÃºc dá»¯ liá»‡u Ä‘áº¡i diá»‡n cho Tiá»n tá»‡
+        /// <summary>
+        /// Mô h?nh d? li?u ğ?i di?n cho m?t lo?i ti?n t?.
+        /// </summary>
         public class CurrencyModel
         {
-            public string Code { get; set; }       // VND, USD, EUR
-            public string Name { get; set; }       // Viá»‡t Nam Äá»“ng, ÄÃ´ la Má»¹
-            public string Symbol { get; set; }     // Ä‘, $, â‚¬
+            /// <summary>M? ti?n t? (VND, USD, EUR).</summary>
+            public string Code { get; set; }
+
+            /// <summary>Tên ti?n t? (Vi?t Nam Ğ?ng, Ğô la M?).</summary>
+            public string Name { get; set; }
+
+            /// <summary>K? hi?u ti?n t? (ğ, $, €).</summary>
+            public string Symbol { get; set; }
+
+            /// <summary>Tr? v? chu?i hi?n th? tên và k? hi?u.</summary>
             public override string ToString() => $"{Name} ({Symbol})";
         }
 
-        // Cáº¥u trÃºc dá»¯ liá»‡u Ä‘áº¡i diá»‡n cho Äá»‹nh dáº¡ng hiá»ƒn thá»‹ sá»‘
+        /// <summary>
+        /// Mô h?nh d? li?u ğ?i di?n cho m?t ğ?nh d?ng hi?n th? s?.
+        /// </summary>
         public class FormatModel
         {
-            public string Id { get; set; }         // chuáº©n id lÆ°u trá»¯
-            public string DisplayText { get; set; } // 1.000.000 Ä‘
-            public string FormatString { get; set; } // {0:N0} Ä‘
+            /// <summary>ID duy nh?t ğ? lıu tr? ğ?nh d?ng.</summary>
+            public string Id { get; set; }
+
+            /// <summary>Ví d? hi?n th? (1.000.000 ğ, $1,000,000.00).</summary>
+            public string DisplayText { get; set; }
+
+            /// <summary>Chu?i ğ?nh d?ng C# (N0, N2, v.v.).</summary>
+            public string FormatString { get; set; }
+
+            /// <summary>Tr? v? chu?i ví d? ğ?nh d?ng.</summary>
             public override string ToString() => DisplayText;
         }
 
-        
-            // Danh sÃ¡ch há»‡ thá»‘ng há»— trá»£ sáºµn
-            public List<CurrencyModel> GetSupportedCurrencies()
+        /// <summary>
+        /// L?y danh sách ti?n t? ğı?c h? tr? b?i h? th?ng.
+        /// </summary>
+        /// <returns>Danh sách các lo?i ti?n t? (VND, USD, EUR).</returns>
+        public List<CurrencyModel> GetSupportedCurrencies()
+        {
+            return new List<CurrencyModel>
             {
-                return new List<CurrencyModel>
-            {
-                new CurrencyModel { Code = "VND", Name = "Viá»‡t Nam Äá»“ng", Symbol = "Ä‘" },
-                new CurrencyModel { Code = "USD", Name = "ÄÃ´ la Má»¹", Symbol = "$" },
-                new CurrencyModel { Code = "EUR", Name = "Euro", Symbol = "â‚¬" }
+                new CurrencyModel { Code = "VND", Name = "Vi?t Nam Ğ?ng", Symbol = "ğ" },
+                new CurrencyModel { Code = "USD", Name = "Ğô la M?", Symbol = "$" },
+                new CurrencyModel { Code = "EUR", Name = "Euro", Symbol = "€" }
             };
-            }
+        }
 
-            public List<FormatModel> GetSupportedFormats()
+        /// <summary>
+        /// L?y danh sách ğ?nh d?ng hi?n th? s? ğı?c h? tr?.
+        /// </summary>
+        /// <returns>Danh sách các ğ?nh d?ng s?.</returns>
+        public List<FormatModel> GetSupportedFormats()
+        {
+            return new List<FormatModel>
             {
-                return new List<FormatModel>
-            {
-                new FormatModel { Id = "Standard_VND", DisplayText = "1.000.000 Ä‘", FormatString = "{0:N0} Ä‘" },
+                new FormatModel { Id = "Standard_VND", DisplayText = "1.000.000 ğ", FormatString = "{0:N0} ğ" },
                 new FormatModel { Id = "Standard_USD", DisplayText = "$1,000,000.00", FormatString = "${0:N2}" },
                 new FormatModel { Id = "Plain_Number", DisplayText = "1 000 000", FormatString = "#,##0" }
             };
-            }
+        }
 
-            // Äá»c cáº¥u hÃ¬nh Code tiá»n tá»‡ Ä‘Ã£ lÆ°u
-            public string LoadSavedCurrencyCode()
-            {
-                // TODO: Thay báº±ng Ä‘á»c tá»« Database / JSON file / AppSettings náº¿u cáº§n
-                // Táº¡m thá»i máº·c Ä‘á»‹nh lÃ  VND náº¿u cháº¡y láº§n Ä‘áº§u
-                return "VND";
-            }
+        /// <summary>
+        /// T?i m? ti?n t? ğ? lıu trı?c ğó (m?c ğ?nh là VND).
+        /// </summary>
+        /// <returns>M? ti?n t? ğı?c lıu.</returns>
+        public string LoadSavedCurrencyCode()
+        {
+            // TODO: Thay b?ng ğ?c t? Database / JSON file / AppSettings n?u c?n
+            // T?m th?i m?c ğ?nh là VND n?u ch?y l?n ğ?u
+            return "VND";
+        }
 
-            // Äá»c cáº¥u hÃ¬nh Äá»‹nh dáº¡ng Ä‘Ã£ lÆ°u
-            public string LoadSavedFormatId()
-            {
-                return "Standard_VND";
-            }
+        /// <summary>
+        /// T?i ID ğ?nh d?ng ğ? lıu trı?c ğó.
+        /// </summary>
+        /// <returns>ID ğ?nh d?ng ğı?c lıu.</returns>
+        public string LoadSavedFormatId()
+        {
+            return "Standard_VND";
+        }
 
-            // LÆ°u cáº¥u hÃ¬nh xuá»‘ng há»‡ thá»‘ng khi cÃ³ thay Ä‘á»•i
-            public void SaveCurrencySetting(string currencyCode)
-            {
-                // Logic lÆ°u trá»¯ cáº¥u hÃ¬nh 
-                System.Diagnostics.Debug.WriteLine($"[Service] ÄÃ£ lÆ°u mÃ£ tiá»n tá»‡ má»›i: {currencyCode}");
-            }
+        /// <summary>
+        /// Lıu c?u h?nh ti?n t? m?i xu?ng h? th?ng.
+        /// </summary>
+        /// <param name="currencyCode">M? ti?n t? c?n lıu.</param>
+        public void SaveCurrencySetting(string currencyCode)
+        {
+            // Logic lıu tr? c?u h?nh 
+            System.Diagnostics.Debug.WriteLine($"[Service] Ğ? lıu m? ti?n t? m?i: {currencyCode}");
+        }
 
-            public void SaveFormatSetting(string formatId)
-            {
-                // Logic lÆ°u trá»¯ cáº¥u hÃ¬nh
-                System.Diagnostics.Debug.WriteLine($"[Service] ÄÃ£ lÆ°u ID Ä‘á»‹nh dáº¡ng má»›i: {formatId}");
-            }
+        /// <summary>
+        /// Lıu c?u h?nh ğ?nh d?ng m?i xu?ng h? th?ng.
+        /// </summary>
+        /// <param name="formatId">ID ğ?nh d?ng c?n lıu.</param>
+        public void SaveFormatSetting(string formatId)
+        {
+            // Logic lıu tr? c?u h?nh
+            System.Diagnostics.Debug.WriteLine($"[Service] Ğ? lıu ID ğ?nh d?ng m?i: {formatId}");
         }
     }
+}

@@ -60,7 +60,7 @@
             <Setter Property="FontFamily"
                     Value="Segoe UI" />
             <Setter Property="FontSize"
-                    Value="15" />
+                    Value="24" />
             <Setter Property="FontWeight"
                     Value="SemiBold" />
             <Setter Property="Height"
@@ -206,7 +206,7 @@
 
                         <!-- AVATAR & PROFILE -->
                         <WrapPanel Grid.Row="0"
-                                   Margin="30,35,0,25"
+                                   Margin="30,35,0,0"
                                    HorizontalAlignment="Left">
                             <!-- Avatar Circle -->
                             <Border Width="80"
@@ -226,53 +226,91 @@
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="{Binding GetRoleName}"
                                            Foreground="{StaticResource TextLight}"
-                                           FontSize="13"
+                                           FontSize="14"
                                            Opacity="0.9"
                                            Margin="0,0,0,4" />
                                 <TextBlock Text="{Binding GetUsername}"
                                            Foreground="{StaticResource TextWhite}"
-                                           FontSize="20"
+                                           FontSize="24"
                                            FontWeight="Bold" />
                             </StackPanel>
                         </WrapPanel>
 
                         <!-- MENU BUTTONS (CÓ ICON) -->
                         <StackPanel Grid.Row="1"
-                                    Margin="0,15,0,0">
+                                    Margin="0,0,0,0"
+                                    VerticalAlignment="Center">
+                            
+                            <!--Bảng chào vui vẻ-->
+                            <Border Margin="12,5,12,20"
+                                Height="150"
+                                    CornerRadius="15"
+                                    Background="White">
+                                <StackPanel>
+                                    <TextBlock Text="Xin chào 👋" 
+                                               FontSize="24"
+                                               FontFamily="Arial"
+                                               FontWeight="DemiBold"
+                                               Margin="15"/>
+                                    <Border Height="2"
+                                            Background="Gray"
+                                            HorizontalAlignment="Stretch"
+                                            Margin="10,0,10,0" />
+
+                                    <WrapPanel Margin="10,10,10,0">
+                                        <TextBlock Text="📅 Hôm nay:" 
+                                                   FontSize="18"
+                                                   Margin="0,0,5,0"/>
+                                        <TextBlock x:Name="textblockDate"
+                                                   FontSize="18" />
+                                    </WrapPanel>
+
+                                    <WrapPanel Margin="10">
+                                        <TextBlock Text="⏰"
+                                                   FontSize="18" />
+                                        <TextBlock x:Name="textblockTime"
+                                                   FontSize="18"/>
+                                    </WrapPanel>
+
+                                </StackPanel>
+                            </Border>
+                            
+                            
                             <Button Style="{StaticResource SidebarButtonStyle}"
                                     Content="TỔNG QUAN"
                                     Tag="&#xE80F;"
                                     Command="{Binding SwitchViewCommand}"
                                     CommandParameter="Dashboard"
-                                    Margin="12,5,12,5" />
+                                    Margin="12,5,12,20" 
+                                    />
 
                             <Button Style="{StaticResource SidebarButtonStyle}"
                                     Content="GIAO DỊCH"
                                     Tag="&#xE8B1;"
                                     Command="{Binding SwitchViewCommand}"
                                     CommandParameter="Transactions"
-                                    Margin="12,5,12,5" />
+                                    Margin="12,5,12,20" />
 
                             <Button Style="{StaticResource SidebarButtonStyle}"
                                     Content="BÁO CÁO"
                                     Tag="&#xE9D9;"
                                     Command="{Binding SwitchViewCommand}"
                                     CommandParameter="Reports"
-                                    Margin="12,5,12,5" />
+                                    Margin="12,5,12,20" />
 
                             <Button Style="{StaticResource SidebarButtonStyle}"
                                     Content="NGÂN SÁCH"
                                     Tag="&#xE941;"
                                     Command="{Binding SwitchViewCommand}"
                                     CommandParameter="Budgets"
-                                    Margin="12,5,12,5" />
+                                    Margin="12,5,12,20"  />
 
                             <Button Style="{StaticResource SidebarButtonStyle}"
                                     Content="CÀI ĐẶT"
                                     Tag="&#xE713;"
                                     Command="{Binding SwitchViewCommand}"
                                     CommandParameter="Settings"
-                                    Margin="12,5,12,5" />
+                                    Margin="12,5,12,20"  />
                         </StackPanel>
 
                         <!-- FOOTER (CÓ THỂ THÊM LOGOUT SAU, HIỆN ĐỂ TRỐNG NHƯNG VẪN GIỮ ROW) -->

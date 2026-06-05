@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Transaction_Management.Views.Messages;
 
 namespace Transaction_Management.Views.SubViews
 {
@@ -56,7 +58,28 @@ namespace Transaction_Management.Views.SubViews
 
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
-            ResultInput = _isPasswordMode ? txtPasswordInput.Password : txtInput.Text;
+            if (_isPasswordMode)
+            {
+                // Kiểm tra Password
+                if (txtPasswordInput.Password.Length < 8)
+                {
+                    new ErrorDialog("Password phải dài hơn 8 ký tự.").Show();
+                    return;
+                }
+                ResultInput = txtPasswordInput.Password;
+            }
+            else
+            {
+                // Kiểm tra Username
+                string username = txtInput.Text.Trim();
+                if (string.IsNullOrWhiteSpace(username) || !Regex.IsMatch(username, @"^[a-zA-Z0-9]+$") || username.Length < 3)
+                {
+                    new ErrorDialog("Username không được để trống, chỉ được chứa chữ cái và số, và phải dài ít nhất 3 ký tự.").Show();
+                    return;
+                }
+                ResultInput = username;
+            }
+
             IsConfirmed = true;
             this.DialogResult = true;
             this.Close();

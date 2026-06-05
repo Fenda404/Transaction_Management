@@ -22,6 +22,10 @@ namespace Transaction_Management.Services
                     CreatedAt = DateTime.Now,
                     RoleID = 2,
                     Currency = "VNĐ",
+                    IsBudgetAlert = true,
+                    IsDailyReminder = true,
+                    ThemeColor = "0",
+                    IsDarkMode = false
                 };
                 db.Users.Add(newUser);
                 db.SaveChanges();

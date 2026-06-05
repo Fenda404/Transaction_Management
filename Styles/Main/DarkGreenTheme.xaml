@@ -16,9 +16,9 @@
     <SolidColorBrush x:Key="TextWhite"
                      Color="#FFFFFF" />
     <SolidColorBrush x:Key="TextLight"
-                     Color="#ECEFF1" />
+                     Color="#F5F5F5" />
     <SolidColorBrush x:Key="TextGray"
-                     Color="#90A4AE" />
+                     Color="#B0B0B0" />
     <SolidColorBrush x:Key="DividerColor"
                      Color="#445947" />
     <!-- Đường viền màu xanh rêu sẫm -->
@@ -38,12 +38,12 @@
 
     <Color x:Key="SrcColor_PrimaryColor">#1E4622</Color>
     <Color x:Key="SrcColor_PrimaryDark">#122B15</Color>
-    <Color x:Key="SrcColor_MainText">#ECEFF1</Color>
-    <Color x:Key="SrcColor_TextGray">#90A4AE</Color>
+    <Color x:Key="SrcColor_MainText">#FFFFFF</Color>
+    <Color x:Key="SrcColor_TextGray">#B0B0B0</Color>
     <Color x:Key="SrcColor_TextWhite">#FFFFFF</Color>
     <Color x:Key="SrcColor_MainContainerBg">#263429</Color>
     <Color x:Key="SrcColor_PrimaryLighter">#1B3E20</Color>
     <Color x:Key="SrcColor_DividerColor">#445947</Color>
     <SolidColorBrush x:Key="MainTextColor"
-                     Color="#ECEFF1" />
+                     Color="#FFFFFF" />
 </ResourceDictionary>

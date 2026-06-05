@@ -349,54 +349,33 @@ namespace Transaction_Management.ViewModels
         }
         public async Task CheckDailyReminderOnNavigatedAsync()
         {
-            // 1. CHẶN NGAY TỪ ĐẦU: Nếu chưa có user đăng nhập thì thoát
             if (UserSessionService.CurrentUser == null) return;
 
-            // 2. KIỂM TRA CẤU HÌNH: Người dùng có bật tính năng nhắc nhở hàng ngày không
             bool isReminderEnabled = UserSessionService.CurrentUser.IsDailyReminder;
+            if (!isReminderEnabled) return;
 
-            if (isReminderEnabled)
+            int userId = UserSessionService.CurrentUser.UserID;
+            bool hasEnteredToday = await _transactionService.CheckUserHasEnteredTransactionTodayAsync(userId);
+            if (hasEnteredToday) return;
+
+            await Task.Delay(200);
+
+            await Application.Current.Dispatcher.InvokeAsync(() =>
             {
-                int userId = UserSessionService.CurrentUser.UserID;
-
-                // 3. KIỂM TRA LOGIC: Hôm nay người dùng đã nhập giao dịch nào chưa?
-                // (Gọi xuống Service để check xem hôm nay có bản ghi nào của UserId này chưa)
-                bool hasEnteredToday = await _transactionService.CheckUserHasEnteredTransactionTodayAsync(userId);
-
-                // Nếu HÔM NAY CHƯA NHẬP giao dịch nào thì mới hiện thông báo nhắc nhở
-                if (!hasEnteredToday)
+                var existingReminder = Application.Current.Windows.OfType<DailyReminder>().FirstOrDefault();
+                if (existingReminder != null)
                 {
-                    // Nhường luồng 200ms cho UI vẽ xong tab để tránh gây đơ cứng ứng dụng
-                    await Task.Delay(200);
-
-                    await Application.Current.Dispatcher.InvokeAsync(() =>
-                    {
-                        // CHẶN TRÙNG LẶP: Nếu cửa sổ nhắc nhở đang mở sẵn rồi thì không mở thêm cái nữa
-                        var alreadyOpen = Application.Current.Windows.OfType<DailyReminder>().FirstOrDefault();
-                        if (alreadyOpen != null)
-                        {
-                            alreadyOpen.Activate();
-                            return;
-                        }
-
-                        // Khởi tạo cửa sổ nhắc nhở nhập liệu
-                        var reminderWindow = new DailyReminder();
-
-                        // Gán Owner để căn giữa theo App chính một cách an toàn
-                        if (Application.Current.MainWindow != null && Application.Current.MainWindow.IsVisible)
-                        {
-                            reminderWindow.Owner = Application.Current.MainWindow;
-                        }
-
-                        reminderWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-
-                        // Dùng Show() để giải phóng hoàn toàn luồng, không lo bị đơ App khi chuyển tab
-                        reminderWindow.Show();
-
-                    }, System.Windows.Threading.DispatcherPriority.Background);
+                    existingReminder.Activate();
+                    return;
                 }
-            }
-            #endregion
+
+                var reminder = new DailyReminder();
+                reminder.Owner = Application.Current.MainWindow;
+                reminder.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                reminder.ShowDialog(); // Chỉ hiện nhắc nhở, không làm gì thêm
+            }, System.Windows.Threading.DispatcherPriority.Background);
         }
+        #endregion
     }
-}
+
+    }

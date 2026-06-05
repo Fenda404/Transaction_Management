@@ -29,11 +29,5 @@ namespace Transaction_Management.Views.SubViews
         {
             this.Close();
         }
-
-        private void BtnInputNow_Click(object sender, RoutedEventArgs e)
-        {
-            IsNavigateToTransactionRequested = true;
-            this.Close();
-        }
     }
 }
