@@ -28,7 +28,6 @@ namespace Transaction_Management.Models
         public virtual DbSet<Budgets> Budgets { get; set; }
         public virtual DbSet<Categories> Categories { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Transactions> Transactions { get; set; }
         public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<Wallets> Wallets { get; set; }

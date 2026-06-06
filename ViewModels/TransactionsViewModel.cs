@@ -261,11 +261,19 @@ namespace Transaction_Management.ViewModels
             }
 
             string keywordLower = keyword.ToLower();
+            if (keywordLower == "Chi tiêu".ToLower())
+            {
+                keywordLower = "expense"; 
+            }
+            else if (keywordLower == "Thu nhập".ToLower())
+            {
+                keywordLower = "income";
+            }
 
 
             var filtered = _allTransactionsCache.Where(t =>
                 (t.Note != null && t.Note.ToLower().Contains(keywordLower)) ||
-                (t.Categories != null && t.Categories.CategoryName != null && t.Categories.CategoryName.ToLower().Contains(keywordLower)) ||
+                (t.Categories != null && t.Categories.CategoryName != null && t.Categories.CategoryType.ToLower().Contains(keywordLower)) ||
                 t.Amount.ToString().Contains(keyword) ||
                 (t.TransactionDate.HasValue && t.TransactionDate.Value.ToString("dd/MM/yyyy").Contains(keyword))
             ).ToList();
