@@ -227,8 +227,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="DARK_MODE_COLOR_UPDATE.md" />
-    <None Include="DARK_MODE_UPDATE_COMPLETE.md" />
     <EntityDeploy Include="Models\TM_Database.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>TM_Database.Designer.cs</LastGenOutput>
