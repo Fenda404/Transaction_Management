@@ -1,7 +1,7 @@
 **Mở dự án:**
 1.   Mở file `.sln` (Solution) bằng Visual Studio.
 2. **Cấu hình Cơ sở dữ liệu:**
-   *[Chạy file SQL Execute "PERSONAL_FINANCE.sql" để tạo mới cơ sở dữ liệu]*. Update lại chuỗi kết nối (`ConnectionString`) trong file `App.config`.
+   *[Chạy file SQL Execute "Transaction_Management.sql" để tạo mới cơ sở dữ liệu]*. Update lại chuỗi kết nối (`ConnectionString`) trong file `App.config`.
 3. **Build & Run:**
    Nhấn `F5` hoặc nút **Start** trên Visual Studio để tận hưởng thành quả!
 
