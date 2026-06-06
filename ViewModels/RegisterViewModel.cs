@@ -58,6 +58,8 @@ namespace Transaction_Management.ViewModels
                 return;
             }
 
+            
+
             if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(password) || string.IsNullOrEmpty(confirmPassword))
             {
                 ErrorDialog err = new ErrorDialog("Phải điền đầy đủ thông tin.");
@@ -77,6 +79,13 @@ namespace Transaction_Management.ViewModels
                 return;
             }
             bool result = _registerService.Register(Username, password);
+
+            if (!result)
+            {
+                ErrorDialog err = new ErrorDialog("Tên đăng nhập đã tồn tại.");
+                err.Show();
+                return;
+            }
             if (result)
             {
                 ConfirmDialog cf = new ConfirmDialog("Đăng ký thành công! Bạn có muốn đăng nhập ngay bây giờ?");
